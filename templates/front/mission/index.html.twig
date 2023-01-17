@@ -1,0 +1,12 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Listing de mes missions{% endblock %}
+
+{% block body %}
+    <h1>Listing de mes missions</h1>
+    
+    {% for mission in app.user.missions %}
+        {{ mission.name }} <br>
+        <a href="{{ path('front_mission_show', {'slug': mission.slug}) }}">Voir</a>
+    {% endfor %}
+{% endblock %}

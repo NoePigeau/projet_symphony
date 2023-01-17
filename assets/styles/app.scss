@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$aqua: #52abab;
+
+body {
+    background-color: $aqua;
+    color: red;
+}

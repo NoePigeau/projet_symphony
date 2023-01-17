@@ -1,0 +1,11 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}Mission {{ mission.name }}{% endblock %}
+
+{% block body %}
+        <a href="{{ path('admin_mission_index') }}">Liste des missions</a> <br><br>
+        {{ mission.name|capitalize }} <br>
+        {{ mission.description }} <br>
+        {{ mission.startDate|date('d/m/Y') }}
+        <img src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}">
+{% endblock %}

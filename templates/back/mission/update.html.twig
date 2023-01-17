@@ -1,0 +1,10 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}Modification de la mission {{ mission.name }}{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_rest(form) }}
+        <input type="submit" value="Modifier">
+    {{ form_end(form) }}
+{% endblock %}
