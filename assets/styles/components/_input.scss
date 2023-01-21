@@ -1,0 +1,19 @@
+input {
+    &:focus {
+        outline: none;
+    }
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    label {
+        font-size: 12px;
+    }
+    input {
+        display: flex;
+        border: 1px solid black;
+    }
+}
+

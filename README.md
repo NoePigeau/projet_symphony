@@ -175,3 +175,8 @@ Exemple d'utilisation
 #### Sécurité : globale documentation
 
 Documentation complète liée à la sécurité [https://symfony.com/doc/current/security.html](https://symfony.com/doc/current/security.html)
+
+WEBPACK
+
+docker compose exec php npm install
+docker compose exec php npm run watch
