@@ -1,0 +1,21 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// utils 
+@import 'utils/vars';
+@import 'utils/fonts';
+
+// components
+@import 'components/navbars';
+@import 'components/input';
+
+//globals
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
