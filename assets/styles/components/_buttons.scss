@@ -1,0 +1,18 @@
+.main-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    border-radius: 10px;
+    background-color: $main-color;
+    color: $bg-color;
+    font-weight: bold;
+    font-size: 16px;
+    max-width: 150px;
+    width: 100%;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $main-color-light;
+    }
+}
