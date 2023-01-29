@@ -1,11 +1,77 @@
 .navbar-front {
     position: fixed;
+    z-index: 5;
+    background-color: $bg-color;
     top: 0;
     left: 0;
     height: 90px;
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     box-shadow: $shadow;
     background: $bg-color;
+    padding: 24px;
+    transition: .5s;
+
+    figure {
+        width: 90px;
+        img {
+            width: 100%;
+        }
+    }
+    .links {
+        max-width: 1050px;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        transition: .5s;
+    }
+    .sign {
+        display: flex;
+        flex-direction: column;
+        transition: .5s;
+        a {
+            display: flex;
+            gap: 4px;
+        }
+    }
+    .burger-menu {
+        position: absolute;
+        top: calc(45px - 12px);
+        right: 24px;
+        display: none;
+        cursor: pointer;
+    }
+    @include breakpoint(tablet) {
+        gap: 24px;
+        padding: 32px 24px;
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .links {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            flex: 1;
+            opacity: 0;
+        }
+        .sign {
+            display: none;
+            opacity: 0;
+        }
+        .burger-menu {
+            display: block;
+        }
+        &.show {
+            height: 100vh;
+
+            .links, .sign {
+                display: flex;
+                opacity: 1;
+            }
+        }
+    }
 }
