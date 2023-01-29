@@ -1,18 +1,3 @@
 @import '../utils/vars';
 
-.container-sign {
-    width: 100%;
-    padding-top: 256px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .form-sign {
-        display: flex;
-        flex-direction: column;
-        padding: 32px;
-        max-width: 500px;
-        width: 100%;
-        box-shadow: $shadow;
-        border-radius: 8px;
-    }
-}
+
