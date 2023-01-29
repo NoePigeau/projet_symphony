@@ -16,21 +16,21 @@
     <body>
         <header class="navbar-front">
                 <figure>
-                    <img src="" alt="">
+                    <img src="{{ asset('images/logos/logo-black.svg') }}" alt="logo black">
                 </figure>
-                <div>
-                    <nav>
-                        <ul><a href="#"> lien 1</a></ul>
-                        <ul><a href="#"> lien 2</a></ul>
-                        <ul><a href="#"> lien 3</a></ul>
-                    </nav>
-                </div>
-                {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('admin_default_index') }}">Panel d'admin</a>{% endif %}
+                <nav class="links">
+                    <ul><a href="#"> Homepage</a></ul>
+                    <ul><a href="#"> More information</a></ul>
+                    <ul><a href="#"> Contact</a></ul>
+                    <ul><a href="#"> others page</a></ul>
+                    {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_default_index') }}">Panel d'admin</a></ul> {% endif %}
+                </nav>
                 <div class="sign">
-                    <div> 
-                        <a href="#"> sign up</a>
-                        <a href="#"> sign in</a>
-                    </div>
+                    <a href="{{ path('register') }}"><img src="{{ asset('images/icones/signup.svg') }}" alt="signup"> Sign up</a>
+                    <a href="{{ path('app_login') }}"><img src="{{ asset('images/icones/signin.svg') }}" alt="signin"> Sign in</a>
+                </div>
+                <div class="burger-menu" id="burger-menu">
+                    <img src="{{ asset('images/icones/burger-menu.svg') }}" alt="burger menu">
                 </div>
         </header>
         {% block body %}{% endblock %}
