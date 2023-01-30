@@ -31,6 +31,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+
+    #[ORM\Column]
+    private ?string $nickname = null;
+    #[ORM\Column]
+    private ?string $firstname = null;
+    #[ORM\Column]
+    private ?string $lastname = null;
     /**
      * @var string The hashed password
      */
@@ -43,6 +50,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToMany(targetEntity: Mission::class, mappedBy: 'participants')]
     private Collection $missions;
+
+    #[ORM\Column(length: 1024, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column]
+    private ?bool $status = false;
+
+    #[ORM\Column(length: 64)]
+    private ?string $validationToken = null;
+
+    #[ORM\Column]
+    private ?bool $emailNotify = false;
 
     public function __construct()
     {
@@ -59,9 +78,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
+    public function getNickname(): ?string
+    {
+        return $this->nickname;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->nickname;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->nickname;
+    }
+
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function setNickname(string $nickname): self
+    {
+        $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
 
         return $this;
     }
@@ -165,6 +220,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->missions->removeElement($mission)) {
             $mission->removeParticipant($this);
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function isStatus(): ?bool
+    {
+        return $this->status;
+    }
+
+    public function setStatus(bool $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getValidationToken(): ?string
+    {
+        return $this->validationToken;
+    }
+
+    public function setValidationToken(string $validationToken): self
+    {
+        $this->validationToken = $validationToken;
+
+        return $this;
+    }
+
+    public function isEmailNotify(): ?bool
+    {
+        return $this->emailNotify;
+    }
+
+    public function setEmailNotify(bool $emailNotify): self
+    {
+        $this->emailNotify = $emailNotify;
 
         return $this;
     }
