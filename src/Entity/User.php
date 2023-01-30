@@ -63,9 +63,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $emailNotify = false;
 
+    #[ORM\OneToMany(mappedBy: 'agent', targetEntity: Rating::class, orphanRemoval: true)]
+    private Collection $ratings;
+
+    #[ORM\OneToMany(mappedBy: 'agent', targetEntity: Order::class, orphanRemoval: true)]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->missions = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -198,27 +206,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Mission>
+     * @return Collection<int, Rating>
      */
-    public function getMissions(): Collection
+    public function getRatings(): Collection
     {
-        return $this->missions;
+        return $this->ratings;
     }
 
-    public function addMission(Mission $mission): self
+    public function addRating(Rating $rating): self
     {
-        if (!$this->missions->contains($mission)) {
-            $this->missions->add($mission);
-            $mission->addParticipant($this);
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings->add($rating);
+            $rating->setAgent($this);
         }
 
         return $this;
     }
 
-    public function removeMission(Mission $mission): self
+    public function removeRating(Rating $rating): self
     {
-        if ($this->missions->removeElement($mission)) {
-            $mission->removeParticipant($this);
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getAgent() === $this) {
+                $rating->setAgent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setAgent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getAgent() === $this) {
+                $order->setAgent(null);
+            }
         }
 
         return $this;
