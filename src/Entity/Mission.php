@@ -52,8 +52,11 @@ class Mission
     #[ORM\ManyToOne(inversedBy: 'missions')]
     private ?Type $type = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'missions')]
-    private Collection $participants;
+    // #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'missions')]
+    // private Collection $participants;
+
+    #[ORM\ManyToOne(inversedBy: 'missions')]
+    private ?User $agent = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -68,9 +71,17 @@ class Mission
     )]
     private ?File $imageFile = null;
 
+    #[ORM\OneToMany(mappedBy: 'mission', targetEntity: Step::class, orphanRemoval: true)]
+    private Collection $steps;
+
+    #[ORM\OneToMany(mappedBy: 'mission', targetEntity: Order::class, orphanRemoval: true)]
+    private Collection $orders;
+
     public function __construct()
     {
-        $this->participants = new ArrayCollection();
+        // $this->participants = new ArrayCollection();
+        $this->steps = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,25 +174,16 @@ class Mission
     }
 
     /**
-     * @return Collection<int, User>
+     * @return User|null
      */
-    public function getParticipants(): Collection
+    public function getAgent(): User
     {
-        return $this->participants;
+        return $this->agent;
     }
 
-    public function addParticipant(User $participant): self
+    public function setAgent(?User $agent): self
     {
-        if (!$this->participants->contains($participant)) {
-            $this->participants->add($participant);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipant(User $participant): self
-    {
-        $this->participants->removeElement($participant);
+        $this->agent = $agent;
 
         return $this;
     }
@@ -222,6 +224,66 @@ class Mission
 
         if (null !== $imageFile) {
             $this->updatedAT = new \DateTime('now');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Step>
+     */
+    public function getSteps(): Collection
+    {
+        return $this->steps;
+    }
+
+    public function addStep(Step $step): self
+    {
+        if (!$this->steps->contains($step)) {
+            $this->steps->add($step);
+            $step->setMission($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStep(Step $step): self
+    {
+        if ($this->steps->removeElement($step)) {
+            // set the owning side to null (unless already changed)
+            if ($step->getMission() === $this) {
+                $step->setMission(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setMission($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getMission() === $this) {
+                $order->setMission(null);
+            }
         }
 
         return $this;
