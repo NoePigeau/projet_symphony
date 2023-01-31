@@ -32,6 +32,10 @@
                         {{ form_label(form.plainPassword.second, 'Confirm Password') }}
                         {{ form_widget(form.plainPassword.second) }}
                     </div>
+                    <div class="input-group">
+                        {{ form_label(form.emailNotify, 'I want to receive Email Notification') }}
+                        {{ form_widget(form.emailNotify) }}
+                    </div>
             </div>
             {{ form_errors(form) }}
             <input class="main-cta" type="submit" value="Sign up">
