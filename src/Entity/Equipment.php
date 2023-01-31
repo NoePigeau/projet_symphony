@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Slug;
 
 #[ORM\Entity(repositoryClass: EquipmentRepository::class)]
 class Equipment
@@ -27,6 +28,10 @@ class Equipment
 
     #[ORM\Column]
     private ?int $stock = null;
+
+    #[ORM\Column(length: 105)]
+    #[Slug(fields: ['name', 'createdAt'])]
+    private ?string $slug = null;
 
     #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'equipments')]
     private Collection $orders;
@@ -74,6 +79,24 @@ class Equipment
     {
         $this->stock = $stock;
 
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string|null $slug
+     * @return Equipment
+     */
+    public function setSlug(?string $slug): Equipment
+    {
+        $this->slug = $slug;
         return $this;
     }
 

@@ -1,0 +1,15 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}Equipment {{ equipment.name }}{% endblock %}
+
+{% block body %}
+    <div class="page-list">
+        <div class="card-profile">  
+                <h1 class="text-4xl"> Information </h1>
+                <div> <strong>Name</strong> : {{ equipment.name }} </div>
+                <div> <strong>Description</strong> : {{ equipment.description }} </div>
+                <div> <strong>Stock</strong> : {{ equipment.stock }} </div>
+        </div>
+        {# <a href="{{ path('admin_equipment_index') }}" >  back to equipments list</a> #}
+    </div>
+{% endblock %}
