@@ -1,0 +1,17 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Profile update!{% endblock %}
+
+{% block body %}
+    <div class="profile">
+        <div class="flex-col dark:bg-slate-800 text-white relative">
+            <h1 class="text-2xl mb-10">Submit your application</h1>
+            {{ form_start(form) }}
+                {{ form_rest(form) }}
+                <input type="submit" class="rounded mt-4 h-16 bg-violet-600 flex items-center justify-center text-white" value="S'enregistrer">
+            {{ form_end(form) }}
+        </div>
+        
+    </div>
+    
+{% endblock %}
