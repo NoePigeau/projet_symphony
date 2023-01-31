@@ -18,6 +18,7 @@ class UserType extends AbstractType
             ->add('nickname')
             ->add('firstname')
             ->add('lastname')
+            ->add('emailNotify')
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class
             ])

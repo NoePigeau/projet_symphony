@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,12 +76,12 @@ class SecurityController extends AbstractController
             $user->setStatus(true);
             $em->persist($user);
             $em->flush();
-            return $this->redirectToRoute('front_default_index');
+            return $this->render('security/token-validation.html.twig');
         } 
-
-        // TODO RETURN ERROR PAGE
-
-        return $this->redirectToRoute('front_default_index');
+        
+        return $this->render('security/token-validation.html.twig', [
+            'errors' => "Couldn't validate the token." 
+        ]);
 
 
     }
