@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Security\Voter\MissionVoter;
 
 #[Route('/mission')]
 #[Security("is_granted('ROLE_USER')")]
@@ -21,9 +23,27 @@ class MissionController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'mission_index', methods: ['GET'])]
-    public function index(): Response
+    #[Security("is_granted('ROLE_AGENT')")]
+    public function index(MissionRepository $missionRepository): Response
     {
-        return $this->render('front/mission/index.html.twig');
+        $missions = $missionRepository->findBy(['status' => 'free']);
+        return $this->render('front/mission/index.html.twig', [
+            'missions' => $missions
+        ]);
+    }
+
+    /**
+     * @param MissionRepository $missionRepository
+     * @return Response
+     */
+    #[Route('/my-missions', name: 'mission-my-missions', methods: ['GET'])]
+    public function myMissions(MissionRepository $missionRepository): Response
+    {
+        $user = $this->getUser();
+        $missions = $missionRepository->findBy([in_array('ROLE_CLIENT', $user->getRoles()) ? 'client' : 'agent' => $user]);
+        return $this->render('front/mission/index.html.twig', [
+            'missions' => $missions
+        ]);
     }
 
     /**
@@ -57,7 +77,7 @@ class MissionController extends AbstractController
      * @return Response
      */
     #[Route('/{slug}', name: 'mission_show', methods: ['GET'])]
-    #[Security("is_granted('ROLE_AGENT')")]
+    #[IsGranted(MissionVoter::VIEW, 'mission')]
     public function show(Mission $mission): Response
     {
         //$this->denyAccessUnlessGranted(MissionVoter::VIEW, $mission);
@@ -65,5 +85,46 @@ class MissionController extends AbstractController
         return $this->render('front/mission/show.html.twig', [
             'mission' => $mission
         ]);
+    }
+
+     /**
+     * @param Mission $mission
+     * @param $token
+     * @param MissionRepository $missionRepository
+     * @return Response
+     */
+    #[Route('/{id}/asign/{token}', name: 'mission_asign', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[Security("is_granted('ROLE_AGENT')")]
+    public function asign(Mission $mission, string $token, MissionRepository $missionRepository): Response
+    {
+        if (!$this->isCsrfTokenValid('asign' . $mission->getId(), $token)) {
+            throw $this->createAccessDeniedException('Error token!');
+        }
+
+        $mission->setAgent($this->getUser());
+        $mission->setStatus('in_progress');
+        $missionRepository->save($mission, true);
+
+        return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
+    }
+
+     /**
+     * @param Mission $mission
+     * @param $token
+     * @param MissionRepository $missionRepository
+     * @return Response
+     */
+    #[Route('/{id}/finish/{token}', name: 'mission_finish', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[Security("is_granted('ROLE_AGENT')")]
+    public function finish(Mission $mission, string $token, MissionRepository $missionRepository): Response
+    {
+        if (!$this->isCsrfTokenValid('finish' . $mission->getId(), $token)) {
+            throw $this->createAccessDeniedException('Error token!');
+        }
+
+        $mission->setStatus('finished');
+        $missionRepository->save($mission, true);
+
+        return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
     }
 }
