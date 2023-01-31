@@ -8,25 +8,25 @@
 {% endblock %}
 
 {% block body %}
-<div class="container-sign">
-    <form method="post" class="form-sign">
+<div class="container-sign ">
+    <form method="post" class="form-sign dark:bg-slate-800">
         {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            <div class="alert alert-danger text-white">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
 
         {% if app.user %}
-            <div class="mb-3">
+            <div class="mb-3 text-white">
                 You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
             </div>
         {% endif %}
-        <h1 class="text-4xl">Sign in</h1>
+        <h1 class="text-4xl text-white">Sign in</h1>
         <div class="inputs">
             <div class="input-group">
-            <label for="inputEmail">Email</label>
+            <label for="inputEmail" class="text-white">Email</label>
             <input type="email" placeholder="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
             </div>
             <div class="input-group">
-                <label for="inputPassword">Password</label>
+                <label for="inputPassword" class="text-white">Password</label>
                 <input type="password" placeholder="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
             </div>
         </div>
@@ -43,7 +43,7 @@
             </div>
         #}
 
-        <button class="main-cta" type="submit">Sign in</button>
+        <button class="rounded mt-4 h-16 bg-violet-600 flex items-center justify-center text-white" type="submit" >Sign in</button>
     </form>
 </div>
 {% endblock %}

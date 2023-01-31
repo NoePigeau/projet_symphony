@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Document;
 use App\Entity\User;
+use App\Repository\DocumentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -86,10 +88,32 @@ class SecurityController extends AbstractController
 
     }
 
+    #[Route('/profile/become', name: 'profile_become_agent', methods: ['GET', 'POST'])]
+    public function becomeAgent(Request $request, EntityManagerInterface $entityManager, DocumentRepository $dr): Response
+    {
+        $document = new Document();
+        $form = $this->createForm(\App\Form\BecomeType::class, $document);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $document->setSubmitedBy($this->getUser());
+            $dr->save($document, true);
+            return $this->redirectToRoute('profile');
+        }
+
+        return $this->render('security/become.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
     #[Route('/profile', name: 'profile', methods: ['GET', 'POST'])]
-    public function profile(Request $request, EntityManagerInterface $entityManager): Response
+    public function profile(Request $request, EntityManagerInterface $entityManager, DocumentRepository $dr): Response
     {
         $form = $this->createForm(\App\Form\UserType::class, $this->getUser());
+
+        $hasPendingRequest = $dr->findOneBy(array('submitedBy' => $this->getUser()->getId()));
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -98,8 +122,11 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('front_default_index');
         }
 
+
+
         return $this->render('security/profile.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'hasPending' => $hasPendingRequest
         ]);
     }
 

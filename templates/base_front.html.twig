@@ -13,16 +13,20 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body class="dark:bg-slate-700 ">
         <header class="navbar-front">
                 <figure>
                     <img src="{{ asset('images/logos/logo-black.svg') }}" alt="logo black">
                 </figure>
                 <nav class="links">
-                    <ul><a href="#"> Homepage</a></ul>
-                    <ul><a href="#"> More information</a></ul>
-                    <ul><a href="#"> Contact</a></ul>
-                    <ul><a href="#"> others page</a></ul>
+                    {% if is_granted('ROLE_USER') %}
+                    <ul><a href="{{ path('front_mission_index') }}"> See Missions </a></ul>
+                    {% if is_granted('ROLE_CLIENT') %}
+                        <ul><a href="{{ path('front_mission_create') }}"> Create Missions </a></ul>
+                    {% endif %}
+                    <ul><a href="{{ path('profile') }}"> History </a></ul>
+                    <ul><a href="{{ path('profile') }}"> Profil </a></ul>
+                    {% endif %}
                     {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_default_index') }}">Panel d'admin</a></ul> {% endif %}
                 </nav>
                 <div class="sign">
