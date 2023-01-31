@@ -20,16 +20,16 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 class Mission
 {
+    const STATUS_FREE = 'free';
+    const STATUS_IN_PROGRESS = 'in_progress';
+    const STATUS_FINISHED = 'finished';
+
     use TimestampableTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column()]
-    #[SortablePosition]
-    private ?int $position = null;
 
     #[Assert\NotBlank(message: 'Cette valeur ne peut pas être vide.')]
     #[Assert\Type('string', message: 'Cette valeur doit être une chaine de caractère.')]
@@ -38,25 +38,14 @@ class Mission
     private ?string $name = null;
 
     #[ORM\Column(length: 105)]
-    #[Slug(fields: ['name', 'startDate'])]
+    #[Slug(fields: ['name', 'createdAt'])]
     private ?string $slug = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\GreaterThan('now', message: 'Merci de choisir une date dans le futur')]
-    #[Assert\LessThan('+2 years', message: 'Merci de choisir une date dans les 2 prochaines années')]
-    private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'missions')]
     private ?Type $type = null;
-
-    // #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'missions')]
-    // private Collection $participants;
-
-    #[ORM\ManyToOne(inversedBy: 'missions')]
-    private ?User $agent = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -80,9 +69,21 @@ class Mission
     #[ORM\OneToMany(mappedBy: 'missionId', targetEntity: Message::class)]
     private Collection $messages;
 
+    #[ORM\ManyToOne(inversedBy: 'clientMissions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $client = null;
+
+    #[ORM\ManyToOne(inversedBy: 'agentMissions')]
+    private ?User $agent = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $status = null;
+
+    #[ORM\Column]
+    private ?float $reward = null;
+
     public function __construct()
     {
-        // $this->participants = new ArrayCollection();
         $this->steps = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->messages = new ArrayCollection();
@@ -91,24 +92,6 @@ class Mission
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getPosition(): ?int
-    {
-        return $this->position;
-    }
-
-    /**
-     * @param int|null $position
-     * @return Mission
-     */
-    public function setPosition(?int $position): Mission
-    {
-        $this->position = $position;
-        return $this;
     }
 
     public function getName(): ?string
@@ -141,18 +124,6 @@ class Mission
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
-    {
-        return $this->startDate;
-    }
-
-    public function setStartDate(\DateTimeInterface $startDate): self
-    {
-        $this->startDate = $startDate;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -173,21 +144,6 @@ class Mission
     public function setType(?Type $type): self
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getAgent(): User
-    {
-        return $this->agent;
-    }
-
-    public function setAgent(?User $agent): self
-    {
-        $this->agent = $agent;
 
         return $this;
     }
@@ -307,7 +263,6 @@ class Mission
             $this->messages->add($message);
             $message->setMissionId($this);
         }
-
         return $this;
     }
 
@@ -319,7 +274,59 @@ class Mission
                 $message->setMissionId(null);
             }
         }
+        return $this;
+    }
 
+    public function getClient(): ?User
+    {
+        return $this->client;
+    }
+
+    public function setClient(?User $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getAgent(): ?User
+    {
+        return $this->agent;
+    }
+
+    public function setAgent(?User $agent): self
+    {
+        $this->agent = $agent;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        if (!in_array($status, [self::STATUS_FREE, self::STATUS_IN_PROGRESS, self::STATUS_FINISHED])) {
+            throw new \InvalidArgumentException("Status '$status' not recognized.");
+        }
+
+        
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getReward(): ?float
+    {
+        return $this->reward;
+    }
+
+    public function setReward(float $reward): self
+    {
+        $this->reward = $reward;
+        
         return $this;
     }
 }

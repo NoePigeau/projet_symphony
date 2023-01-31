@@ -35,27 +35,26 @@ class MissionController extends AbstractController
         ]);
     }
 
-    /**
-     * @param Mission $mission
-     * @param string $position
-     * @param EntityManagerInterface $manager
-     * @return Response
-     */
-    #[Route('/{id}/sortable/{position}', name: 'mission_sortable', requirements: ['position' => 'UP|DOWN'], methods: ['GET'])]
-    public function sortable(Mission $mission, string $position, EntityManagerInterface $manager): Response
-    {
-        $position === 'DOWN' ? $mission->setPosition($mission->getPosition() +1) : $mission->setPosition($mission->getPosition() -1);
-        $manager->flush();
+    // /**
+    //  * @param Mission $mission
+    //  * @param string $position
+    //  * @param EntityManagerInterface $manager
+    //  * @return Response
+    //  */
+    // #[Route('/{id}/sortable/{position}', name: 'mission_sortable', requirements: ['position' => 'UP|DOWN'], methods: ['GET'])]
+    // public function sortable(Mission $mission, string $position, EntityManagerInterface $manager): Response
+    // {
+    //     $position === 'DOWN' ? $mission->setPosition($mission->getPosition() +1) : $mission->setPosition($mission->getPosition() -1);
+    //     $manager->flush();
 
-        return $this->redirectToRoute('admin_mission_index');
-    }
+    //     return $this->redirectToRoute('admin_mission_index');
+    // }
 
     /**
      * @param Mission $mission
      * @return Response
      */
     #[Route('/create', name: 'mission_create', methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_ORGANIZER')")]
     public function create(Request $request, MissionRepository $missionRepository): Response
     {
         $mission = new Mission();
@@ -101,7 +100,6 @@ class MissionController extends AbstractController
      */
     #[Route('/{slug}', name: 'mission_show', methods: ['GET'])]
     /** #[IsGranted(MissionVoter::VIEW, 'mission')]  */
-    #[Security('is_granted("ROLE_ORGANIZER") or mission.getParticipants().contains(user)')]
     public function show(Mission $mission): Response
     {
         //$this->denyAccessUnlessGranted(MissionVoter::VIEW, $mission);
@@ -118,7 +116,6 @@ class MissionController extends AbstractController
      * @return Response
      */
     #[Route('/{id}/delete/{token}', name: 'mission_delete', requirements: ['id' => '\d+'], methods: ['GET'])]
-    #[Security("is_granted('ROLE_ORGANIZER')")]
     public function delete(Mission $mission, string $token, MissionRepository $missionRepository): Response
     {
         if (!$this->isCsrfTokenValid('delete' . $mission->getId(), $token)) {
