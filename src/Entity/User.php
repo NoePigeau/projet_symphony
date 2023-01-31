@@ -48,9 +48,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Length(min: 6)]
     private ?string $plainPassword = null;
 
-    #[ORM\ManyToMany(targetEntity: Mission::class, mappedBy: 'participants')]
-    private Collection $missions;
-
     #[ORM\Column(length: 1024, nullable: true)]
     private ?string $description = null;
 
@@ -69,11 +66,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'agent', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Mission::class, orphanRemoval: true)]
+    private Collection $clientMissions;
+
+    #[ORM\OneToMany(mappedBy: 'agent', targetEntity: Mission::class)]
+    private Collection $agentMissions;
+
     public function __construct()
     {
-        $this->missions = new ArrayCollection();
         $this->ratings = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->clientMissions = new ArrayCollection();
+        $this->agentMissions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -309,6 +313,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmailNotify(bool $emailNotify): self
     {
         $this->emailNotify = $emailNotify;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mission>
+     */
+    public function getClientMissions(): Collection
+    {
+        return $this->clientMissions;
+    }
+
+    public function addClientMission(Mission $clientMission): self
+    {
+        if (!$this->clientMissions->contains($clientMission)) {
+            $this->clientMissions->add($clientMission);
+            $clientMission->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientMission(Mission $clientMission): self
+    {
+        if ($this->clientMissions->removeElement($clientMission)) {
+            // set the owning side to null (unless already changed)
+            if ($clientMission->getClient() === $this) {
+                $clientMission->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mission>
+     */
+    public function getAgentMissions(): Collection
+    {
+        return $this->agentMissions;
+    }
+
+    public function addAgentMission(Mission $agentMission): self
+    {
+        if (!$this->agentMissions->contains($agentMission)) {
+            $this->agentMissions->add($agentMission);
+            $agentMission->setAgent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAgentMission(Mission $agentMission): self
+    {
+        if ($this->agentMissions->removeElement($agentMission)) {
+            // set the owning side to null (unless already changed)
+            if ($agentMission->getAgent() === $this) {
+                $agentMission->setAgent(null);
+            }
+        }
 
         return $this;
     }
