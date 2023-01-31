@@ -77,11 +77,15 @@ class Mission
     #[ORM\OneToMany(mappedBy: 'mission', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
+    #[ORM\OneToMany(mappedBy: 'missionId', targetEntity: Message::class)]
+    private Collection $messages;
+
     public function __construct()
     {
         // $this->participants = new ArrayCollection();
         $this->steps = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -283,6 +287,36 @@ class Mission
             // set the owning side to null (unless already changed)
             if ($order->getMission() === $this) {
                 $order->setMission(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setMissionId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getMissionId() === $this) {
+                $message->setMissionId(null);
             }
         }
 
