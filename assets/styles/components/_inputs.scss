@@ -16,6 +16,8 @@ input {
         border: 1px solid $light-gray;
         border-radius: 10px;
         padding: 10px;
+        color: $bg-color;
+
         transition: .4s;
         &::placeholder {
             color: $light-gray;
@@ -24,6 +26,22 @@ input {
         &:focus {
             border-color: $main-color;
         }
+    }
+}
+
+.input {
+    display: flex;
+    border: 1px solid $light-gray;
+    border-radius: 10px;
+    padding: 10px;
+    transition: .4s;
+    color: $bg-color;
+    &::placeholder {
+        color: $light-gray;
+    }
+
+    &:focus {
+        border-color: $main-color;
     }
 }
 

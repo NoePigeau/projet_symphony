@@ -1,0 +1,34 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}User - update{% endblock %}
+
+{% block body %}
+    <div>
+        <a href="{{ path('admin_user_index') }}"> back to users list </a>
+    </div>
+    <div class="container-sign back">
+        {{ form_start(form, { 'attr' : { 'class': 'form-sign' } }) }}
+            <h1 class="text-3xl">Edit - {{user.email}}</h1>
+            <div class="inputs">
+                    <div class="input-group">
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email, { 'attr' : { 'class': 'input' }})}}
+                    </div>
+                    <div class="input-group">
+                        {{ form_label(form.nickname, 'Nickname') }}
+                        {{ form_widget(form.nickname)}}
+                    </div>
+                    <div class="input-group">
+                        {{ form_label(form.firstname, 'Firstname') }}
+                        {{ form_widget(form.firstname)}}
+                    </div>
+                    <div class="input-group">
+                        {{ form_label(form.lastname, 'Lastname') }}
+                        {{ form_widget(form.lastname)}}
+                    </div>
+            </div>
+            {{ form_errors(form) }}
+            <input class="main-cta" type="submit" value="Edit">
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
