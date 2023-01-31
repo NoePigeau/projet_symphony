@@ -5,6 +5,7 @@
 {% block body %}
     <div class="container-sign">
         {{ form_start(form, { 'attr' : { 'class': 'form-sign' } }) }}
+        
             <h1 class="text-4xl">Sign up</h1>
             <div class="inputs">
                     <div class="input-group">
@@ -16,11 +17,11 @@
                         {{ form_widget(form.nickname)}}
                     </div>
                     <div class="input-group">
-                        {{ form_label(form.firstname, 'Password') }}
+                        {{ form_label(form.firstname) }}
                         {{ form_widget(form.firstname)}}
                     </div>
                     <div class="input-group">
-                        {{ form_label(form.lastname, 'Password') }}
+                        {{ form_label(form.lastname) }}
                         {{ form_widget(form.lastname)}}
                     </div>
                     <div class="input-group">

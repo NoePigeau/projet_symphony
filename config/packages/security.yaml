@@ -34,6 +34,7 @@ security:
         - { path: ^/admin, roles: ROLE_ORGANIZER }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/profile/token-validation, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER }
 
     role_hierarchy:
