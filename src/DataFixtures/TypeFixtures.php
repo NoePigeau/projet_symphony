@@ -11,15 +11,15 @@ class TypeFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create('fr_FR');
+        // $faker = Factory::create('fr_FR');
 
-        for ($i=0; $i<10; $i++) {
-            $object = (new Type())
-                ->setName($faker->colorName)
-            ;
-            $manager->persist($object);
-        }
+        // for ($i=0; $i<10; $i++) {
+        //     $object = (new Type())
+        //         ->setName($faker->colorName)
+        //     ;
+        //     $manager->persist($object);
+        // }
 
-        $manager->flush();
+        // $manager->flush();
     }
 }

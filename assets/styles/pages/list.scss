@@ -1,0 +1,49 @@
+.page-list {
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .container-list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        box-shadow: $shadow;
+        border-radius: 10px;
+    
+        .row {
+            display: flex;
+            gap: 24px;
+            padding: 8px 24px;
+            border-bottom: 1px solid $light-gray;
+
+            .col {
+                background: transparent;
+                flex: 1;
+                text-align: left;
+                font-weight: 400;
+                font-size: 14px;
+
+                &.action {
+                    display: flex;
+                    gap: 24px;
+                    justify-content: center;
+                }
+            }
+            &.pagination {
+                justify-content: center;
+            }
+        }
+        thead .col {
+            font-weight: bold !important;
+        }
+        tbody .row:not(.pagination) {
+            cursor: pointer;
+            &:hover {
+                background-color: $light-gray;
+            }
+        }
+        
+    }
+}

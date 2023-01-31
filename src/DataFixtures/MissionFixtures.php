@@ -13,21 +13,21 @@ class MissionFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create('fr_FR');
+        // $faker = Factory::create('fr_FR');
 
-        $types = $manager->getRepository(Type::class)->findAll();
+        // $types = $manager->getRepository(Type::class)->findAll();
 
-        for ($i=0; $i<10; $i++) {
-            $object = (new Mission())
-                ->setName($faker->name)
-                ->setDescription($faker->paragraph)
-                ->setStartDate($faker->dateTimeBetween('-1 years'))
-                ->setType($faker->randomElement($types))
-            ;
-            $manager->persist($object);
-        }
+        // for ($i=0; $i<10; $i++) {
+        //     $object = (new Mission())
+        //         ->setName($faker->name)
+        //         ->setDescription($faker->paragraph)
+        //         ->setStartDate($faker->dateTimeBetween('-1 years'))
+        //         ->setType($faker->randomElement($types))
+        //     ;
+        //     $manager->persist($object);
+        // }
 
-        $manager->flush();
+        // $manager->flush();
     }
 
     public function getDependencies()

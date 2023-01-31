@@ -13,6 +13,10 @@
 @import 'components/inputs';
 @import 'components/buttons';
 @import 'components/forms';
+@import 'components/card';
+
+//pages globals
+@import 'pages/list.scss';
 
 //globals
 * {
@@ -22,7 +26,11 @@
 body {
     margin: 0;
     min-height: 100vh;
+    background-color: $bg-color;
     @include breakpoint(tablet) {
         padding: 0 24px;
+    }
+    &.backoffice {
+        padding-left: 225px;
     }
 }
