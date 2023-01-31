@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Listing de mes missions</h1>
     
-    {% for mission in app.user.agentMissions %}
+    {% for mission in missions %}
         {{ mission.name }} <br>
         <a href="{{ path('front_mission_show', {'slug': mission.slug}) }}">Voir</a>
     {% endfor %}
