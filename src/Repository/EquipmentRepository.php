@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Equipment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Equipment>
@@ -37,6 +38,26 @@ class EquipmentRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function search($request): QueryBuilder
+    {
+        $query = $request->request->get('query');
+        $limit = $request->request->get('limit');
+
+        $qr = $this->createQueryBuilder('e')
+            ->orderBy('e.name', 'ASC')
+            ->setMaxResults($limit)
+        ;
+
+        if ($query) {
+            $qr
+                ->andWhere('lower(e.name) LIKE :val')
+                ->setParameter('val', '%' . strtolower($query) . '%')
+            ;
+        }
+
+        return $qr;
     }
 
 //    /**
