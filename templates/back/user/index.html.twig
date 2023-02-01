@@ -5,11 +5,12 @@
 {% block body %}
     <div class="page-list">
         <h1 class="text-4xl"> Users List </h1>
-        <form method="POST">
+        <form method="POST" class="container-search">
             <input class="input" type="text" value="{{ app.request.request.get('query') }}" name="query" placeholder="Search ...">
             <select name="limit">
-                <option value="10">10</option>
-                <option value="30">30</option>
+                <option value="10" {{ limit == 10 ? 'selected': '' }}>10</option>
+                <option value="20" {{ limit == 20 ? 'selected': '' }}>20</option>
+                <option value="30" {{ limit == 30 ? 'selected': '' }}>30</option>
             </select>
             <button type="submit" class="main-cta">Search</button>
         </form>

@@ -5,6 +5,15 @@
     flex-direction: column;
     gap: 24px;
 
+    .container-search {
+        display: flex;
+        gap: 16px;
+        select {
+            background-color: $bg-color;
+
+        }
+    }
+
     .container-list {
         width: 100%;
         display: flex;
