@@ -34,6 +34,9 @@ body {
     @include breakpoint(tablet) {
         padding: 0 24px;
     }
+    &.front {
+        padding-top: 90px;
+    }
     &.backoffice {
         padding-left: 225px;
     }

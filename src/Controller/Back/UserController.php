@@ -4,6 +4,7 @@ namespace App\Controller\Back;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\UserUpdateType;
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -32,11 +33,12 @@ class UserController extends AbstractController
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             $adapter,
             $request->query->get('page', 1),
-            12
+            $request->request->get('limit', 10)
         );
 
         return $this->render('back/user/index.html.twig', [
-            'pager' => $pager
+            'pager' => $pager,
+            'limit' => $request->request->get('limit', 10)
         ]);
     }
     
@@ -72,13 +74,13 @@ class UserController extends AbstractController
     #[Security("is_granted('ROLE_ADMIN')")]
     public function update(user $user, Request $request, userRepository $userRepository): Response
     {
-        $form = $this->createForm(userType::class, $user);
+        $form = $this->createForm(UserUpdateType::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $userRepository->save($user, true);
 
-            return $this->redirectToRoute('admin_user_show', ['slug' => $user->getId()]);
+            return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render('back/user/update.html.twig', [

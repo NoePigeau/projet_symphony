@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\PseudoTypes\LowercaseString;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -43,6 +44,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
     }
 
+    public function updatePassword(User $user, string $newHashedPassword): void
+    {
+        if($user->getPlainPassword() != null) {
+            $user->setPassword($newHashedPassword);
+        }
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
@@ -69,8 +77,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         if ($query) {
             $qr
-                ->andWhere('m.email LIKE :val')
-                ->setParameter('val', '%' . $query . '%')
+                ->andWhere('lower(m.email) LIKE :val')
+                ->orWhere('lower(m.nickname) LIKE :val')
+                ->orWhere('lower(m.firstname) LIKE :val')
+                ->orWhere('lower(m.lastname) LIKE :val')
+                ->setParameter('val', '%' . strtolower($query) . '%')
             ;
         }
 
