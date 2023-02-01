@@ -1,0 +1,58 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}Orders list{% endblock %}
+
+{% block body %}
+    <div class="page-list">
+        <h1 class="text-4xl"> Orders List </h1>
+        <form method="POST" class="container-search">
+            <input class="input" type="text" value="{{ app.request.request.get('query') }}" name="query" placeholder="Search ...">
+            <select name="limit">
+                <option value="10" {{ limit == 10 ? 'selected': '' }}>10</option>
+                <option value="20" {{ limit == 20 ? 'selected': '' }}>20</option>
+                <option value="30" {{ limit == 30 ? 'selected': '' }}>30</option>
+            </select>
+            <button type="submit" class="main-cta">Search</button>
+        </form>
+
+        <table class="container-list">
+            <thead>
+                <tr class="row">
+                    <th class="col">ID</th>
+                    <th class="col">Agent</th>
+                    <th class="col">Mission</th>
+                    <th class="col">Equipment</th>
+                    <th class="col">Amount</th>
+                    <th class="col">Status</th>
+                    <th class="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in pager %}
+                <tr class="row">
+                    <th class="col">{{ order.id }}</th>
+                    <th class="col"><a href="{{ path('admin_user_show', {'id': order.agent.id}) }}">{{ order.agent.nickname }}</a></th>
+                    {# <th class="col"><a href="{{ path('admin_mission_show', {'slug': order.mission.slug}) }}">{{ order.mission.name }}</a></th> #}
+                    <th class="col">{{ order.mission.name }}</th>
+                    <th class="col"><a href="{{ path('admin_equipment_show', {'slug': order.equipment.slug}) }}">{{ order.equipment.name }}</th>
+                    <th class="col">{{ order.amount }}</th>
+                    <th class="col">{{ order.status }}</th>
+                    <th class="col action">
+                        {% if order.status == 'in_demand' %}
+                            <a href="{{ path('admin_order_accept', {'id': order.id}) }}">A</a>
+                            <a href="{{ path('admin_order_refuse', {'id': order.id}) }}">R</a>
+                        {% endif %}
+                        <a href="{{ path('admin_order_delete', {'id': order.id, 'token': csrf_token('delete' ~ order.id)}) }}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
+                    </th>
+                </tr>
+                
+                {% else %}
+                    no orders found.
+                {% endfor %}
+                <tr class="row pagination">
+                    <th class="col">{{ pagerfanta(pager, {'pageParameter': '[other_page]', 'prev_message' : 'back' }) }}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

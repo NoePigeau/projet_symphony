@@ -311,7 +311,6 @@ class Mission
         if (!in_array($status, [self::STATUS_FREE, self::STATUS_IN_PROGRESS, self::STATUS_FINISHED])) {
             throw new \InvalidArgumentException("Status '$status' not recognized.");
         }
-
         
         $this->status = $status;
 

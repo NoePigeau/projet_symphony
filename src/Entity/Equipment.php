@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\EquipmentRepository;
+use COM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -33,7 +34,7 @@ class Equipment
     #[Slug(fields: ['name', 'createdAt'])]
     private ?string $slug = null;
 
-    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'equipments')]
+    #[ORM\OneToMany(mappedBy: 'equipment', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
     public function __construct()
@@ -112,7 +113,7 @@ class Equipment
     {
         if (!$this->orders->contains($order)) {
             $this->orders->add($order);
-            $order->addEquipment($this);
+            $order->setEquipment($this);
         }
 
         return $this;
@@ -121,7 +122,7 @@ class Equipment
     public function removeOrder(Order $order): self
     {
         if ($this->orders->removeElement($order)) {
-            $order->removeEquipment($this);
+            $order->setEquipment(null);
         }
 
         return $this;
