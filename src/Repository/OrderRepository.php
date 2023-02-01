@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Order>
@@ -37,6 +38,27 @@ class OrderRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function search($request): QueryBuilder
+    {
+        $query = $request->request->get('query');
+        $limit = $request->request->get('limit');
+
+        $qr = $this->createQueryBuilder('o')
+            ->orderBy('o.id', 'ASC')
+            ->setMaxResults($limit)
+        ;
+
+        if ($query) {
+            $qr
+                ->andWhere('o.id LIKE :val')
+                ->orWhere('lower(o.status) LIKE :val')
+                ->setParameter('val', '%' . strtolower($query) . '%')
+            ;
+        }
+
+        return $qr;
     }
 
 //    /**

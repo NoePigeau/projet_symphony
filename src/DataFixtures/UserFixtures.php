@@ -5,38 +5,39 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 
 class UserFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        $faker = Factory::create('fr_FR');
+
         $pwd = 'Test1234';
 
-        $names = array("Harry","Ross",
-        "Bruce","Cook",
-        "Carolyn","Morgan",
-        "Albert","Walker",
-        "Randy","Reed",
-        "Larry","Barnes",
-        "Lois","Wilson",
-        "Jesse","Campbell",
-        "Ernest","Rogers",
-        "Theresa","Patterson",
-        "Henry","Simmons",
-        "Michelle","Perry",
-        "Frank","Butler",
-        "Shirley");
-
-        foreach ($names as $name) {
+        for ($i=0; $i<10; $i++) {
             $user = (new User())
-                ->setEmail($name . '@user.fr')
-                ->setNickname('nick_' . $name)
+                ->setEmail($faker->email())
+                ->setNickname($faker->userName())
                 ->setDescription('je suis un agent')
-                ->setFirstname($name)
-                ->setLastname('l_' . $name)
+                ->setFirstname($faker->firstName())
+                ->setLastname($faker->lastName())
                 ->setValidationToken('ooo')
                 ->setPlainPassword($pwd)
                 ->setRoles(['ROLE_AGENT']);
+            $manager->persist($user);
+        }
+
+        for ($i=0; $i<10; $i++) {
+            $user = (new User())
+                ->setEmail($faker->email())
+                ->setNickname($faker->userName())
+                ->setDescription('')
+                ->setFirstname($faker->firstName())
+                ->setLastname($faker->lastName())
+                ->setValidationToken('ooo')
+                ->setPlainPassword($pwd)
+                ->setRoles(['ROLE_CLIENT']);
             $manager->persist($user);
         }
 

@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`order`')]
 class Order
 {
+    const STATUS_IN_DEMAND = 'in_demand';
+    const STATUS_ACCEPTED = 'accepted';
+    const STATUS_REFUSED = 'refused';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -24,12 +28,18 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?Mission $mission = null;
 
-    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'orders')]
-    private Collection $equipments;
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Equipment $equipment= null;
+
+    #[ORM\Column]
+    private ?int $amount = null;
+
+    #[ORM\Column(length: 30)]
+    private ?string $status = null;
 
     public function __construct()
     {
-        $this->equipments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -61,26 +71,42 @@ class Order
         return $this;
     }
 
-    /**
-     * @return Collection<int, Equipment>
-     */
-    public function getEquipments(): Collection
+    public function getEquipment(): ?Equipment
     {
-        return $this->equipments;
+        return $this->equipment;
     }
 
-    public function addEquipment(Equipment $equipment): self
+    public function setEquipment(?Equipment $equipment): self
     {
-        if (!$this->equipments->contains($equipment)) {
-            $this->equipments->add($equipment);
-        }
+        $this->equipment = $equipment;
 
         return $this;
     }
 
-    public function removeEquipment(Equipment $equipment): self
+    public function getAmount(): ?int
     {
-        $this->equipments->removeElement($equipment);
+        return $this->amount;
+    }
+
+    public function setAmount(int $amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        if (!in_array($status, [self::STATUS_IN_DEMAND, self::STATUS_ACCEPTED, self::STATUS_REFUSED])) {
+            throw new \InvalidArgumentException("Status '$status' not recognized.");
+        }
+
+        $this->status = $status;
 
         return $this;
     }
