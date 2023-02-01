@@ -16,39 +16,40 @@
         </form>
         <a href="{{ path('admin_user_create') }}">Add new user</a>
 
-        <table class="container-list">
-            <thead>
-                <tr class="row">
-                    <th class="col">Email</th>
-                    <th class="col">Nickname</th>
-                    <th class="col">Firstname</th>
-                    <th class="col">Lastname</th>
-                    <th class="col">Account checked</th>
-                    <th class="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in pager %}
-                <tr class="row">
-                    <th class="col">{{ user.email }}</th>
-                    <th class="col">{{ user.nickname }}</th>
-                    <th class="col">{{ user.firstname }}</th>
-                    <th class="col">{{ user.lastname }}</th>
-                    <th class="col">{{ user.status == null ? 'no' : 'yes' }}</th>
-                    <th class="col action">
-                        <a href="{{ path('admin_user_show', {'id': user.id}) }}"><img src="{{asset('images/icones/eye.svg')}}" alt="eye"></a>
-                        <a href="{{ path('admin_user_update', {'id': user.id}) }}"><img src="{{asset('images/icones/edit.svg')}}" alt="edit"></a>
-                        <a href="{{ path('admin_user_delete', {'id': user.id, 'token': csrf_token('delete' ~ user.id)}) }}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
-                    </th>
-                </tr>
-                
-                {% else %}
-                    no users found.
-                {% endfor %}
-                <tr class="row pagination">
-                    <th class="col">{{ pagerfanta(pager, {'pageParameter': '[other_page]', 'prev_message' : 'back' }) }}</th>
-                </tr>
-            </tbody>
-        </table>
+        {% if pager|length == 0 %} 
+            <div>no users found</div>
+        {% else %}
+            <table class="container-list">
+                <thead>
+                    <tr class="row">
+                        <th class="col">Email</th>
+                        <th class="col">Nickname</th>
+                        <th class="col">Firstname</th>
+                        <th class="col">Lastname</th>
+                        <th class="col">Account checked</th>
+                        <th class="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in pager %}
+                    <tr class="row">
+                        <th class="col">{{ user.email }}</th>
+                        <th class="col">{{ user.nickname }}</th>
+                        <th class="col">{{ user.firstname }}</th>
+                        <th class="col">{{ user.lastname }}</th>
+                        <th class="col">{{ user.status == null ? 'no' : 'yes' }}</th>
+                        <th class="col action">
+                            <a href="{{ path('admin_user_show', {'id': user.id}) }}"><img src="{{asset('images/icones/eye.svg')}}" alt="eye"></a>
+                            <a href="{{ path('admin_user_update', {'id': user.id}) }}"><img src="{{asset('images/icones/edit.svg')}}" alt="edit"></a>
+                            <a href="{{ path('admin_user_delete', {'id': user.id, 'token': csrf_token('delete' ~ user.id)}) }}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
+                        </th>
+                    </tr>
+                    {% endfor %}
+                    <tr class="row pagination">
+                        <th class="col">{{ pagerfanta(pager, {'pageParameter': '[other_page]', 'prev_message' : 'back' }) }}</th>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
     </div>
 {% endblock %}

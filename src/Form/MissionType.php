@@ -18,7 +18,7 @@ class MissionType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Coucou, tu peux mettre le nom stp'
+                'label' => 'Name'
             ])
             ->add('description')
             ->add('type', EntityType::class, [

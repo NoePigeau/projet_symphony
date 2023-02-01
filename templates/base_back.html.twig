@@ -21,9 +21,7 @@
                 <nav class="links">
                     <ul><a href="{{ path('front_default_index') }}"> Homepage</a></ul>
                     <ul><a href="{{ path('admin_user_index') }}"> Users </a></ul>
-                    <ul><a href="#"> Contact</a></ul>
-                    <ul><a href="#"> others page</a></ul>
-                    {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_default_index') }}">Panel d'admin</a></ul> {% endif %}
+                    <ul><a href="{{ path('admin_mission_index') }}"> Missions </a></ul>
                 </nav>
                 <div class="sign">
                     <a href="{{ path('register') }}"><img src="{{ asset('images/icones/signup.svg') }}" alt="signup"> Profil </a>

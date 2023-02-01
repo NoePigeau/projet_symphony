@@ -8,6 +8,8 @@ use App\Repository\MissionRepository;
 use App\Repository\TypeRepository;
 use App\Security\Voter\MissionVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,46 +31,17 @@ class MissionController extends AbstractController
 
         $missions = $missionRepository->search($request);
 
+        $adapter = new QueryAdapter($missions);
+        $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
+            $adapter,
+            $request->query->get('page', 1),
+            $request->request->get('limit', 10)
+        );
+
         return $this->render('back/mission/index.html.twig', [
             'types' => $types,
-            'missions' => $missions
-        ]);
-    }
-
-    // /**
-    //  * @param Mission $mission
-    //  * @param string $position
-    //  * @param EntityManagerInterface $manager
-    //  * @return Response
-    //  */
-    // #[Route('/{id}/sortable/{position}', name: 'mission_sortable', requirements: ['position' => 'UP|DOWN'], methods: ['GET'])]
-    // public function sortable(Mission $mission, string $position, EntityManagerInterface $manager): Response
-    // {
-    //     $position === 'DOWN' ? $mission->setPosition($mission->getPosition() +1) : $mission->setPosition($mission->getPosition() -1);
-    //     $manager->flush();
-
-    //     return $this->redirectToRoute('admin_mission_index');
-    // }
-
-    /**
-     * @param Mission $mission
-     * @return Response
-     */
-    #[Route('/create', name: 'mission_create', methods: ['GET', 'POST'])]
-    public function create(Request $request, MissionRepository $missionRepository): Response
-    {
-        $mission = new Mission();
-        $form = $this->createForm(MissionType::class, $mission);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $missionRepository->save($mission, true);
-
-            return $this->redirectToRoute('admin_mission_show', ['slug' => $mission->getSlug()]);
-        }
-
-        return $this->render('back/mission/create.html.twig', [
-            'form' => $form->createView()
+            'pager' => $pager,
+            'limit' => $request->request->get('limit', 10)
         ]);
     }
 
@@ -99,11 +72,8 @@ class MissionController extends AbstractController
      * @return Response
      */
     #[Route('/{slug}', name: 'mission_show', methods: ['GET'])]
-    /** #[IsGranted(MissionVoter::VIEW, 'mission')]  */
     public function show(Mission $mission): Response
     {
-        //$this->denyAccessUnlessGranted(MissionVoter::VIEW, $mission);
-
         return $this->render('back/mission/show.html.twig', [
             'mission' => $mission
         ]);

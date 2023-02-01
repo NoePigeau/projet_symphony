@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Mission;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -42,7 +43,7 @@ class MissionRepository extends ServiceEntityRepository
     /**
      * @return Mission[] Returns an array of Mission objects
      */
-    public function search($request): array
+    public function search($request): QueryBuilder
     {
         $query = $request->request->get('query');
         $type = $request->request->get('type');
@@ -67,16 +68,17 @@ class MissionRepository extends ServiceEntityRepository
             ;
         }
 
-        return $qr->getQuery()->getResult();
+        return $qr;
     }
 
-//    public function findOneBySomeField($value): ?Mission
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   public function findMissionDetail($id): ?Mission
+   {
+       return $this->createQueryBuilder('m')
+            ->andWhere('m.id = :id')
+            ->setParameter('id', $id)
+            ->leftJoin('m.agent', 'agent' )
+            ->leftJoin('m.client', 'client' )
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

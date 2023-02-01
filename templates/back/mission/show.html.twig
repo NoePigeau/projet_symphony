@@ -3,9 +3,19 @@
 {% block title %}Mission {{ mission.name }}{% endblock %}
 
 {% block body %}
-        <a href="{{ path('admin_mission_index') }}">Liste des missions</a> <br><br>
-        {{ mission.name|capitalize }} <br>
-        {{ mission.description }} <br>
-        {{ mission.startDate|date('d/m/Y') }}
-        <img src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}">
+    <div class="page-list">
+        <div class="card-profile">  
+                <h1 class="text-4xl"> {{ mission.name }} </h1>
+                <div> <strong>status</strong> : {{ mission.status }} </div>
+                <div> <strong>description</strong> : {{ mission.description }} </div>
+                <div> <strong>Reward</strong> : {{ mission.reward }} $ </div>
+                <div> <strong>created at</strong> : {{ mission.createdAt|date("m/d/Y") }} </div>
+                <div> <strong>updated at</strong> : {{ mission.updatedAt|date("m/d/Y") }} </div>
+                <div><strong>agent</strong> : {{ mission.agent.email }}, {{ mission.client.nickname }}</div>
+                <div> <strong>client</strong> : {{ mission.client.email }}, {{mission.client.firstname}}, {{mission.client.lastname}}</div>
+
+                <img src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}">        
+        </div>
+        <a href="{{ path('admin_mission_index') }}" >  back to missions list</a>
+    </div>
 {% endblock %}

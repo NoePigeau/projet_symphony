@@ -29,7 +29,7 @@ input {
     }
 }
 
-.input {
+.input, textarea {
     display: flex;
     border: 1px solid $light-gray;
     border-radius: 10px;
