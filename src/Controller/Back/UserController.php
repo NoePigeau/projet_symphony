@@ -3,7 +3,7 @@
 namespace App\Controller\Back;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\UserAdminType;
 use App\Form\UserUpdateType;
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -47,7 +47,12 @@ class UserController extends AbstractController
     public function create(Request $request, UserRepository $userRepository): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $pwd = bin2hex(openssl_random_pseudo_bytes(4));
+        $user->setPlainPassword($pwd);
+        $user->setStatus(true);
+        $user->setRoles(['ROLE_ADMIN']);
+        $user->setValidationToken($pwd);
+        $form = $this->createForm(UserAdminType::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
