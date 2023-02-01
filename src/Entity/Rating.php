@@ -23,6 +23,10 @@ class Rating
     #[ORM\ManyToOne(inversedBy: 'ratings')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $agent = null;
+	
+	#[ORM\ManyToOne(targetEntity: Mission::class, inversedBy: "ratings")]
+	#[ORM\JoinColumn(nullable: false)]
+	private ?Mission $mission = null;
 
     public function getId(): ?int
     {
@@ -64,4 +68,15 @@ class Rating
 
         return $this;
     }
+	
+	public function getMission(): ?Mission
+	{
+		return $this->mission;
+	}
+	
+	public function setMission(?Mission $mission): self
+	{
+		$this->mission = $mission;
+		return $this;
+	}
 }

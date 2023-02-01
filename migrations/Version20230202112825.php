@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230202071828 extends AbstractMigration
+final class Version20230202112825 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -43,11 +43,12 @@ final class Version20230202071828 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_F52993983414710B ON "order" (agent_id)');
         $this->addSql('CREATE INDEX IDX_F5299398BE6CAE90 ON "order" (mission_id)');
         $this->addSql('CREATE INDEX IDX_F5299398517FE9FE ON "order" (equipment_id)');
-        $this->addSql('CREATE TABLE rating (id INT NOT NULL, agent_id INT NOT NULL, rate INT NOT NULL, opinion TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE rating (id INT NOT NULL, agent_id INT NOT NULL, mission_id INT NOT NULL, rate INT NOT NULL, opinion TEXT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_D88926223414710B ON rating (agent_id)');
+        $this->addSql('CREATE INDEX IDX_D8892622BE6CAE90 ON rating (mission_id)');
         $this->addSql('CREATE TABLE step (id INT NOT NULL, mission_id INT NOT NULL, name VARCHAR(255) NOT NULL, status BOOLEAN NOT NULL, position INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_43B9FE3CBE6CAE90 ON step (mission_id)');
-        $this->addSql('CREATE TABLE type (id INT NOT NULL, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE type (id INT NOT NULL, name VARCHAR(50) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, slug VARCHAR(105) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "user" (id INT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, nickname VARCHAR(255) NOT NULL, firstname VARCHAR(255) NOT NULL, lastname VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, description VARCHAR(1024) DEFAULT NULL, status BOOLEAN NOT NULL, validation_token VARCHAR(64) NOT NULL, email_notify BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON "user" (email)');
         $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
@@ -72,6 +73,7 @@ final class Version20230202071828 extends AbstractMigration
         $this->addSql('ALTER TABLE "order" ADD CONSTRAINT FK_F5299398BE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "order" ADD CONSTRAINT FK_F5299398517FE9FE FOREIGN KEY (equipment_id) REFERENCES equipment (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE rating ADD CONSTRAINT FK_D88926223414710B FOREIGN KEY (agent_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE rating ADD CONSTRAINT FK_D8892622BE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE step ADD CONSTRAINT FK_43B9FE3CBE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
@@ -98,6 +100,7 @@ final class Version20230202071828 extends AbstractMigration
         $this->addSql('ALTER TABLE "order" DROP CONSTRAINT FK_F5299398BE6CAE90');
         $this->addSql('ALTER TABLE "order" DROP CONSTRAINT FK_F5299398517FE9FE');
         $this->addSql('ALTER TABLE rating DROP CONSTRAINT FK_D88926223414710B');
+        $this->addSql('ALTER TABLE rating DROP CONSTRAINT FK_D8892622BE6CAE90');
         $this->addSql('ALTER TABLE step DROP CONSTRAINT FK_43B9FE3CBE6CAE90');
         $this->addSql('DROP TABLE document');
         $this->addSql('DROP TABLE equipment');

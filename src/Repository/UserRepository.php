@@ -69,6 +69,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         $query = $request->request->get('query');
         $limit = $request->request->get('limit');
+	
+//    /**
+//     * @return User[] Returns an array of User objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('u')
+//            ->andWhere('u.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('u.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
 
         $qr = $this->createQueryBuilder('m')
             ->orderBy('m.email', 'ASC')
@@ -87,4 +102,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $qr;
     }
+	
+	/**
+	 * @param string $role
+	 *
+	 * @return QueryBuilder Returns an array of User objects
+	 */
+	public function findByRole(string $role): QueryBuilder
+	{
+		return $this->createQueryBuilder('u')
+			->where("JSON_GET_TEXT(u.roles, 0) LIKE :role")
+			->setParameter('role', '%' . $role . '%');
+	}
 }
