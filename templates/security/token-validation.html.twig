@@ -4,11 +4,11 @@
 
 {% block body %}
     <div class="container-sign">
-        {% if errors %}
+        {% if errors is defined %}
             <h1 class="text-4xl">Your token couldn't been validated</h1>
             <span class="mt-16">{{errors}}</span>
             <span>Please contact us.</span>
-        {% else  %}
+        {% else %}
             <h1 class="text-4xl">Your token has been validated</h1>
             <span class="mt-16">You can know access all the website freely. Click <a class="text-rose-800" href="{{ path('front_default_index') }}">here</a> to go to the missions list</span>
         {% endif %}
