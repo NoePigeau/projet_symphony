@@ -96,12 +96,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getFirstname(): ?string
     {
-        return $this->nickname;
+        return $this->firstname;
     }
 
     public function getLastname(): ?string
     {
-        return $this->nickname;
+        return $this->lastname;
     }
 
     public function setEmail(string $email): self

@@ -19,3 +19,13 @@
     }
 }
 
+
+.multiple {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    > option {
+        padding-bottom: .2em;
+        padding-top: .8em;
+    }
+}

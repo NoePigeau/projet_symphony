@@ -113,7 +113,7 @@ class SecurityController extends AbstractController
     #[Route('/profile', name: 'profile', methods: ['GET', 'POST'])]
     public function profile(Request $request, EntityManagerInterface $entityManager, DocumentRepository $dr): Response
     {
-        $form = $this->createForm(\App\Form\UserType::class, $this->getUser());
+        $form = $this->createForm(\App\Form\UserType::class, $this->getUser(), ['isUpdate' => true]);
 
         $hasPendingRequest = $dr->findOneBy(array('submitedBy' => $this->getUser()->getId()));
 
@@ -121,7 +121,10 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('front_default_index');
+            return $this->render('security/profile.html.twig', [
+                'form' => $form->createView(),
+                'hasPending' => $hasPendingRequest
+            ]);
         }
 
 
