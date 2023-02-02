@@ -1,0 +1,10 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}Equipment Update{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_rest(form) }}
+        <input type="submit" value="Update">
+    {{ form_end(form) }}
+{% endblock %}
