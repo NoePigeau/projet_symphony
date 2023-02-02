@@ -20,9 +20,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 class Mission
 {
+    const STATUS_IN_DEMAND = 'in_demand';
+    const STATUS_REFUSED = 'refused';
     const STATUS_FREE = 'free';
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_FINISHED = 'finished';
+
 
     use TimestampableTrait;
 
@@ -87,6 +90,11 @@ class Mission
         $this->steps = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->messages = new ArrayCollection();
+    }
+
+    public static function getAllStatus()
+    {
+        return [self::STATUS_IN_DEMAND , self::STATUS_REFUSED, self::STATUS_FREE, self::STATUS_IN_PROGRESS, self::STATUS_FINISHED];
     }
 
     public function getId(): ?int
@@ -308,7 +316,7 @@ class Mission
 
     public function setStatus(string $status): self
     {
-        if (!in_array($status, [self::STATUS_FREE, self::STATUS_IN_PROGRESS, self::STATUS_FINISHED])) {
+        if (!in_array($status, self::getAllStatus())) {
             throw new \InvalidArgumentException("Status '$status' not recognized.");
         }
         

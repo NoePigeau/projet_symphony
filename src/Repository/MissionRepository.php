@@ -70,15 +70,4 @@ class MissionRepository extends ServiceEntityRepository
 
         return $qr;
     }
-
-   public function findMissionDetail($id): ?Mission
-   {
-       return $this->createQueryBuilder('m')
-            ->andWhere('m.id = :id')
-            ->setParameter('id', $id)
-            ->leftJoin('m.agent', 'agent' )
-            ->leftJoin('m.client', 'client' )
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
 }

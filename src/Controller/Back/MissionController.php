@@ -49,28 +49,6 @@ class MissionController extends AbstractController
      * @param Mission $mission
      * @return Response
      */
-    #[Route('/{id}/update', name: 'mission_update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function update(Mission $mission, Request $request, MissionRepository $missionRepository): Response
-    {
-        $form = $this->createForm(MissionType::class, $mission);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $missionRepository->save($mission, true);
-
-            return $this->redirectToRoute('admin_mission_show', ['slug' => $mission->getId()]);
-        }
-
-        return $this->render('back/mission/update.html.twig', [
-            'form' => $form->createView(),
-            'mission' => $mission
-        ]);
-    }
-
-    /**
-     * @param Mission $mission
-     * @return Response
-     */
     #[Route('/{slug}', name: 'mission_show', methods: ['GET'])]
     public function show(Mission $mission): Response
     {
@@ -93,6 +71,22 @@ class MissionController extends AbstractController
         }
 
         $missionRepository->remove($mission, true);
+
+        return $this->redirectToRoute('admin_mission_index');
+    }
+
+    #[Route('/{id}/validate/{validate}/{token}', name: 'mission_validate', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function validate(Mission $mission, MissionRepository $missionRepository, string $validate, string $token): Response
+    {
+        if (!$this->isCsrfTokenValid('validate' . $mission->getId(), $token)) {
+            throw $this->createAccessDeniedException('Error token!');
+        }
+
+        if ($mission->getStatus() == $mission::STATUS_IN_DEMAND) {
+            $mission->setStatus($validate == 'true' ? $mission::STATUS_FREE : $mission::STATUS_REFUSED);
+        }
+
+        $missionRepository->save($mission, true);
 
         return $this->redirectToRoute('admin_mission_index');
     }

@@ -61,7 +61,7 @@ class MissionController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $mission->setClient($user);
-            $mission->setStatus('free');
+            $mission->setStatus($mission::STATUS_IN_DEMAND);
             $missionRepository->save($mission, true);
 
             return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
