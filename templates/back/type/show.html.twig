@@ -1,26 +1,14 @@
 {% extends 'base_back.html.twig' %}
 
-{% block title %}Type{% endblock %}
+{% block title %}Type {{ type.name }}{% endblock %}
 
 {% block body %}
-    <h1>Type</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ type.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ type.name }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('admin_type_index') }}">back to list</a>
-
-    <a href="{{ path('admin_type_edit', {'id': type.id}) }}">edit</a>
-
-    {{ include('back/type/_delete_form.html.twig') }}
+    <div class="page-list">
+        <div class="card-profile">  
+                <h1 class="text-4xl"> Information </h1>
+                <div> <strong>Name</strong> : {{ type.name }} </div>
+                <div> <strong>Created At</strong> : {{ type.createdAt|date("d/m/Y")}} </div>
+        </div>
+        <a href="{{ path('admin_type_index') }}" >  back to types list</a>
+    </div>
 {% endblock %}

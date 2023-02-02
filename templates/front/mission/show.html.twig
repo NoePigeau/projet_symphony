@@ -13,7 +13,7 @@
         <a href="{{ path('front_mission_finish', {'id': mission.id, 'token': csrf_token('finish' ~ mission.id)}) }}">End the mission</a>
     {% endif %}
 
-    {% if is_granted('ROLE_AGENT') and mission.orders %}
+    {% if is_granted('ROLE_AGENT') and mission.orders and mission.status != 'free' %}
         <h3>Oders for this missions</h3>
         {% for order in mission.orders %}
             <div>

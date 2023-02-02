@@ -7,21 +7,24 @@ use App\Entity\Order;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use App\Repository\EquipmentRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class OrderType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('equipment', ChoiceType::class, [
-                'choices' => $options['equipments'],
-                'choice_value' => 'id',
-                'choice_label' => function (?Equipment $equipment) {
-                    return $equipment ? strtoupper($equipment->getName()) : '';
+            ->add('equipment', EntityType::class, [
+                'class' => Equipment::class,
+                'query_builder' => function (EquipmentRepository $rep) {
+                    return $rep->createQueryBuilder('equipment')
+                    ->where('equipment.stock > :value')
+                    ->setParameter('value', 0);
                 },
-                ])
+                'choice_label' => 'name'
+            ])
             ->add('amount', IntegerType::class)
         ;
     }

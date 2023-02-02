@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Type>
@@ -37,6 +38,26 @@ class TypeRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function search($request): QueryBuilder
+    {
+        $query = $request->request->get('query');
+        $limit = $request->request->get('limit');
+
+        $qr = $this->createQueryBuilder('t')
+            ->orderBy('t.name', 'ASC')
+            ->setMaxResults($limit)
+        ;
+
+        if ($query) {
+            $qr
+                ->andWhere('lower(t.name) LIKE :val')
+                ->setParameter('val', '%' . strtolower($query) . '%')
+            ;
+        }
+
+        return $qr;
     }
 
 //    /**
