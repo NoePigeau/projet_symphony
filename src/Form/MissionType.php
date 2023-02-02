@@ -28,9 +28,9 @@ class MissionType extends AbstractType
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
                 'allow_delete' => true,
-                'delete_label' => 'Supprimer l\'image',
+                'delete_label' => 'Delete image',
                 'download_link' => false,
-                'download_label' => 'Télécharger l\'image',
+                'download_label' => 'Download image',
             ])
             ->add('reward', MoneyType::class, [
                 'html5' => true
