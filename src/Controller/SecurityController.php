@@ -15,8 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 // use Mailgun\Mailgun;
@@ -37,7 +36,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/register', name: 'register', methods: ['GET', 'POST'])]
-    public function create(Request $request, UserRepository $userRepository): Response
+    public function create(Request $request, UserRepository $userRepository, MailerInterface $mailer): Response
     {
         if ($this->getUser()) return $this->redirectToRoute('profile');
 
@@ -51,10 +50,8 @@ class SecurityController extends AbstractController
 
             $url = $this->generateUrl('profile_token_validation', ['token' => $user->getValidationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $transport = Transport::fromDsn($_ENV["MAILER_DSN"]);
-            $mailer = new Mailer($transport);
 
-            $email = (new Email())->from('support@'.$_ENV["MAILGUN_DOMAIN"]);
+            $email = new Email();
     
             $email->to($user->getEmail());
             $email->subject('KGB Agent recruitment');

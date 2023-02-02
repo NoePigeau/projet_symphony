@@ -67,6 +67,19 @@ class UserFixtures extends Fixture
                 ->setRoles(['ROLE_CLIENT'])
             ;
         $manager->persist($user);
+
+        $user = (new User())
+            ->setEmail('armanddfl@gmail.com')
+            ->setNickname('Izonite')
+            ->setFirstname('Armand')
+            ->setLastname('DFL')
+            ->setValidationToken('ooo')
+            ->setPlainPassword($pwd)
+            ->addType($faker->randomElement($types))
+            ->addType($faker->randomElement($types))
+            ->setRoles(['ROLE_AGENT'])
+            ;
+        $manager->persist($user);
         
         $manager->flush();
     }
