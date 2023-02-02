@@ -59,6 +59,8 @@ class SecurityController extends AbstractController
             $email->html('<h1>Thanks you for your registration</h1>
             <span>To verify your account, please click on the following <a href='.$url.'> link </a> or go on the following link: '.$url.'</span>');
 
+            $mailer->send($email);
+
             $userRepository->save($user, true);
 
             return $this->redirectToRoute('front_default_index');
