@@ -29,7 +29,15 @@ class MissionController extends AbstractController
     #[Security("is_granted('ROLE_AGENT')")]
     public function index(MissionRepository $missionRepository): Response
     {
-        $missions = $missionRepository->findBy(['status' => 'free']);
+        $user = $this->getUser();
+        $missions = $missionRepository->createQueryBuilder('m')
+            ->where('m.status = :status')
+            ->andWhere('m.type IN (:types)')
+            ->setParameter('types', $user->getType())
+            ->setParameter('status', 'free')
+            ->getQuery()
+            ->getResult();
+
         return $this->render('front/mission/index.html.twig', [
             'missions' => $missions
         ]);
