@@ -14,7 +14,7 @@ input {
     input {
         display: flex;
         border: 1px solid $light-gray;
-        border-radius: 10px;
+        border-radius: 0.25em;
         padding: 10px;
         color: $bg-color;
 
@@ -32,7 +32,7 @@ input {
 .input, textarea {
     display: flex;
     border: 1px solid $light-gray;
-    border-radius: 10px;
+    border-radius: 0.25em;
     padding: 10px;
     transition: .4s;
     color: $bg-color;

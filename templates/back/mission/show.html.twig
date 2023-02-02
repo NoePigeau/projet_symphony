@@ -11,7 +11,7 @@
                 <div> <strong>Reward</strong> : {{ mission.reward }} $ </div>
                 <div> <strong>created at</strong> : {{ mission.createdAt|date("m/d/Y") }} </div>
                 <div> <strong>updated at</strong> : {{ mission.updatedAt|date("m/d/Y") }} </div>
-                <div><strong>agent</strong> : {{ mission.agent.email }}, {{ mission.client.nickname }}</div>
+                <div><strong>agent</strong> : {{ mission.agent.email }}, {{ mission.agent.nickname }}</div>
                 <div> <strong>client</strong> : {{ mission.client.email }}, {{mission.client.firstname}}, {{mission.client.lastname}}</div>
 
                 <img src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}">        

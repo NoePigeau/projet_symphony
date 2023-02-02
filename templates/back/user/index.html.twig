@@ -14,7 +14,6 @@
             </select>
             <button type="submit" class="main-cta">Search</button>
         </form>
-        <a href="{{ path('admin_user_create') }}">Add new user</a>
 
         {% if pager|length == 0 %} 
             <div>no users found</div>
@@ -51,5 +50,6 @@
                 </tbody>
             </table>
         {% endif %}
+        <a href="{{ path('admin_user_create') }}" class="main-cta">Add admin</a>
     </div>
 {% endblock %}
