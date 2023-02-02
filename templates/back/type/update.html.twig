@@ -1,0 +1,11 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}Update Type{% endblock %}
+
+{% block body %}
+    <h1>Update Type</h1>
+
+    {{ include('back/type/_form.html.twig') }}
+
+    <a href="{{ path('admin_type_index') }}">back to list</a>
+{% endblock %}

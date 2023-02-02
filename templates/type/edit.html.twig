@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Type</title>
+
+{% block body %}
+    <h1>Edit Type</h1>
+
+    {{ include('type/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_type_index') }}">back to list</a>
+
+    {{ include('type/_delete_form.html.twig') }}
+{% endblock %}

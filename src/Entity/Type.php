@@ -2,14 +2,19 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\SlugableTrait;
 use App\Repository\TypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\TimestampableTrait;
 
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
 class Type
 {
+    use TimestampableTrait;
+    use SlugableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

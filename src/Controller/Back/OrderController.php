@@ -70,7 +70,7 @@ class OrderController extends AbstractController
     #[Security("is_granted('ROLE_ADMIN')")]
     public function refuse(Order $order, OrderRepository $orderRepository): Response
     {
-        $order->setStatus('refuse');
+        $order->setStatus('refused');
 
         $orderRepository->save($order, true);
 

@@ -15,6 +15,7 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 
 #[Route('/equipment')]
+#[Security("is_granted('ROLE_ADMIN')")]
 class EquipmentController extends AbstractController
 {
     /**
@@ -22,7 +23,6 @@ class EquipmentController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'equipment_index', methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function index(EquipmentRepository $equipmentRepository, Request $request): Response
     {
         $equipments = $equipmentRepository->search($request);  
@@ -40,7 +40,6 @@ class EquipmentController extends AbstractController
     }
 
     #[Route('/create', name: 'equipment_create')]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function create(Request $request, EquipmentRepository $equipmentRepository): Response
     {
         $equipment = new Equipment();
@@ -85,7 +84,6 @@ class EquipmentController extends AbstractController
      * @return Response
      */
     #[Route('/{slug}', name: 'equipment_show', methods: ['GET'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     /** #[IsGranted(MissionVoter::VIEW, 'mission')]  */
     public function show(Equipment $equipment): Response
     {

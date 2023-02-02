@@ -1,35 +1,49 @@
 {% extends 'base_back.html.twig' %}
 
-{% block title %}Type index{% endblock %}
+{% block title %}types list{% endblock %}
 
 {% block body %}
-    <h1>Type index</h1>
+    <div class="page-list">
+        <h1 class="text-4xl"> Types List </h1>
+        <form method="POST" class="container-search">
+            <input class="input" type="text" value="{{ app.request.request.get('query') }}" name="query" placeholder="Search ...">
+            <select name="limit">
+                <option value="10" {{ limit == 10 ? 'selected': '' }}>10</option>
+                <option value="20" {{ limit == 20 ? 'selected': '' }}>20</option>
+                <option value="30" {{ limit == 30 ? 'selected': '' }}>30</option>
+            </select>
+            <button type="submit" class="main-cta">Search</button>
+        </form>
 
-    <table class="border-collaps">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for type in types %}
-            <tr>
-                <td>{{ type.id }}</td>
-                <td>{{ type.name }}</td>
-                <td>
-                    <a href="{{ path('admin_type_show', {'id': type.id}) }}">show</a>
-                    <a href="{{ path('admin_type_edit', {'id': type.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('admin_type_new') }}">Create new</a>
+        <table class="container-list">
+            <thead>
+                <tr class="row">
+                    <th class="col">Name</th>
+                    <th class="col">Created At</th>
+                    <th class="col">Updated At</th>
+                    <th class="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for type in pager %}
+                <tr class="row">
+                    <th class="col">{{ type.name }}</th>
+                    <th class="col">{{ type.createdAt|date("d/m/Y") }}</th>
+                    <th class="col">{{ type.updatedAt|date("d/m/Y") }}</th>
+                    <th class="col action">
+                        <a href="{{ path('admin_type_show', {'slug': type.slug}) }}"><img src="{{asset('images/icones/eye.svg')}}" alt="eye"></a>
+                        <a href="{{ path('admin_type_update', {'slug': type.slug}) }}"><img src="{{asset('images/icones/edit.svg')}}" alt="edit"></a>
+                        <a href="{{ path('admin_type_delete', {'id': type.id, 'token': csrf_token('delete' ~ type.id)}) }}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
+                    </th>
+                </tr>
+                
+                {% else %}
+                    no types found.
+                {% endfor %}
+                <tr class="row pagination">
+                    <th class="col">{{ pagerfanta(pager, {'pageParameter': '[other_page]', 'prev_message' : 'back' }) }}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

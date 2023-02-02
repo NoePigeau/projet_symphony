@@ -30,19 +30,12 @@ class OrderController extends AbstractController
      */
     #[Route('/create/{slug}', name: 'order_create', methods: ['GET', 'POST'])]
     #[Security("is_granted('ROLE_AGENT')")]
-    public function create(Mission $mission, Request $request, OrderRepository $orderRepository, EquipmentRepository $equipmentRepository): Response
+    public function create(Mission $mission, Request $request, OrderRepository $orderRepository): Response
     {
         $user = $this->getUser();
-        $equipments = $equipmentRepository->createQueryBuilder('equipment')
-            ->where('equipment.stock > :value')
-            ->setParameter('value', 0)
-            ->getQuery()
-            ->getResult();
         $order = new Order();
 
-        $form = $this->createForm(OrderType::class, $order, [
-            'equipments' => $equipments
-        ]);
+        $form = $this->createForm(OrderType::class, $order);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
