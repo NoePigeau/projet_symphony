@@ -71,12 +71,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'agent', targetEntity: Mission::class)]
     private Collection $agentMissions;
 
+    #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'users')]
+    private Collection $type;
+
     public function __construct()
     {
         $this->ratings = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->clientMissions = new ArrayCollection();
         $this->agentMissions = new ArrayCollection();
+        $this->type = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -372,6 +376,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $agentMission->setAgent(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Type>
+     */
+    public function getType(): Collection
+    {
+        return $this->type;
+    }
+
+    public function addType(Type $type): self
+    {
+        if (!$this->type->contains($type)) {
+            $this->type->add($type);
+        }
+
+        return $this;
+    }
+
+    public function removeType(Type $type): self
+    {
+        $this->type->removeElement($type);
 
         return $this;
     }

@@ -26,9 +26,13 @@ class Type
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Mission::class)]
     private Collection $missions;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'type')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->missions = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,6 +77,33 @@ class Type
             if ($mission->getType() === $this) {
                 $mission->setType(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeType($this);
         }
 
         return $this;
