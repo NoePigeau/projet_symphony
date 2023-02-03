@@ -47,7 +47,7 @@ class MissionController extends AbstractController
 	 * @param MissionRepository $missionRepository
 	 * @return Response
 	 */
-	#[Route('/my-missions', name: 'mission-my-missions', methods: ['GET'])]
+	#[Route('/my-missions', name: 'mission_my_missions', methods: ['GET'])]
 	public function myMissions(MissionRepository $missionRepository): Response
 	{
 		$user = $this->getUser();
