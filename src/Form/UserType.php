@@ -20,7 +20,8 @@ class UserType extends AbstractType
             ->add('lastname')
             ->add('emailNotify')
             ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class
+                'type' => PasswordType::class,
+                'required' => !$options['isUpdate'],
             ])
         ;
     }
@@ -28,6 +29,8 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'isUpdate' => true,
+            'autocomplete' => 'off',
             'data_class' => User::class,
         ]);
     }

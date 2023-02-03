@@ -28,3 +28,31 @@
         }
     }
 }
+
+.custom-form {
+    display: flex;
+    flex-direction: column;
+    gap: .8em;
+    > div {
+        display: flex;
+        position: relative;
+        > label {
+            width: 150px;
+            font-size: 20px;
+        }
+        > ul {
+           position: absolute; 
+           bottom: -1.3em;
+           > * {
+            color: rgb(255, 43, 43);
+
+           }
+        }
+        > input {
+            border-bottom: 2px solid rgb(124 58 237);
+            background-color: transparent;
+            width: 100%;
+            font-size: 18px;
+        }
+    }
+}
