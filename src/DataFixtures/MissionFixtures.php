@@ -17,19 +17,37 @@ class MissionFixtures extends Fixture implements DependentFixtureInterface
         $faker = Factory::create('fr_FR');
 
         $types = $manager->getRepository(Type::class)->findAll();
-        $agents = $manager->getRepository(User::class)->findAll();
-        $clients = $manager->getRepository(User::class)->findAll();
+        $users = $manager->getRepository(User::class)->findAll();
+        $agents = array_filter($users, function($user) {
+           return in_array('ROLE_AGENT', $user->getRoles());
+        });
+        $clients = array_filter($users, function($user) {
+            return in_array('ROLE_CLIENT', $user->getRoles());
+         });
 
-        for ($i=0; $i<10; $i++) {
+         for ($i=0; $i<10; $i++) {
+            $agent = $faker->randomElement($agents);
             $object = (new Mission())
                 ->setName($faker->name)
                 ->setDescription($faker->paragraph)
                 ->setStatus('free')
-                ->setAgent($faker->randomElement($agents))
                 ->setClient($faker->randomElement($clients))
                 ->setType($faker->randomElement($types))
-                ->setSlug(strtolower($faker->name))
-                ->setReward(12)
+                ->setReward(rand(10, 999))
+            ;
+            $manager->persist($object);
+        }
+
+        for ($i=0; $i<10; $i++) {
+            $agent = $faker->randomElement($agents);
+            $object = (new Mission())
+                ->setName($faker->name)
+                ->setDescription($faker->paragraph)
+                ->setStatus('in_progress')
+                ->setAgent($agent)
+                ->setClient($faker->randomElement($clients))
+                ->setType($faker->randomElement($agent->getType()))
+                ->setReward(rand(10, 999))
             ;
             $manager->persist($object);
         }
@@ -40,7 +58,8 @@ class MissionFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            TypeFixtures::class
+            TypeFixtures::class,
+            UserFixtures::class
         ];
     }
 }
