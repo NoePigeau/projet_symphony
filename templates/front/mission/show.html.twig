@@ -3,8 +3,43 @@
 {% block title %}{{ mission.name }}{% endblock %}
 
 {% block body %}
-    <h1>{{ mission.name }}</h1>
-    
+<div class="md:container mt-20 mb-4">
+    <div class="bg-slate-800 w-10 h-10 rounded flex justify-center items-center">
+        <a class="text-center font-bold text-xl" href="{{ path('front_mission_my_missions') }}"><</a>
+         
+    </div>
+
+</div>
+<div class="md:container flex  gap-6">
+
+    <div class="h-96 w-8/12 rounded relative">
+        <div class="object-cover h-96 w-full absolute" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(30, 41, 59)),url('{{ vich_uploader_asset(mission, 'imageFile') }}');"></div>
+        <div class="linear-background relative min-h-96 w-full bg-slate-800 rounded pt-48 p-8 flex flex-col justify-start content-start items-start z-10">
+            <div class="flex gap-4 items-center w-full">
+                <div class="flex gap-4 items-start w-full">
+                    <h1 class="text-4xl font-bold border-b-2 border-violet-600 mb-4">{{ mission.name }}</h1>
+                    <span class="bg-red-600 text-xl p-1 w-16 text-center rounded mt-2 mb-2 font-bold">{{ mission.type.name }}</span>
+                </div>
+                <span class="p-1 text-center text-3xl font-bold">{{ mission.reward }}€</span>
+            </div>
+            <div class="flex gap-4 mt-4">
+                <span class="text-lg text-neutral-300 w-9/12">{{ mission.description }}</span>
+                <div class="w-3/12 flex flex-col items-stretch">
+                    <div class="flex bg-violet-600 items-center justify-center rounded">
+                        <a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_mission_asign', {'id': mission.id, 'token': csrf_token('asign' ~ mission.id)}) }}">Accept!</a>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-4/12  flex flex-col gap-6">
+        <div class="h-96 bg-slate-800 rounded"></div>
+        <div class="h-96 bg-slate-800 rounded"></div>
+        <div class="h-20 bg-slate-800 rounded"></div>
+    </div>
+</div>
     {% if is_granted('ROLE_AGENT') and mission.status is same as('free') %}
         <a href="{{ path('front_mission_asign', {'id': mission.id, 'token': csrf_token('asign' ~ mission.id)}) }}">Accept the Mission !</a>
     {% endif %}

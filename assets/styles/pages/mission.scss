@@ -1,0 +1,11 @@
+.linear-gradient-image {
+    background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(30, 41, 59)),
+    url('https://localhost/upload/images/missions/DALL%C2%B7E%202023-02-02%2009.29.46.png');
+    position: relative;
+}
+
+.linear-background {
+    background: rgb(30,41,59);
+background: linear-gradient(0deg, rgba(30,41,59,1) 60%, rgba(30,41,59,0.1) 84%, rgba(30,41,59,0) 100%);
+}

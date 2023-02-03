@@ -20,7 +20,7 @@
                 </figure>
                 <nav class="links">
                     {% if is_granted('ROLE_USER') %}
-                    <ul><a href="{{ path('front_mission_index') }}"> See Missions </a></ul>
+                    <ul><a href="{{ path('front_mission_my_missions') }}"> See Missions </a></ul>
                     {% if is_granted('ROLE_CLIENT') %}
                         <ul><a href="{{ path('front_mission_create') }}"> Create Missions </a></ul>
                     {% endif %}

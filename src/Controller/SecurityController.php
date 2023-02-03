@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Document;
 use App\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Repository\DocumentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,9 +25,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+        if ($this->getUser()) return $this->redirectToRoute('profile');
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -39,6 +38,8 @@ class SecurityController extends AbstractController
     #[Route('/register', name: 'register', methods: ['GET', 'POST'])]
     public function create(Request $request, UserRepository $userRepository): Response
     {
+        if ($this->getUser()) return $this->redirectToRoute('profile');
+
         $user = new User();
         $form = $this->createForm(\App\Form\UserType::class, $user);
 
@@ -91,6 +92,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/profile/become', name: 'profile_become_agent', methods: ['GET', 'POST'])]
+    #[Security("is_granted('ROLE_USER')")]
     public function becomeAgent(Request $request, EntityManagerInterface $entityManager, DocumentRepository $dr): Response
     {
         $document = new Document();
@@ -111,6 +113,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/profile', name: 'profile', methods: ['GET', 'POST'])]
+    #[Security("is_granted('ROLE_USER')")]
     public function profile(Request $request, EntityManagerInterface $entityManager, DocumentRepository $dr): Response
     {
         $form = $this->createForm(\App\Form\UserType::class, $this->getUser(), ['isUpdate' => true]);
@@ -136,6 +139,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
+    #[Security("is_granted('ROLE_USER')")]
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
