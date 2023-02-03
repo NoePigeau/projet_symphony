@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230202163735 extends AbstractMigration
+final class Version20230203111212 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -51,6 +51,9 @@ final class Version20230202163735 extends AbstractMigration
         $this->addSql('CREATE TABLE type (id INT NOT NULL, name VARCHAR(50) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, slug VARCHAR(105) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "user" (id INT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, nickname VARCHAR(255) NOT NULL, firstname VARCHAR(255) NOT NULL, lastname VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, description VARCHAR(1024) DEFAULT NULL, status BOOLEAN NOT NULL, validation_token VARCHAR(64) NOT NULL, email_notify BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON "user" (email)');
+        $this->addSql('CREATE TABLE user_type (user_id INT NOT NULL, type_id INT NOT NULL, PRIMARY KEY(user_id, type_id))');
+        $this->addSql('CREATE INDEX IDX_F65F1BE0A76ED395 ON user_type (user_id)');
+        $this->addSql('CREATE INDEX IDX_F65F1BE0C54C8C93 ON user_type (type_id)');
         $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_75EA56E0FB7336F0 ON messenger_messages (queue_name)');
         $this->addSql('CREATE INDEX IDX_75EA56E0E3BD61CE ON messenger_messages (available_at)');
@@ -75,6 +78,8 @@ final class Version20230202163735 extends AbstractMigration
         $this->addSql('ALTER TABLE rating ADD CONSTRAINT FK_D88926223414710B FOREIGN KEY (agent_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE rating ADD CONSTRAINT FK_D8892622BE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE step ADD CONSTRAINT FK_43B9FE3CBE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE user_type ADD CONSTRAINT FK_F65F1BE0A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE user_type ADD CONSTRAINT FK_F65F1BE0C54C8C93 FOREIGN KEY (type_id) REFERENCES type (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
     public function down(Schema $schema): void
@@ -102,6 +107,8 @@ final class Version20230202163735 extends AbstractMigration
         $this->addSql('ALTER TABLE rating DROP CONSTRAINT FK_D88926223414710B');
         $this->addSql('ALTER TABLE rating DROP CONSTRAINT FK_D8892622BE6CAE90');
         $this->addSql('ALTER TABLE step DROP CONSTRAINT FK_43B9FE3CBE6CAE90');
+        $this->addSql('ALTER TABLE user_type DROP CONSTRAINT FK_F65F1BE0A76ED395');
+        $this->addSql('ALTER TABLE user_type DROP CONSTRAINT FK_F65F1BE0C54C8C93');
         $this->addSql('DROP TABLE document');
         $this->addSql('DROP TABLE equipment');
         $this->addSql('DROP TABLE message');
@@ -111,6 +118,7 @@ final class Version20230202163735 extends AbstractMigration
         $this->addSql('DROP TABLE step');
         $this->addSql('DROP TABLE type');
         $this->addSql('DROP TABLE "user"');
+        $this->addSql('DROP TABLE user_type');
         $this->addSql('DROP TABLE messenger_messages');
     }
 }
