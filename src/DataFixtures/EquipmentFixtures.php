@@ -14,6 +14,7 @@ class EquipmentFixtures extends Fixture
         $equipment = (new Equipment)
             ->setName('Revolver')
             ->setDescription('Un revolver pour bang')
+            ->setImage('')
             ->setStock(54);
            
         $manager->persist($equipment);
@@ -21,6 +22,7 @@ class EquipmentFixtures extends Fixture
         $equipment = (new Equipment)
             ->setName('Belle voiture')
             ->setDescription('VROOOOOMMMM')
+            ->setImage('')
             ->setStock(15);
            
         $manager->persist($equipment);
@@ -28,6 +30,7 @@ class EquipmentFixtures extends Fixture
         $equipment = (new Equipment)
         ->setName('Couteau')
         ->setDescription('Ça c\'est des vrai couteaux')
+        ->setImage('')
         ->setStock(103);
        
         $manager->persist($equipment);
@@ -35,6 +38,7 @@ class EquipmentFixtures extends Fixture
         $equipment = (new Equipment)
         ->setName('Tazer')
         ->setDescription('zzzzztt')
+        ->setImage('')
         ->setStock(67);
        
         $manager->persist($equipment);

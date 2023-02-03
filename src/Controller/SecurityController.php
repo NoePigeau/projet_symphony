@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Document;
+use App\Entity\Type;
 use App\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Repository\DocumentRepository;
@@ -108,7 +109,7 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/become.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -118,23 +119,31 @@ class SecurityController extends AbstractController
     {
         $form = $this->createForm(\App\Form\UserType::class, $this->getUser(), ['isUpdate' => true]);
 
+        $user = new User();
+
+        $formSkill = $this->createForm(\App\Form\SkillType::class, $this->getUser());
+
         $hasPendingRequest = $dr->findOneBy(array('submitedBy' => $this->getUser()->getId()));
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->render('security/profile.html.twig', [
-                'form' => $form->createView(),
-                'hasPending' => $hasPendingRequest
-            ]);
+            return $this->redirectToRoute('profile');
+        }
+
+        $formSkill->handleRequest($request);
+        if ($formSkill->isSubmitted() && $formSkill->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('profile');
         }
 
 
 
         return $this->render('security/profile.html.twig', [
             'form' => $form->createView(),
-            'hasPending' => $hasPendingRequest
+            'hasPending' => $hasPendingRequest,
+            'formSkill' => $formSkill->createView()
         ]);
     }
 
