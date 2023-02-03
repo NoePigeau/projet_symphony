@@ -8,6 +8,9 @@ vich_uploader:
         missions:
             uri_prefix: /upload/images/missions
             upload_destination: '%kernel.project_dir%/public/upload/images/missions'
+        equipments:
+            uri_prefix: /upload/images/equipments
+            upload_destination: '%kernel.project_dir%/public/upload/images/equipments'
         documents:
             uri_prefix: /upload/documents
             upload_destination: '%kernel.project_dir%/public/upload/documents'

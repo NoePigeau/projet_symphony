@@ -10,8 +10,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: EquipmentRepository::class)]
+#[Vich\Uploadable]
 class Equipment
 {
     use TimestampableTrait;
@@ -29,6 +33,17 @@ class Equipment
 
     #[ORM\Column]
     private ?int $stock = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    #[Vich\UploadableField(mapping: 'equipments', fileNameProperty: 'image')]
+    #[Assert\Image(
+        maxSize: '2M',
+        mimeTypes: ['image/png', 'image/jpeg'],
+        mimeTypesMessage: 'coucou, tu peux mettre que des png ou jpeg',
+    )]
+    private ?File $imageFile = null;
 
     #[ORM\Column(length: 105)]
     #[Slug(fields: ['name', 'createdAt'])]
@@ -79,6 +94,47 @@ class Equipment
     public function setStock(int $stock): self
     {
         $this->stock = $stock;
+
+        return $this;
+    }
+
+       /**
+     * @return string|null
+     */
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string|null $image
+     * @return Equipment
+     */
+    public function setImage(?string $image): Equipment
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+        /**
+     * @return File|null
+     */
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param File|null $imageFile
+     * @return Equipment
+     */
+    public function setImageFile(?File $imageFile): Equipment
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAT = new \DateTime('now');
+        }
 
         return $this;
     }

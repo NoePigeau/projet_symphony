@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EquipmentType extends AbstractType
 {
@@ -20,6 +20,13 @@ class EquipmentType extends AbstractType
             ])
             ->add('description')
             ->add('stock', IntegerType::class)
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'delete_label' => 'Delete image',
+                'download_link' => false,
+                'download_label' => 'Download image',
+            ])
         ;
     }
 
