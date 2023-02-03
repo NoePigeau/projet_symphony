@@ -34,17 +34,7 @@
     <div class="w-4/12  flex flex-col gap-6">
         <div class="h-96 bg-slate-800 rounded"></div>
         <div class="h-48 bg-slate-800 rounded flex items-center justify-between pr-8 pl-8 gap-4">
-            <div class="relative  w-28 h-36">
-                <div class="w-20 h-20 absolute left-5 top-5 rotate-45 border-2 border-red-600">
-                </div>
-                <div class="w-20 h-20 absolute left-5 top-11 rotate-45 border-2 border-violet-600">
-                </div>
-                <div class="w-20 h-20 absolute left-5 top-7 rotate-45 border-2 border-red-600">
-                </div>
-                <div class="w-20 h-20 absolute left-5 top-9 rotate-45 border-2 border-red-600">
-                </div>
-                <img class="w-16 h-15 absolute left-7 top-11 rotate-45" src="https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg" alt="">
-            </div>
+            {% include 'fragment/profile-picture.html.twig' with {'src': 'https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg'} %}
             <div class="flex flex-col items-center">
                 <h1 class="text-xl">Mr.bond</h1>
                 <h3 class="text-neutral-400 text-sm">5 missions completes</h3>
