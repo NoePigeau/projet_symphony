@@ -12,10 +12,11 @@ class TypeFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('en_US');
+        $types = ['Murder', 'Spy', 'Document theft', 'Target destruction', 'push'];
 
-        for ($i=0; $i<10; $i++) {
+        foreach($types as $type) {
             $object = (new Type())
-                ->setName($faker->randomElement(['Murder', 'Spy', 'Document theft', 'Target destruction', 'Coup d\'etat']))
+                ->setName($type)
             ;
             $manager->persist($object);
         }
