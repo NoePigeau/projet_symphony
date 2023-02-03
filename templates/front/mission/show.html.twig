@@ -6,7 +6,6 @@
 <div class="md:container mt-20 mb-4">
     <div class="bg-slate-800 w-10 h-10 rounded flex justify-center items-center">
         <a class="text-center font-bold text-xl" href="{{ path('front_mission_my_missions') }}"><</a>
-         
     </div>
 
 </div>
@@ -18,26 +17,61 @@
             <div class="flex gap-4 items-center w-full">
                 <div class="flex gap-4 items-start w-full">
                     <h1 class="text-4xl font-bold border-b-2 border-violet-600 mb-4">{{ mission.name }}</h1>
-                    <span class="bg-red-600 text-xl p-1 w-16 text-center rounded mt-2 mb-2 font-bold">{{ mission.type.name }}</span>
+                    <span class="bg-red-600 text-xl p-1 pr-4 pl-4 text-center rounded mt-2 mb-2 font-bold">{{ mission.type.name }}</span>
                 </div>
                 <span class="p-1 text-center text-3xl font-bold">{{ mission.reward }}€</span>
             </div>
-            <div class="flex gap-4 mt-4">
-                <span class="text-lg text-neutral-300 w-9/12">{{ mission.description }}</span>
-                <div class="w-3/12 flex flex-col items-stretch">
+            <div class="flex gap-4 mt-4 justify-between w-full">
+                <span class="text-lg text-neutral-300 w-9/12 flex-2">{{ mission.description }}</span>
+                <div class="w-3/12 flex flex-col items-stretch flex-1">
                     <div class="flex bg-violet-600 items-center justify-center rounded">
                         <a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_mission_asign', {'id': mission.id, 'token': csrf_token('asign' ~ mission.id)}) }}">Accept!</a>
                     </div>
-                    
-
                 </div>
             </div>
         </div>
     </div>
     <div class="w-4/12  flex flex-col gap-6">
         <div class="h-96 bg-slate-800 rounded"></div>
-        <div class="h-96 bg-slate-800 rounded"></div>
-        <div class="h-20 bg-slate-800 rounded"></div>
+        <div class="h-48 bg-slate-800 rounded flex items-center justify-between pr-8 pl-8 gap-4">
+            <div class="relative  w-28 h-36">
+                <div class="w-20 h-20 absolute left-5 top-5 rotate-45 border-2 border-red-600">
+                </div>
+                <div class="w-20 h-20 absolute left-5 top-11 rotate-45 border-2 border-violet-600">
+                </div>
+                <div class="w-20 h-20 absolute left-5 top-7 rotate-45 border-2 border-red-600">
+                </div>
+                <div class="w-20 h-20 absolute left-5 top-9 rotate-45 border-2 border-red-600">
+                </div>
+                <img class="w-16 h-15 absolute left-7 top-11 rotate-45" src="https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg" alt="">
+            </div>
+            <div class="flex flex-col items-center">
+                <h1 class="text-xl">Mr.bond</h1>
+                <h3 class="text-neutral-400 text-sm">5 missions completes</h3>
+                <h1 class="text-lg">Skills</h1>
+                <span class="bg-red-600 text-base p-1 pr-4 pl-4  text-center rounded mt-2 mb-2 font-bold">{{ mission.type.name }}</span>
+            </div>
+        </div>
+        <div class="h-20 bg-slate-800 rounded flex gap-4 items-center p-4 w-full relative">
+            <div class="flex gap-4 items-center w-10/12 relative">
+                <div class="w-12 h-12 rounded-3xl bg-violet-600">              
+                </div>
+                <div class="w-12 h-12 rounded-3xl bg-violet-600">              
+                </div>
+                <div class="w-12 h-12 rounded-3xl bg-violet-600">              
+                </div>
+                <div class="w-12 h-12 rounded-3xl bg-violet-600">              
+                </div>
+                <div class="w-12 h-12 rounded-3xl bg-violet-600">              
+                </div>
+                <div class="w-12 h-12 rounded-3xl bg-violet-600">              
+                </div>
+                <div class="absolute linear-background-horizontal z-10 w-full h-full"></div>
+            </div>
+                        <div class="w-12 h-12 rounded-3xl bg-violet-600 flex items-center justify-center">  
+                <a href="{{ path('front_order_create', {'slug': mission.slug}) }}" class="text-4xl font-bold">+</a>            
+            </div>
+        </div>
     </div>
 </div>
     {% if is_granted('ROLE_AGENT') and mission.status is same as('free') %}
@@ -68,8 +102,5 @@
                 <h4>{{ order.status }}</h4>
             </div>
         {% endfor %}
-    {% endif %}
-    
-    <a href="{{ path('front_mission-my-missions') }}" class="btn btn-primary">Back to my missions</a>
-    
+    {% endif %}    
 {% endblock %}

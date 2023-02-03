@@ -9,3 +9,8 @@
     background: rgb(30,41,59);
 background: linear-gradient(0deg, rgba(30,41,59,1) 60%, rgba(30,41,59,0.1) 84%, rgba(30,41,59,0) 100%);
 }
+
+.linear-background-horizontal {
+    background: rgb(30,41,59);
+background: linear-gradient(270deg, rgba(30,41,59,1) 10%, rgba(30,41,59,0.1) 84%, rgba(30,41,59,0) 100%);
+}
