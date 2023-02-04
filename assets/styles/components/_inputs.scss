@@ -11,12 +11,15 @@ input {
     label {
         font-size: 12px;
     }
-    input {
+    input,select {
         display: flex;
         border: 1px solid $light-gray;
         border-radius: 0.25em;
         padding: 10px;
         color: $bg-color;
+        option {
+            color: $bg-color;
+        }
 
         transition: .4s;
         &::placeholder {
@@ -24,6 +27,7 @@ input {
         }
 
         &:focus {
+            outline: none;
             border-color: $main-color;
         }
     }
@@ -36,12 +40,14 @@ input {
     padding: 10px;
     transition: .4s;
     color: $bg-color;
+    resize: none;
     &::placeholder {
         color: $light-gray;
     }
 
     &:focus {
         border-color: $main-color;
+        outline: none;
     }
 }
 

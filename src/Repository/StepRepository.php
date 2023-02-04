@@ -30,13 +30,16 @@ class StepRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Step $entity, bool $flush = false): void
+    public function deleteByMission($id): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->createQueryBuilder()
+        ->delete(Step::class, 's')
+        ->where('s.mission = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getResult();
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 
 //    /**

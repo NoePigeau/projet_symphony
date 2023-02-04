@@ -23,11 +23,21 @@
             </div>
             <div class="flex gap-4 mt-4 justify-between w-full">
                 <span class="text-lg text-neutral-300 w-9/12 flex-2">{{ mission.description }}</span>
+                {% if is_granted('ROLE_AGENT') and mission.status is same as('free') %}
                 <div class="w-3/12 flex flex-col items-stretch flex-1">
                     <div class="flex bg-violet-600 items-center justify-center rounded">
                         <a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_mission_asign', {'id': mission.id, 'token': csrf_token('asign' ~ mission.id)}) }}">Accept!</a>
                     </div>
                 </div>
+                {% endif %}
+            </div>
+            <div class="container-steps">
+                <h1 class="text-2xl font-bold">Steps</h1>
+                <div id="steps"></div>
+                <div id="edit-btns"></div>
+                {% if is_granted('ROLE_CLIENT') and (mission.status is same as('free') or mission.status is same as('in_demand')) %}
+                <button class="main-cta" id="handle-steps">Edit steps</button>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -92,5 +102,8 @@
                 <h4>{{ order.status }}</h4>
             </div>
         {% endfor %}
-    {% endif %}    
+    {% endif %}
+    
+    <a href="{{ path('front_mission_my_missions') }}" class="btn btn-primary">Back to my missions</a>
+    
 {% endblock %}

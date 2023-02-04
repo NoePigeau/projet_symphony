@@ -34,9 +34,9 @@ class Mission
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank(message: 'Cette valeur ne peut pas être vide.')]
-    #[Assert\Type('string', message: 'Cette valeur doit être une chaine de caractère.')]
-    #[Assert\Length(min: 10, max: 100, minMessage: 'Vous devez avoir au moins 10 caractères.', maxMessage: 'Vous devez avoir maximum 100 caractères.')]
+    #[Assert\NotBlank(message: 'Cannot be blank.')]
+    #[Assert\Type('string', message: 'need to be a string.')]
+    #[Assert\Length(min: 5, max: 100, minMessage: 'min 5 characters.', maxMessage: 'max 5 characters.')]
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 

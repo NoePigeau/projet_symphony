@@ -1,0 +1,43 @@
+.container-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    #steps {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        .step {
+            display: flex;
+            gap: 8px;
+            .input {
+                border-radius: 0.25em;
+                padding: 2px;
+            }
+        }
+    }
+    
+    .actions {
+        display: flex;
+        gap: 24px;
+    
+        .btn {
+            padding: 3px 8px;
+            border-radius: 0.25em;
+            width: 76px;
+            color: white;
+            &.cancel {
+                background-color: $errors;
+                &:hover {
+                    background-color: lighten($errors, 20%);
+                }
+            }
+    
+            &.validate {
+                background-color: $main-color;
+                &:hover {
+                    background-color: lighten($main-color, 20%);
+                }
+            }
+        }
+    }
+}
