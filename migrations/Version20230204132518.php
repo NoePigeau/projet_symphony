@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230203111212 extends AbstractMigration
+final class Version20230204132518 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -31,7 +31,7 @@ final class Version20230203111212 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE "user_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE document (id INT NOT NULL, submited_by_id INT NOT NULL, path VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_D8698A7649151F17 ON document (submited_by_id)');
-        $this->addSql('CREATE TABLE equipment (id INT NOT NULL, name VARCHAR(255) NOT NULL, description TEXT NOT NULL, stock INT NOT NULL, slug VARCHAR(105) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE equipment (id INT NOT NULL, name VARCHAR(255) NOT NULL, description TEXT NOT NULL, stock INT NOT NULL, image VARCHAR(255) DEFAULT NULL, slug VARCHAR(105) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE message (id INT NOT NULL, mission_id_id INT NOT NULL, from_id_id INT NOT NULL, content VARCHAR(1024) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_B6BD307FEFD2C16A ON message (mission_id_id)');
         $this->addSql('CREATE INDEX IDX_B6BD307F4632BB48 ON message (from_id_id)');

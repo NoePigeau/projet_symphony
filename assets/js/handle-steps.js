@@ -15,9 +15,11 @@ const deleteIcone = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
 window.addEventListener("load", async () => {
     await displaySteps()
     const handleStepBtn = document.getElementById('handle-steps')
-    handleStepBtn.addEventListener('click', () => {
-        editSteps()
-    })
+    if(handleStepBtn) {
+        handleStepBtn.addEventListener('click', () => {
+            editSteps()
+        })
+    }
 })
 
 // http request
@@ -74,14 +76,14 @@ const submitSteps = async () => {
 // handle html
 
 const displaySteps = async () => {
-    document.getElementById('handle-steps').style.display = "flex"
-    document.getElementById('edit-btns').innerHTML = ""
-    document.getElementById('edit-btns').style.display = "none"
-
     const stepsContainer = document.getElementById('steps')
     if (!stepsContainer) {
         return
     }
+    document.getElementById('handle-steps').style.display = "flex"
+    document.getElementById('edit-btns').innerHTML = ""
+    document.getElementById('edit-btns').style.display = "none"
+
     const steps = await getSteps()
     stepsContainer.innerHTML = ""
     steps.forEach((step) => {
