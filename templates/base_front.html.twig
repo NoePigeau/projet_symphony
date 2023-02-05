@@ -27,11 +27,11 @@
                     <ul><a href="{{ path('profile') }}"> History </a></ul>
                     <ul><a href="{{ path('profile') }}"> Profil </a></ul>
                     {% endif %}
-                    {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_default_index') }}">Panel d'admin</a></ul> {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_user_index') }}">Backoffice</a></ul> {% endif %}
                 </nav>
                 <div class="sign">
                     {% if is_granted('ROLE_USER') %} 
-                    <a href="{{ path('app_logout') }}">Logout</a>
+                    <a href="{{ path('app_logout') }}"><img src="{{ asset('images/icones/logout.svg') }}" alt="logo black">Logout</a>
                     {% else  %}
                     <a href="{{ path('register') }}"><img src="{{ asset('images/icones/signup.svg') }}" alt="signup"> Sign up</a>
                     <a href="{{ path('app_login') }}"><img src="{{ asset('images/icones/signin.svg') }}" alt="signin"> Sign in</a>

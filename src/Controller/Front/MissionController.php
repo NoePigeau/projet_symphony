@@ -39,7 +39,8 @@ class MissionController extends AbstractController
             ->getResult();
 
         return $this->render('front/mission/index.html.twig', [
-            'missions' => $missions
+            'missions' => $missions,
+            'user' => $user
         ]);
     }
 	
@@ -53,7 +54,8 @@ class MissionController extends AbstractController
 		$user = $this->getUser();
 		$missions = $missionRepository->findBy([in_array('ROLE_CLIENT', $user->getRoles()) ? 'client' : 'agent' => $user]);
 		return $this->render('front/mission/index.html.twig', [
-			'missions' => $missions
+			'missions' => $missions,
+            'user' => $user
 		]);
 	}
 	

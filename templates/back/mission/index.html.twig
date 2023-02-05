@@ -15,15 +15,15 @@
             <button type="submit" class="main-cta">Search</button>
         </form>
         {% if pager|length == 0 %} 
-            <div>no missions found</div>
+            <div>no missions found.</div>
         {% else %}
         <table class="container-list">
             <thead>
                 <tr class="row">
                     <th class="col">Name</th>
+                    <th class="col">Client</th>
                     <th class="col">Reward</th>
                     <th class="col">Created at</th>
-                    <th class="col">Updated at</th>
                     <th class="col">Status</th>
                     <th class="col">Actions</th>
                 </tr>
@@ -32,31 +32,25 @@
                 {% for mission in pager %}
                 <tr class="row">
                     <th class="col">{{ mission.name }}</th>
+                    <th class="col">{{ mission.client.firstname }} {{ mission.client.lastname }}</th>
                     <th class="col">{{ mission.reward }} $</th>
                     <th class="col">{{ mission.createdAt|date("d/m/Y") }}</th>
-                    <th class="col">{{ mission.updatedAt|date("d/m/Y") }}</th>
                     <th class="col action">
                         {% if mission.status == 'in_demand' %}
                             <a href="{{ path('admin_mission_validate', {'id': mission.id, 'validate': 'true', 'token': csrf_token('validate' ~ mission.id) }) }}"><img src="{{asset('images/icones/validate.svg')}}" alt="validate"></a>
                             <a href="{{ path('admin_mission_validate', {'id': mission.id, 'validate': 'false', 'token': csrf_token('validate' ~ mission.id) }) }}"><img src="{{asset('images/icones/refused.svg')}}" alt="refused"></a>
                         {% else %}
-                            {{ mission.status }}
+                            {{ mission.getFormattedStatus() }}
                         {% endif %}
                     </th>
                     <th class="col action">
                         <a href="{{ path('admin_mission_show', {'slug': mission.slug}) }}"><img src="{{asset('images/icones/eye.svg')}}" alt="eye"></a>
                         <a href="{{ path('admin_mission_delete', {'id': mission.id, 'token': csrf_token('delete' ~ mission.id)}) }}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
                     </th>
-                </tr>
-                
-                {% else %}
-                 <tr class="row pagination">
-                    <th class="col"> <th class="col ">no missions found.</th></th>
-                </tr>
-                   
+                </tr>               
                 {% endfor %}
                 <tr class="row pagination">
-                    <th class="col">{{ pagerfanta(pager, {'pageParameter': '[other_page]', 'prev_message' : 'back' }) }}</th>
+                    <th class="col">{{ pagerfanta(pager, {'prev_message' : 'back' }) }}</th>
                 </tr>
             </tbody>
         </table>

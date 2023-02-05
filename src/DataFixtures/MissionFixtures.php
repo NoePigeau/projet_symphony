@@ -14,7 +14,7 @@ class MissionFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create('fr_FR');
+        $faker = Factory::create('en_US');
 
         $types = $manager->getRepository(Type::class)->findAll();
         $users = $manager->getRepository(User::class)->findAll();

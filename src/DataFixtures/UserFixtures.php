@@ -12,7 +12,7 @@ class UserFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create('fr_FR');
+        $faker = Factory::create('en_US');
 
         $types = $manager->getRepository(Type::class)->findAll();
 
@@ -22,10 +22,10 @@ class UserFixtures extends Fixture
             $user = (new User())
                 ->setEmail($faker->email())
                 ->setNickname($faker->userName())
-                ->setDescription('je suis un agent')
+                ->setDescription('I am an agent or what')
                 ->setFirstname($faker->firstName())
                 ->setLastname($faker->lastName())
-                ->setValidationToken('ooo')
+                ->setValidationToken('_baw_')
                 ->setPlainPassword($pwd)
                 ->addType($faker->randomElement($types))
                 ->addType($faker->randomElement($types))
@@ -40,7 +40,7 @@ class UserFixtures extends Fixture
                 ->setDescription('')
                 ->setFirstname($faker->firstName())
                 ->setLastname($faker->lastName())
-                ->setValidationToken('ooo')
+                ->setValidationToken('_baw_')
                 ->setPlainPassword($pwd)
                 ->setRoles(['ROLE_CLIENT']);
             $manager->persist($user);
@@ -51,7 +51,7 @@ class UserFixtures extends Fixture
                 ->setNickname('bgdu78')
                 ->setFirstname('admin')
                 ->setLastname('adminum')
-                ->setValidationToken('ooo')
+                ->setValidationToken('_baw_')
                 ->setPlainPassword($pwd)
                 ->setRoles(['ROLE_ADMIN'])
             ;
@@ -62,7 +62,7 @@ class UserFixtures extends Fixture
                 ->setNickname('clientdu78')
                 ->setFirstname('admin')
                 ->setLastname('adminum')
-                ->setValidationToken('ooo')
+                ->setValidationToken('_baw_')
                 ->setPlainPassword($pwd)
                 ->setRoles(['ROLE_CLIENT'])
             ;

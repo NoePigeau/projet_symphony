@@ -6,16 +6,34 @@
     <div class="page-list">
         <div class="card-profile">  
                 <h1 class="text-4xl"> {{ mission.name }} </h1>
-                <div> <strong>status</strong> : {{ mission.status }} </div>
                 <div> <strong>description</strong> : {{ mission.description }} </div>
+                <div> <strong>status</strong> : {{ mission.getFormattedStatus() }} </div>
                 <div> <strong>Reward</strong> : {{ mission.reward }} $ </div>
                 <div> <strong>created at</strong> : {{ mission.createdAt|date("m/d/Y") }} </div>
                 <div> <strong>updated at</strong> : {{ mission.updatedAt|date("m/d/Y") }} </div>
                 <div> <strong>Type</strong> : {{ mission.type.name }} </div>
-                <div><strong>agent</strong> : {{ mission.agent.email }}, {{ mission.agent.nickname }}</div>
-                <div> <strong>client</strong> : {{ mission.client.email }}, {{mission.client.firstname}}, {{mission.client.lastname}}</div>
+                <div><strong>agent</strong> : 
+                {% if mission.agent is not null %}
+                    {{ mission.agent.email }}, {{ mission.agent.nickname }}
+                {% else %}
+                    no agent has accepted the mission yet
+                {% endif %}
+                </div>
+                <div> <strong>client</strong> : {{ mission.client.email }}, {{mission.client.firstname}} {{mission.client.lastname}}</div>
 
-                <img src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}">        
+                <img src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}">
+
+                {% if mission.steps|length > 0 %}   
+                <div>
+                    <h2 class="text-2xl"> Steps </h1>
+                    {% for step in mission.steps %}
+                        <div class="flex gap-3">
+                            <input type="checkbox" checked="{{step.status}}" disabled>
+                            <div> {{step.name}} </div>
+                        </div>                        
+                    {% endfor %}
+                </div> 
+                {% endif %}    
         </div>
         <a href="{{ path('admin_mission_index') }}" >  back to missions list</a>
     </div>

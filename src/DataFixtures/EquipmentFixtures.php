@@ -29,7 +29,7 @@ class EquipmentFixtures extends Fixture
 
         $equipment = (new Equipment)
         ->setName('Couteau')
-        ->setDescription('Ça c\'est des vrai couteaux')
+        ->setDescription('Ça c\'est des vrais couteaux (swing)')
         ->setImage('')
         ->setStock(103);
        

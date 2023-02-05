@@ -17,19 +17,16 @@
         <header class="navbar-back">
                 <a href="{{ path('front_default_index') }}">
                     <img src="{{ asset('images/logos/logo-text.svg') }}" alt="logo black">
-                </a>
-                    
+                </a>     
                 <nav class="links">
                     <ul><a href="{{ path('admin_user_index') }}"> Users </a></ul>
                     <ul><a href="{{ path('admin_mission_index') }}"> Missions </a></ul>
                     <ul><a href="{{ path('admin_equipment_index') }}"> Equipments </a></ul>
                     <ul><a href="{{ path('admin_order_index') }}"> Orders </a></ul>
                     <ul><a href="{{ path('admin_type_index') }}"> Types </a></ul>
-                    <ul><a href="#"> Contact</a></ul>
-                    <ul><a href="#"> others page</a></ul>
                 </nav>
                 <div class="sign">
-                    <a href="{{ path('register') }}"><img src="{{ asset('images/icones/signup.svg') }}" alt="signup"> Profil </a>
+                    <a href="{{ path('profile') }}"><img src="{{ asset('images/icones/signup.svg') }}" alt="signup"> Profil </a>
                     <a href="{{ path('app_logout') }}"><img src="{{ asset('images/icones/logout.svg') }}" alt="logo black">Logout</a>
                 </div>
         </header>

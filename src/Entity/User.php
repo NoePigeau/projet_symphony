@@ -158,6 +158,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    public function getFormattedRoles(): array
+    {
+        $roles = [];
+        foreach($this->getRoles() as $role) {
+            if ($role != 'ROLE_USER') {
+                $role = strtolower(explode('_', $role)[1]);
+                $roles [] = $role;
+            }
+            
+        }
+
+        return $roles;
+    }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

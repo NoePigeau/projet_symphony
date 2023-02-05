@@ -19,7 +19,7 @@ use Pagerfanta\Pagerfanta;
 #[Security("is_granted('ROLE_ADMIN')")]
 class TypeController extends AbstractController
 {
-    #[Route('/', name: 'type_index', methods: ['GET'])]
+    #[Route('/', name: 'type_index', methods: ['GET', 'POST'])]
     public function index(TypeRepository $typeRepository, Request $request): Response
     {
         $types = $typeRepository->search($request);  

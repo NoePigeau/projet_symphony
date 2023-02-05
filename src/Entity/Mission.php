@@ -312,6 +312,11 @@ class Mission
         return $this->status;
     }
 
+    public function getFormattedStatus(): ?string
+    {
+        return ucfirst(str_replace('_', ' ', $this->status));
+    }
+
     public function setStatus(string $status): self
     {
         if (!in_array($status, self::getAllStatus())) {

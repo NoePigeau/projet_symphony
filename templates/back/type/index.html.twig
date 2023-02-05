@@ -14,14 +14,16 @@
             </select>
             <button type="submit" class="main-cta">Search</button>
         </form>
-
+        {% if pager|length == 0 %} 
+            <div>no type found.</div>
+        {% else %}
         <table class="container-list">
             <thead>
                 <tr class="row">
                     <th class="col">Name</th>
                     <th class="col">Created At</th>
                     <th class="col">Updated At</th>
-                    <th class="col">Action</th>
+                    <th class="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,14 +38,13 @@
                         <a href="{{ path('admin_type_delete', {'id': type.id, 'token': csrf_token('delete' ~ type.id)}) }}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
                     </th>
                 </tr>
-                
-                {% else %}
-                    no types found.
                 {% endfor %}
                 <tr class="row pagination">
                     <th class="col">{{ pagerfanta(pager, {'pageParameter': '[other_page]', 'prev_message' : 'back' }) }}</th>
                 </tr>
             </tbody>
         </table>
+        {% endif %}
+        <a href="{{ path('admin_type_create') }}" class="main-cta">Add Type</a>
     </div>
 {% endblock %}

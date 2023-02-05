@@ -14,7 +14,9 @@
             </select>
             <button type="submit" class="main-cta">Search</button>
         </form>
-
+        {% if pager|length == 0 %} 
+            <div>no orders found.</div>
+        {% else %}
         <table class="container-list">
             <thead>
                 <tr class="row">
@@ -45,14 +47,12 @@
                         <a href="{{ path('admin_order_delete', {'id': order.id, 'token': csrf_token('delete' ~ order.id)}) }}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
                     </th>
                 </tr>
-                
-                {% else %}
-                    no orders found.
                 {% endfor %}
                 <tr class="row pagination">
-                    <th class="col">{{ pagerfanta(pager, {'pageParameter': '[other_page]', 'prev_message' : 'back' }) }}</th>
+                    <th class="col">{{ pagerfanta(pager, { 'prev_message' : 'back' }) }}</th>
                 </tr>
             </tbody>
         </table>
+        {% endif %}
     </div>
 {% endblock %}
