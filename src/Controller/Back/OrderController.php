@@ -13,6 +13,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
 
 #[Route('/order')]
 class OrderController extends AbstractController
@@ -45,7 +47,7 @@ class OrderController extends AbstractController
      */
     #[Route('/{id}/accept', name: 'order_accept', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[Security("is_granted('ROLE_ADMIN')")]
-    public function accept(Order $order, OrderRepository $orderRepository, EquipmentRepository $equipmentRepository): Response
+    public function accept(Order $order, OrderRepository $orderRepository, EquipmentRepository $equipmentRepository, MailerInterface $mailer): Response
     {
         $equipment = $order->getEquipment();
 
@@ -59,6 +61,15 @@ class OrderController extends AbstractController
         $equipmentRepository->save($equipment, true);
         $orderRepository->save($order, true);
 
+        $email = (new Email())
+            ->from('hello@example.com')
+            ->to($order->getAgent()->getEmail())
+            ->subject('Your order has been accepted')
+            // ->text('The order for: ' . $order->getEquipment()->getName() . 'has been accepted and will be delivered to you')
+            ->html('<p>The order for: ' . $order->getEquipment()->getName() . ' has been accepted and will be delivered to you</p>');
+
+        $mailer->send($email);
+
         return $this->redirectToRoute('admin_order_index');
     }
 
@@ -68,11 +79,20 @@ class OrderController extends AbstractController
      */
     #[Route('/{id}/refuse', name: 'order_refuse', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[Security("is_granted('ROLE_ADMIN')")]
-    public function refuse(Order $order, OrderRepository $orderRepository): Response
+    public function refuse(Order $order, OrderRepository $orderRepository, MailerInterface $mailer): Response
     {
         $order->setStatus('refused');
 
         $orderRepository->save($order, true);
+
+        $email = (new Email())
+            ->from('hello@example.com')
+            ->to($order->getAgent()->getEmail())
+            ->subject('Your order has been accepted')
+            // ->text('The order for: ' . $order->getEquipment()->getName() . 'has been accepted and will be delivered to you')
+            ->html('<p>The order for: ' . $order->getEquipment()->getName() . ' has been refused. Sorry :(/p>');
+
+        $mailer->send($email);
 
         return $this->redirectToRoute('admin_order_index');
     }
