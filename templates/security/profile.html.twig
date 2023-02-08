@@ -16,13 +16,14 @@
         </div>
     </div>
     <div class="profile w-9/12">
-        {% if hasPending is null %}
+        {% if hasPending is null and not is_granted('ROLE_AGENT') %}
         <div class="flex-col dark:bg-slate-800 text-white relative">
             <h1 class="text-2xl mb-4 text-white" >Become an Agent</h1>
             <p class="text-white">Simply by submiting an official document of your abilites you could become the futur Agent and execute order from this platform</p>
             <a href="{{ path('profile_become_agent') }}" class="rounded mt-4 h-16 bg-violet-600 flex items-center justify-center">Apply</a>
         </div>
         {% endif %}
+        {% if is_granted('ROLE_AGENT') %}
         <div class="flex-col dark:bg-slate-800 text-white relative">
             <h1 class="text-2xl mb-4 text-white" >Select your skills</h1>
             <div class="flex justify-start1">
@@ -34,6 +35,7 @@
                 </div>
               </div>
         </div>
+        {% endif %}
         <div class="flex-col dark:bg-slate-800 text-white relative">
             <h1 class="text-2xl mb-10">Update Profile</h1>
             {{ form_start(form, { 'attr': { 'class': 'custom-form'} }) }}

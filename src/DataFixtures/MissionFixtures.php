@@ -27,6 +27,9 @@ class MissionFixtures extends Fixture implements DependentFixtureInterface
 
          for ($i=0; $i<10; $i++) {
             $agent = $faker->randomElement($agents);
+            $file = $faker->image('./public/upload/images/missions', 640, 480);
+            $explodedFile = explode("/", $file);
+            $endOfFile = end($explodedFile);
             $object = (new Mission())
                 ->setName($faker->name)
                 ->setDescription($faker->paragraph)
@@ -34,12 +37,16 @@ class MissionFixtures extends Fixture implements DependentFixtureInterface
                 ->setClient($faker->randomElement($clients))
                 ->setType($faker->randomElement($types))
                 ->setReward(rand(10, 999))
+                ->setImage($endOfFile)
             ;
             $manager->persist($object);
         }
 
         for ($i=0; $i<10; $i++) {
             $agent = $faker->randomElement($agents);
+            $file = $faker->image('./public/upload/images/missions', 640, 480);
+            $explodedFile = explode("/", $file);
+            $endOfFile = end($explodedFile);
             $object = (new Mission())
                 ->setName($faker->name)
                 ->setDescription($faker->paragraph)
@@ -48,6 +55,7 @@ class MissionFixtures extends Fixture implements DependentFixtureInterface
                 ->setClient($faker->randomElement($clients))
                 ->setType($faker->randomElement($agent->getType()))
                 ->setReward(rand(10, 999))
+                ->setImage($endOfFile)
             ;
             $manager->persist($object);
         }
