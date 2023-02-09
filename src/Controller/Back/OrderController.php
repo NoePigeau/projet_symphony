@@ -62,7 +62,7 @@ class OrderController extends AbstractController
         $orderRepository->save($order, true);
 
         $email = (new Email())
-            ->from('hello@example.com')
+            ->from('mission-bot@kgbytes.com')
             ->to($order->getAgent()->getEmail())
             ->subject('Your order has been accepted')
             // ->text('The order for: ' . $order->getEquipment()->getName() . 'has been accepted and will be delivered to you')
@@ -86,11 +86,11 @@ class OrderController extends AbstractController
         $orderRepository->save($order, true);
 
         $email = (new Email())
-            ->from('hello@example.com')
+            ->from('mission-bot@kgbytes.com')
             ->to($order->getAgent()->getEmail())
             ->subject('Your order has been accepted')
             // ->text('The order for: ' . $order->getEquipment()->getName() . 'has been accepted and will be delivered to you')
-            ->html('<p>The order for: ' . $order->getEquipment()->getName() . ' has been refused. Sorry :(/p>');
+            ->html('<p>The order for: ' . $order->getEquipment()->getName() . ' has been refused. Sorry :(</p>');
 
         $mailer->send($email);
 
