@@ -15,6 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Security\Voter\MissionVoter;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
 
 #[Route('/mission')]
 #[Security("is_granted('ROLE_USER')")]
@@ -116,7 +118,7 @@ class MissionController extends AbstractController
 	 */
     #[Route('/{id}/asign/{token}', name: 'mission_asign', requirements: ['id' => '\d+'], methods: ['GET'])]
     #[Security("is_granted('ROLE_AGENT')")]
-    public function asign(Mission $mission, string $token, MissionRepository $missionRepository): Response
+    public function asign(Mission $mission, string $token, MissionRepository $missionRepository, MailerInterface $mailer): Response
     {
         if (!$this->isCsrfTokenValid('asign' . $mission->getId(), $token)) {
             throw $this->createAccessDeniedException('Error token!');
@@ -125,6 +127,14 @@ class MissionController extends AbstractController
         $mission->setAgent($this->getUser());
         $mission->setStatus('in_progress');
         $missionRepository->save($mission, true);
+
+        $email = (new Email())
+            ->from('mission-bot@kgbytes.com')
+            ->to($mission->getClient()->getEmail())
+            ->subject('Your mission has been accepted')
+            ->html('<p>' . $mission->getAgent()->getNickname() . ' accepeted your mission: ' . $mission->getName() .'. You will be noticed when our agent will finish the mission.</p>');
+        
+        $mailer->send($email);
 
         return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
     }
@@ -138,7 +148,7 @@ class MissionController extends AbstractController
 	 */
     #[Route('/{id}/finish/{token}', name: 'mission_finish', requirements: ['id' => '\d+'], methods: ['GET'])]
     #[Security("is_granted('ROLE_AGENT')")]
-    public function finish(Mission $mission, string $token, MissionRepository $missionRepository): Response
+    public function finish(Mission $mission, string $token, MissionRepository $missionRepository, MailerInterface $mailer): Response
     {
         if (!$this->isCsrfTokenValid('finish' . $mission->getId(), $token)) {
             throw $this->createAccessDeniedException('Error token!');
@@ -146,6 +156,14 @@ class MissionController extends AbstractController
 
         $mission->setStatus('finished');
         $missionRepository->save($mission, true);
+
+        $email = (new Email())
+            ->from('mission-bot@kgbytes.com')
+            ->to($mission->getClient()->getEmail())
+            ->subject('Our agent completed your mission !')
+            ->html('<p>' . $mission->getAgent()->getNickname() . ' completed your mission: ' . $mission->getName() .'. You can now send him his reward. Thank you for trusting our services.</p>');
+        
+        $mailer->send($email);
 
         return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
     }

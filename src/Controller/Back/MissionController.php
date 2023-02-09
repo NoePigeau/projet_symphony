@@ -16,6 +16,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
 
 #[Route('/mission')]
 class MissionController extends AbstractController
@@ -76,7 +78,7 @@ class MissionController extends AbstractController
     }
 
     #[Route('/{id}/validate/{validate}/{token}', name: 'mission_validate', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function validate(Mission $mission, MissionRepository $missionRepository, string $validate, string $token): Response
+    public function validate(Mission $mission, MissionRepository $missionRepository, string $validate, string $token, MailerInterface $mailer): Response
     {
         if (!$this->isCsrfTokenValid('validate' . $mission->getId(), $token)) {
             throw $this->createAccessDeniedException('Error token!');
@@ -84,6 +86,21 @@ class MissionController extends AbstractController
 
         if ($mission->getStatus() == $mission::STATUS_IN_DEMAND) {
             $mission->setStatus($validate == 'true' ? $mission::STATUS_FREE : $mission::STATUS_REFUSED);
+
+            $email = (new Email())
+                ->from('mission-bot@kgbytes.com')
+                ->to($mission->getClient()->getEmail());
+                
+            if ($validate === 'true') {
+                $email
+                    ->subject('Your mission demand has been validated')
+                    ->html('<p>You mission ' . $mission->getName() . ' has been validated by our administration. An agent will be soon take care of it !! Thanks to trust our company.</p>');
+            } else {
+                $email
+                    ->subject('Your mission demand has been refused')
+                    ->html('<p>You mission ' . $mission->getName() . ' has been refused by our administration. This mission doesn\'t respect the terms of conditions. Sorry for the disagrement</p>');
+            }  
+            $mailer->send($email);
         }
 
         $missionRepository->save($mission, true);
