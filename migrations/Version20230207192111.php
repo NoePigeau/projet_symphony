@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230207171522 extends AbstractMigration
+final class Version20230207192111 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -26,6 +26,7 @@ final class Version20230207171522 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE mission_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "order_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE rating_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE reset_password_request_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE step_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE type_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "user_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
@@ -47,6 +48,10 @@ final class Version20230207171522 extends AbstractMigration
         $this->addSql('CREATE TABLE rating (id INT NOT NULL, agent_id INT NOT NULL, mission_id INT NOT NULL, rate INT NOT NULL, opinion TEXT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_D88926223414710B ON rating (agent_id)');
         $this->addSql('CREATE INDEX IDX_D8892622BE6CAE90 ON rating (mission_id)');
+        $this->addSql('CREATE TABLE reset_password_request (id INT NOT NULL, user_id INT NOT NULL, selector VARCHAR(20) NOT NULL, hashed_token VARCHAR(100) NOT NULL, requested_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, expires_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_7CE748AA76ED395 ON reset_password_request (user_id)');
+        $this->addSql('COMMENT ON COLUMN reset_password_request.requested_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN reset_password_request.expires_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE step (id INT NOT NULL, mission_id INT NOT NULL, name VARCHAR(255) NOT NULL, status BOOLEAN NOT NULL, position INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_43B9FE3CBE6CAE90 ON step (mission_id)');
         $this->addSql('CREATE TABLE type (id INT NOT NULL, name VARCHAR(50) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, slug VARCHAR(105) NOT NULL, PRIMARY KEY(id))');
@@ -79,6 +84,7 @@ final class Version20230207171522 extends AbstractMigration
         $this->addSql('ALTER TABLE "order" ADD CONSTRAINT FK_F5299398517FE9FE FOREIGN KEY (equipment_id) REFERENCES equipment (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE rating ADD CONSTRAINT FK_D88926223414710B FOREIGN KEY (agent_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE rating ADD CONSTRAINT FK_D8892622BE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE reset_password_request ADD CONSTRAINT FK_7CE748AA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE step ADD CONSTRAINT FK_43B9FE3CBE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE user_type ADD CONSTRAINT FK_F65F1BE0A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE user_type ADD CONSTRAINT FK_F65F1BE0C54C8C93 FOREIGN KEY (type_id) REFERENCES type (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -94,6 +100,7 @@ final class Version20230207171522 extends AbstractMigration
         $this->addSql('DROP SEQUENCE mission_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE "order_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE rating_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE reset_password_request_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE step_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE type_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE "user_id_seq" CASCADE');
@@ -108,6 +115,7 @@ final class Version20230207171522 extends AbstractMigration
         $this->addSql('ALTER TABLE "order" DROP CONSTRAINT FK_F5299398517FE9FE');
         $this->addSql('ALTER TABLE rating DROP CONSTRAINT FK_D88926223414710B');
         $this->addSql('ALTER TABLE rating DROP CONSTRAINT FK_D8892622BE6CAE90');
+        $this->addSql('ALTER TABLE reset_password_request DROP CONSTRAINT FK_7CE748AA76ED395');
         $this->addSql('ALTER TABLE step DROP CONSTRAINT FK_43B9FE3CBE6CAE90');
         $this->addSql('ALTER TABLE user_type DROP CONSTRAINT FK_F65F1BE0A76ED395');
         $this->addSql('ALTER TABLE user_type DROP CONSTRAINT FK_F65F1BE0C54C8C93');
@@ -117,6 +125,7 @@ final class Version20230207171522 extends AbstractMigration
         $this->addSql('DROP TABLE mission');
         $this->addSql('DROP TABLE "order"');
         $this->addSql('DROP TABLE rating');
+        $this->addSql('DROP TABLE reset_password_request');
         $this->addSql('DROP TABLE step');
         $this->addSql('DROP TABLE type');
         $this->addSql('DROP TABLE "user"');
