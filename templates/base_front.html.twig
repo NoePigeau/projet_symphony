@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Welcome !{% endblock %}</title>
         <link rel="icon" href="{{asset('images/logos/logo-black.svg')}}">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
@@ -20,21 +20,22 @@
                 </figure>
                 <nav class="links">
                     {% if is_granted('ROLE_USER') %}
-                    <ul><a href="{{ path('front_mission_index') }}"> See Missions </a></ul>
+                    <ul><a href="{{ path('front_mission_index') }}">See missions</a></ul>
                     {% if is_granted('ROLE_CLIENT') %}
-                        <ul><a href="{{ path('front_mission_create') }}"> Create Missions </a></ul>
+                        <ul><a href="{{ path('front_mission-my-missions') }}">My missions</a></ul>
+                        <ul><a href="{{ path('front_mission_create') }}">Create missions</a></ul>
                     {% endif %}
-                    <ul><a href="{{ path('profile') }}"> History </a></ul>
-                    <ul><a href="{{ path('profile') }}"> Profil </a></ul>
+                    <ul><a href="{{ path('profile') }}">History</a></ul>
+                    <ul><a href="{{ path('profile') }}">Profile</a></ul>
                     {% endif %}
-                    {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_default_index') }}">Panel d'admin</a></ul> {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_default_index') }}">Admin Panel</a></ul> {% endif %}
                 </nav>
                 <div class="sign">
                     {% if is_granted('ROLE_USER') %} 
                     <a href="{{ path('app_logout') }}">Logout</a>
                     {% else  %}
-                    <a href="{{ path('register') }}"><img src="{{ asset('images/icones/signup.svg') }}" alt="signup"> Sign up</a>
-                    <a href="{{ path('app_login') }}"><img src="{{ asset('images/icones/signin.svg') }}" alt="signin"> Sign in</a>
+                    <a href="{{ path('register') }}"><img src="{{ asset('images/icones/signup.svg') }}" alt="signup">Sign up</a>
+                    <a href="{{ path('app_login') }}"><img src="{{ asset('images/icones/signin.svg') }}" alt="signin">Sign in</a>
                     {% endif %}
                    
                 </div>

@@ -13,6 +13,12 @@
         <a href="{{ path('front_mission_finish', {'id': mission.id, 'token': csrf_token('finish' ~ mission.id)}) }}">End the mission</a>
     {% endif %}
     
+    {% if is_granted('ROLE_CLIENT') and mission.status is same as('finished') %}
+{#        <a href="{{ path('front_mission_pay', {'id': mission.id, 'token': csrf_token('pay' ~ mission.id)}) }}">Pay the mission</a>#}
+        <a>Pay the mission</a>
+        
+    {% endif %}
+    
     {% if rating.rate is not defined or rating.rate is empty %}
         {% if is_granted('ROLE_CLIENT') and mission.status is same as('finished') %}
             {{ form_start(form, {'action': path('front_rating_submit', {'slug': mission.slug}), 'method': 'POST'}) }}
