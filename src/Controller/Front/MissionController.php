@@ -140,7 +140,7 @@ class MissionController extends AbstractController
 			'mission' => $mission,
 			'form' => $form->createView(),
 			'rating' => $rating,
-            'formMessage' => $messageForm->createView(),
+			'formMessage' => $messageForm->createView(),
 			'payment' => $payment
 		]);
 	}
@@ -223,7 +223,7 @@ class MissionController extends AbstractController
 			->from('mission-bot@kgbytes.com')
 			->to($mission->getClient()->getEmail())
 			->subject('Your mission has been accepted')
-			->html('<p>' . $mission->getAgent()->getNickname() . ' accepeted your mission: ' . $mission->getName() .'. You will be noticed when our agent will finish the mission.</p>');
+			->html('<p>' . $mission->getAgent()->getNickname() . ' accepted your mission: ' . $mission->getName() .'. You will be noticed when our agent will finish the mission.</p>');
 		
 		$mailer->send($email);
 		
