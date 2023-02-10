@@ -11,6 +11,9 @@ use App\Repository\MessageRepository;
 use App\Repository\MissionRepository;
 use App\Repository\RatingRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -204,4 +207,30 @@ class MissionController extends AbstractController
 
         return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
     }
+	
+	/**
+	 * @throws ApiErrorException
+	 */
+	public function StripeCheckout(){
+		require_once '../../../vendor/autoload.php';
+		
+		Stripe::setApiKey($_ENV["STRIPE_PUBLIC_KEY"]);
+		header('Content-Type: application/json');
+		
+		$YOUR_DOMAIN = 'http://localhost';
+		
+		$checkout_session = Session::create([
+			'line_items' => [[
+				# Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
+				'price' => '{{PRICE_ID}}',
+				'quantity' => 1,
+			]],
+			'mode' => 'payment',
+			'success_url' => $YOUR_DOMAIN . '/success.html',
+			'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
+		]);
+		
+		header("HTTP/1.1 303 See Other");
+		header("Location: " . $checkout_session->url);
+	}
 }
