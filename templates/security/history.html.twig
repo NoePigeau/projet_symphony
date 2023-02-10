@@ -1,0 +1,70 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Profile update!{% endblock %}
+
+{% block body %}
+	<div class="md:container flex mt-10 gap-4 items-start">
+		<div class="profile w-9/12">
+			<div class="flex-col dark:bg-slate-800 text-white relative">
+				<h1 class="text-2xl mb-4 text-white" >History of my missions</h1>
+				{% if missions is not empty %}
+					<table class="w-full">
+						<thead>
+							<tr>
+								<th class="text-left">Id</th>
+								{% if is_granted('ROLE_CLIENT') %}
+									<th class="text-left">Agent</th>
+								{% elseif is_granted('ROLE_AGENT') %}
+									<th class="text-left">Client</th>
+								{% endif %}
+								<th class="text-left">Name</th>
+								<th class="text-left">Status</th>
+								<th class="text-left">Reward</th>
+								<th class="text-left">Payment</th>
+								<th class="text-left">Updated at</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for mission in missions %}
+								<tr>
+									<td>{{ mission.id }}</td>
+									{% if is_granted('ROLE_CLIENT') and mission.agent is not null %}
+										<td>{{ mission.agent.nickname }}</td>
+									{% elseif is_granted('ROLE_CLIENT') and mission.agent is null %}
+										<td>Not assigned</td>
+									{% elseif is_granted('ROLE_AGENT') %}
+										<td>{{ mission.client.nickname }}</td>
+									{% endif %}
+									<td>{{ mission.name }}</td>
+									<td>{{ mission.status }}</td>
+									<td>{{ mission.reward }}</td>
+									{% set paid = 0 %}
+									{% for payment in payments %}
+										{% if payment.mission.id == mission.id and payment.status is same as 'paid'%}
+											<td>Paid</td>
+											{% set paid = 1 %}
+										{% endif %}
+									{% endfor %}
+									{% if paid == 0 %}
+										{% if is_granted('ROLE_CLIENT') and mission.status is same as 'finished' %}
+											<td><a href="{{ path('front_pay', { 'missionId': mission.id }) }}" style="color: red">Not paid</a></td>
+										{% elseif is_granted('ROLE_CLIENT') and mission.status is not same as 'finished' %}
+											<td>Not paid</td>
+										{% elseif is_granted('ROLE_AGENT') %}
+											<td style="color: red">Not paid</td>
+										{% endif %}
+									{% endif %}
+									<td>{{ mission.updatedAt|date("m/d/Y") }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				{% else %}
+					<tr>
+						<td colspan="7">No missions yet</td>
+					</tr>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

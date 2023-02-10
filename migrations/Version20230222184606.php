@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230211173806 extends AbstractMigration
+final class Version20230222184606 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -25,6 +25,7 @@ final class Version20230211173806 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE message_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE mission_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "order_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE payment_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE rating_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE reset_password_request_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE step_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
@@ -45,6 +46,8 @@ final class Version20230211173806 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_F52993983414710B ON "order" (agent_id)');
         $this->addSql('CREATE INDEX IDX_F5299398BE6CAE90 ON "order" (mission_id)');
         $this->addSql('CREATE INDEX IDX_F5299398517FE9FE ON "order" (equipment_id)');
+        $this->addSql('CREATE TABLE payment (id INT NOT NULL, mission_id INT DEFAULT NULL, amount INT NOT NULL, stripe_payment_id VARCHAR(255) DEFAULT NULL, status VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_6D28840DBE6CAE90 ON payment (mission_id)');
         $this->addSql('CREATE TABLE rating (id INT NOT NULL, agent_id INT NOT NULL, mission_id INT NOT NULL, rate INT NOT NULL, opinion TEXT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_D88926223414710B ON rating (agent_id)');
         $this->addSql('CREATE INDEX IDX_D8892622BE6CAE90 ON rating (mission_id)');
@@ -82,6 +85,7 @@ final class Version20230211173806 extends AbstractMigration
         $this->addSql('ALTER TABLE "order" ADD CONSTRAINT FK_F52993983414710B FOREIGN KEY (agent_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "order" ADD CONSTRAINT FK_F5299398BE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "order" ADD CONSTRAINT FK_F5299398517FE9FE FOREIGN KEY (equipment_id) REFERENCES equipment (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE payment ADD CONSTRAINT FK_6D28840DBE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE rating ADD CONSTRAINT FK_D88926223414710B FOREIGN KEY (agent_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE rating ADD CONSTRAINT FK_D8892622BE6CAE90 FOREIGN KEY (mission_id) REFERENCES mission (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE reset_password_request ADD CONSTRAINT FK_7CE748AA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -99,6 +103,7 @@ final class Version20230211173806 extends AbstractMigration
         $this->addSql('DROP SEQUENCE message_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE mission_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE "order_id_seq" CASCADE');
+        $this->addSql('DROP SEQUENCE payment_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE rating_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE reset_password_request_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE step_id_seq CASCADE');
@@ -113,6 +118,7 @@ final class Version20230211173806 extends AbstractMigration
         $this->addSql('ALTER TABLE "order" DROP CONSTRAINT FK_F52993983414710B');
         $this->addSql('ALTER TABLE "order" DROP CONSTRAINT FK_F5299398BE6CAE90');
         $this->addSql('ALTER TABLE "order" DROP CONSTRAINT FK_F5299398517FE9FE');
+        $this->addSql('ALTER TABLE payment DROP CONSTRAINT FK_6D28840DBE6CAE90');
         $this->addSql('ALTER TABLE rating DROP CONSTRAINT FK_D88926223414710B');
         $this->addSql('ALTER TABLE rating DROP CONSTRAINT FK_D8892622BE6CAE90');
         $this->addSql('ALTER TABLE reset_password_request DROP CONSTRAINT FK_7CE748AA76ED395');
@@ -124,6 +130,7 @@ final class Version20230211173806 extends AbstractMigration
         $this->addSql('DROP TABLE message');
         $this->addSql('DROP TABLE mission');
         $this->addSql('DROP TABLE "order"');
+        $this->addSql('DROP TABLE payment');
         $this->addSql('DROP TABLE rating');
         $this->addSql('DROP TABLE reset_password_request');
         $this->addSql('DROP TABLE step');
