@@ -12,6 +12,7 @@ services:
       - database
     restart: unless-stopped
     volumes:
+      - ./public:/srv/app/public
       - php_socket:/var/run/php
     healthcheck:
       interval: 10s
@@ -37,6 +38,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!TODO!}
     restart: unless-stopped
     volumes:
+      - ./public:/srv/app/public:ro
       - php_socket:/var/run/php
       - caddy_data:/data
       - caddy_config:/config
