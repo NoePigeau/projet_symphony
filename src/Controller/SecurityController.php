@@ -53,6 +53,7 @@ class SecurityController extends AbstractController
 
             $email = new Email();
     
+            $email->from('mission-bot@kgbytes.com');
             $email->to($user->getEmail());
             $email->subject('KGB Agent recruitment');
             $email->html('<h1>Thanks you for your registration</h1>
