@@ -1,0 +1,48 @@
+# This is a basic workflow that is manually triggered
+
+name: Deploy to server
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Create directory for ssh
+      run: mkdir -p $HOME/.ssh/
+
+    - name: Install ssh key
+      run: ssh-keyscan ${{ secrets.SSH_HOST }} >> $HOME/.ssh/known_hosts
+
+    - name: Add our ssh key
+      env:
+        SECRET_KEY: ${{secrets.SSH_KEY}}
+      run: echo "$SECRET_KEY" >> $HOME/.ssh/id_rsa
+
+    - name: add specific rights
+      run: chmod 600 $HOME/.ssh/id_rsa
+
+    - name: Check out repository code
+      uses: actions/checkout@v3
+      with:
+        path: ./dist
+
+    - name: Upload code
+      run: rsync -avz ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/project
+      
+    - name: Deploy
+      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /home/${{ secrets.SSH_USER }}/project && rm -rf docker-compose.override.yml && docker compose up -d --build && sleep 10 && docker compose exec php composer install && docker compose exec php npm install && docker compose exec php npm run build"
