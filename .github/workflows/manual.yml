@@ -45,4 +45,4 @@ jobs:
       run: rsync -avz ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/project
       
     - name: Deploy
-      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /home/${{ secrets.SSH_USER }}/project && rm -rf docker-compose.override.yml && docker compose up -d --build && sleep 10 && docker compose exec php composer install && docker compose exec php npm install && docker compose exec php npm run build"
+      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /home/${{ secrets.SSH_USER }}/project && rm -rf docker-compose.override.yml && docker compose up -d && sleep 10 && docker compose exec php composer install && docker compose exec php npm install && docker compose exec php npm run build"
