@@ -10,10 +10,6 @@
 {% block body %}
 <div class="container-sign ">
     <form method="post" class="form-sign dark:bg-slate-800">
-        {% if error %}
-            <div class="alert alert-danger text-white">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-
         {% if app.user %}
             <div class="mb-3 text-white">
                 You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
@@ -30,6 +26,9 @@
                 <input type="password" placeholder="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
             </div>
         </div>
+        {% if error %}
+            <div class="errors">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
         {#

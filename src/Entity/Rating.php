@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\RatingRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 
 #[ORM\Entity(repositoryClass: RatingRepository::class)]
 class Rating
@@ -14,6 +16,7 @@ class Rating
     #[ORM\Column]
     private ?int $id = null;
 
+    #[NotBlank()]
     #[ORM\Column]
     private ?int $rate = null;
 

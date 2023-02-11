@@ -9,4 +9,13 @@
     align-self: center;
     width: 100%;
     max-width: 550px;
+
+    .container-img {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        img {
+            max-height: 250px;
+        }
+    }
 }

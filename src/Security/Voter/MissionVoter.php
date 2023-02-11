@@ -40,9 +40,14 @@ class MissionVoter extends Voter
 
     private function view(Mission $mission, UserInterface $user)
     {
+        if(in_array('ROLE_ADMIN', $user->getRoles())) {
+            return true;
+        }
+
         if (in_array('ROLE_CLIENT', $user->getRoles())) {
             return $mission->getClient() === $user;
         }
+
 
         return $mission->getStatus() === 'free' || $mission->getAgent() === $user;
     }

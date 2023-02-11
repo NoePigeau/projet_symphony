@@ -4,6 +4,7 @@
 
 {% block body %}
     <div class="page-list">
+        <a href="{{ path('admin_mission_index') }}" class="back" ><img src="{{ asset('images/icones/arrow-back.svg') }}" alt="signup">  back to missions list</a>
         <div class="card-profile">  
                 <h1 class="text-4xl"> {{ mission.name }} </h1>
                 <div> <strong>description</strong> : {{ mission.description }} </div>
@@ -20,9 +21,11 @@
                 {% endif %}
                 </div>
                 <div> <strong>client</strong> : {{ mission.client.email }}, {{mission.client.firstname}} {{mission.client.lastname}}</div>
-
-                <img src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}">
-
+                
+                
+                {% if dump(vich_uploader_asset(mission, 'imageFile')) is null %}
+                <div class="container-img"><img src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}"></div>
+                {% endif %}
                 {% if mission.steps|length > 0 %}   
                 <div>
                     <h2 class="text-2xl"> Steps </h1>
@@ -35,6 +38,5 @@
                 </div> 
                 {% endif %}    
         </div>
-        <a href="{{ path('admin_mission_index') }}" >  back to missions list</a>
     </div>
 {% endblock %}

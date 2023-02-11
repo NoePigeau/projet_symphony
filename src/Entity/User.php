@@ -234,6 +234,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->ratings;
     }
 
+    public function getAverageRatings(): ?int
+    {
+        if(count($this->ratings) == 0) {
+            return null;
+        }
+        $rates = array_map(function($rating) {
+            return $rating->rate;
+        }, $this->ratings->toArray());
+
+
+        return array_sum($rates) / count($rates);
+    }
+
     public function addRating(Rating $rating): self
     {
         if (!$this->ratings->contains($rating)) {

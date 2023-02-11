@@ -20,11 +20,12 @@ class Document
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $path = null;
 
+    #[Assert\NotBlank()]
     #[Vich\UploadableField(mapping: 'documents', fileNameProperty: 'path')]
     #[Assert\File(
         maxSize: '4M',
         mimeTypes: ['image/png', 'image/jpeg', 'application/pdf'],
-        mimeTypesMessage: 'We are requesting for PNG or JPEG or PDF',
+        mimeTypesMessage: 'type files: PNG, JPEG or PDF',
     )]
     private ?File $document = null;
 

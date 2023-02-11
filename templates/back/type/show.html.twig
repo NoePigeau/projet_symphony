@@ -4,11 +4,11 @@
 
 {% block body %}
     <div class="page-list">
+        <a href="{{ path('admin_type_index') }}" class="back" ><img src="{{ asset('images/icones/arrow-back.svg') }}" alt="signup">  back to types list</a>
         <div class="card-profile">  
                 <h1 class="text-4xl"> Information </h1>
                 <div> <strong>Name</strong> : {{ type.name }} </div>
                 <div> <strong>Created At</strong> : {{ type.createdAt|date("d/m/Y")}} </div>
         </div>
-        <a href="{{ path('admin_type_index') }}" >  back to types list</a>
     </div>
 {% endblock %}

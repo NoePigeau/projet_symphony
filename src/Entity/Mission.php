@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
-use Gedmo\Mapping\Annotation\SortablePosition;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
@@ -34,9 +33,9 @@ class Mission
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank(message: 'Cannot be blank.')]
+    #[Assert\NotBlank(message: 'Name is required.')]
     #[Assert\Type('string', message: 'need to be a string.')]
-    #[Assert\Length(min: 5, max: 100, minMessage: 'min 5 characters.', maxMessage: 'max 5 characters.')]
+    #[Assert\Length(min: 5, max: 100, minMessage: 'min 5 characters.', maxMessage: 'max 100 characters.')]
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
@@ -47,17 +46,19 @@ class Mission
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[Assert\NotBlank(message: 'Mission type is required.')]
     #[ORM\ManyToOne(inversedBy: 'missions')]
     private ?Type $type = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
+    #[Assert\NotBlank(message: 'Image is required.')]
     #[Vich\UploadableField(mapping: 'missions', fileNameProperty: 'image')]
     #[Assert\Image(
         maxSize: '2M',
         mimeTypes: ['image/png', 'image/jpeg'],
-        mimeTypesMessage: 'coucou, tu peux mettre que des png ou jpeg',
+        mimeTypesMessage: 'file extensions: jpeg, png',
     )]
     private ?File $imageFile = null;
 
@@ -69,17 +70,18 @@ class Mission
 
     #[ORM\OneToMany(mappedBy: 'missionId', targetEntity: Message::class)]
     private Collection $messages;
-
+    
     #[ORM\ManyToOne(inversedBy: 'clientMissions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $client = null;
 
     #[ORM\ManyToOne(inversedBy: 'agentMissions')]
     private ?User $agent = null;
-
+    
     #[ORM\Column(length: 20)]
     private ?string $status = null;
-
+    
+    #[Assert\NotBlank(message: 'Reward is required.')]
     #[ORM\Column]
     private ?float $reward = null;
 

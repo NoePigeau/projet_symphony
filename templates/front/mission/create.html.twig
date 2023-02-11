@@ -11,25 +11,29 @@
                     <div class="input-group">
                         {{ form_label(form.name) }}
                         {{ form_widget(form.name)}}
+                        {{ form_errors(form.name)}}
                     </div>
                     <div class="input-group">
                         {{ form_label(form.description, 'Description') }}
                         {{ form_widget(form.description)}}
+                        {{ form_errors(form.description)}}
                     </div>
                     <div class="input-group">
                         {{ form_label(form.reward, 'Reward $') }}
                         {{ form_widget(form.reward)}}
+                        {{ form_errors(form.reward)}}
                     </div>
                     <div class="input-group">
                         {{ form_label(form.type, 'Type') }}
                         {{ form_widget(form.type)}}
+                        {{ form_errors(form.type)}}
                     </div>
                     <div class="input-group">
                         {{ form_label(form.imageFile) }}
                         {{ form_widget(form.imageFile)}}
+                        {{ form_errors(form.imageFile)}}
                     </div>       
             </div>
-            {{ form_errors(form) }}
             <input class="main-cta" type="submit" value="Add mission">
         {{ form_end(form) }}
     </div>

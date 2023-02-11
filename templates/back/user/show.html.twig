@@ -4,18 +4,20 @@
 
 {% block body %}
     <div class="page-list">
+        <a href="{{ path('admin_user_index') }}" class="back" ><img src="{{ asset('images/icones/arrow-back.svg') }}" alt="back">  back to users list</a>
         <div class="card-profile">  
                 <h1 class="text-4xl"> Information </h1>
                 <div> <strong>Email</strong> : {{ user.email }} </div>
                 <div> <strong>Nickname</strong> : {{ user.nickname }} </div>
                 <div> <strong>Firstname</strong> : {{ user.firstname }} </div>
                 <div> <strong>Lastname</strong> : {{ user.lastname }} </div> 
+                <div> <strong>Role</strong>: {{ user.getFormattedRoles()|join(', ') }} </div>
                 <div> <strong>Account checked</strong> : {{ user.status == null ? 'no' : 'yes' }}</div> 
                 {% if user.description != null %}
                 <div> <strong>description</strong> : {{ user.description }}</div>  
-                {% endif %}       
+                {% endif %}    
+                <div> <strong> rate: </strong> {{ user.getAverageRatings() is null ? 'no rates' : user.getAverageRatings() ~ ' / 5'  }} </div> 
         
         </div>
-        <a href="{{ path('admin_user_index') }}" >  back to users list</a>
     </div>
 {% endblock %}

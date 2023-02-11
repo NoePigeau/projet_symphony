@@ -38,7 +38,7 @@ class Step
 
     public function setName(string $name): self
     {
-        $this->name = trim($name);
+        $this->name = trim(htmlspecialchars($name));
 
         return $this;
     }

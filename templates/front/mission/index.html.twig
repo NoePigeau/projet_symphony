@@ -21,7 +21,8 @@
                 <img class="min-h-full w-6/12 bg-slate-500 rounded" src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}"> 
             </a>
         </div>
-            
+        {% else %}   
+        <div> no missions found. </div>   
         {% endfor %}
     </div>
     

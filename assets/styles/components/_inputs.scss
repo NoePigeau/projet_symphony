@@ -31,6 +31,10 @@ input {
             border-color: $main-color;
         }
     }
+    li {
+        color: $errors;
+        font-size: 12px;
+    }
 }
 
 .input, textarea {
@@ -49,5 +53,10 @@ input {
         border-color: $main-color;
         outline: none;
     }
+}
+
+.errors {
+    color: $errors;
+    font-size: 12px;
 }
 

@@ -80,7 +80,6 @@ class MissionController extends AbstractController
             $mission->setClient($user);
             $mission->setStatus($mission::STATUS_IN_DEMAND);
             $missionRepository->save($mission, true);
-
             return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
         }
 

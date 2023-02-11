@@ -10,11 +10,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: EquipmentRepository::class)]
+#[UniqueEntity(fields: ['name'])]
 #[Vich\Uploadable]
 class Equipment
 {
@@ -31,17 +34,19 @@ class Equipment
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[NotBlank(null, 'a stock is required.')]
     #[ORM\Column]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
+    #[NotBlank(null, 'an image is required.')]
     #[Vich\UploadableField(mapping: 'equipments', fileNameProperty: 'image')]
     #[Assert\Image(
         maxSize: '2M',
         mimeTypes: ['image/png', 'image/jpeg'],
-        mimeTypesMessage: 'coucou, tu peux mettre que des png ou jpeg',
+        mimeTypesMessage: 'type image authorize: png, jpeg',
     )]
     private ?File $imageFile = null;
 

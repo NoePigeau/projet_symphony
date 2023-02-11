@@ -35,8 +35,10 @@
                 <h1 class="text-2xl font-bold">Steps</h1>
                 <div id="steps"></div>
                 <div id="edit-btns"></div>
-                {% if is_granted('ROLE_CLIENT') and (mission.status is same as('free') or mission.status is same as('in_demand')) %}
-                <button class="main-cta" id="handle-steps">Edit steps</button>
+                {% if is_granted('ROLE_CLIENT') %}
+                    {% if mission.status is same as('free') or mission.status is same as('in_demand') %}
+                    <button class="main-cta" id="handle-steps">Edit steps</button>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
