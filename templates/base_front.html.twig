@@ -16,13 +16,17 @@
     <body class="dark:bg-slate-700 front">
         <header class="navbar-front">
                 <figure>
-                    <img src="{{ asset('images/logos/logo-text.svg') }}" alt="logo black">
+                    <a href="{{ path('front_default_index') }}">
+                        <img src="{{ asset('images/logos/logo-text.svg') }}" alt="logo black">
+                    </a>
                 </figure>
                 <nav class="links">
                     {% if is_granted('ROLE_USER') %}
-                    <ul><a href="{{ path('front_mission_my_missions') }}"> See Missions </a></ul>
+                    <ul><a href="{{ path('front_mission_my_missions') }}"> See My Missions </a></ul>
                     {% if is_granted('ROLE_CLIENT') %}
-                        <ul><a href="{{ path('front_mission_create') }}"> Create Missions </a></ul>
+                        <ul><a href="{{ path('front_mission_create') }}"> Create Mission </a></ul>
+                    {% elseif is_granted('ROLE_AGENT') %}
+                        <ul><a href="{{ path('front_mission_index') }}"> Missions List </a></ul>
                     {% endif %}
                     <ul><a href="{{ path('profile') }}"> History </a></ul>
                     <ul><a href="{{ path('profile') }}"> Profil </a></ul>

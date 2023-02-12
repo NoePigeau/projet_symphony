@@ -4,4 +4,22 @@
 
 {% block body %}
 
+<div id="main-page-container">
+    <div id="infos">
+        <div>
+            <h1>Welome on KGBytes</h1>
+            {% if is_granted('ROLE_CLIENT') %}
+                <p>Thanks to our services we put at your disposal qualified agents to fill any problem you encounter. Click on the link below to create a mission!</p>
+            {% elseif is_granted('ROLE_AGENT') %}
+                <p>As official agent of our company, you make us proud. Start working and earning money by clicking on the link below. And don’t forget, disappoint us and this is the end for you</p>
+            {% endif %}
+        </div>
+        {% if is_granted('ROLE_CLIENT') %}
+            <a class="main-cta" href="{{ path('front_mission_create') }}">Create Mission</a>
+        {% elseif is_granted('ROLE_AGENT') %}
+            <a class="main-cta" href="{{ path('front_mission_index') }}">Missions List</a>
+        {% endif %}
+    </div>
+</div>
+
 {% endblock %}
