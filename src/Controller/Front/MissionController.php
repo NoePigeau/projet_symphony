@@ -2,10 +2,12 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\Message;
 use App\Entity\Mission;
 use App\Entity\Rating;
 use App\Form\MissionType;
 use App\Form\RatingType;
+use App\Repository\MessageRepository;
 use App\Repository\MissionRepository;
 use App\Repository\RatingRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -17,6 +19,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Security\Voter\MissionVoter;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
+
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 
 #[Route('/mission')]
 #[Security("is_granted('ROLE_USER')")]
@@ -100,13 +105,46 @@ class MissionController extends AbstractController
 	{
 		$rating = $ratingRepository->findOneBy(['mission' => $mission]);
 		$form = $this->createForm(RatingType::class, $rating ?: new Rating());
+
+        $messageForm = $this->createForm(\App\Form\MessageType::class);
 		
 		return $this->render('front/mission/show.html.twig', [
 			'mission' => $mission,
 			'form' => $form->createView(),
-			'rating' => $rating
+			'rating' => $rating,
+            'formMessage' => $messageForm->createView()
 		]);
 	}
+
+            /**
+     * @param Mission $mission
+     * @return Response
+     */
+    #[Route('/{id}/message', name: 'mission_send_messages', methods: ['POST'])]
+    public function sendMessage(Request $request, Mission $mission, HubInterface $hub, MessageRepository $mr): Response
+    {
+        $user = $this->getUser();
+        if ($user->getId() !== $mission->getAgent()->getId() && $user->getId() !== $mission->getClient()->getId()) {
+            return new Response('Not authorized');
+        }
+
+        $message = new Message();
+
+        $missionId = $mission->getId();
+
+        $reqContent = json_decode($request->getContent(), true);
+        $message->setContent($reqContent['message[content]']);
+        $message->setFromId($user);
+        $message->setMissionId($mission);
+        $mr->save($message, true);
+        $update = new Update(
+            "/messages/$missionId",
+            json_encode(['message' => $message->getContent(), 'userId' => $user->getId()])
+        );
+
+        $hub->publish($update);
+        return new Response($reqContent['message[content]']);
+    }
 	
 	/**
 	 * @param Mission           $mission
