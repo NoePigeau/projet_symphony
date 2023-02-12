@@ -35,7 +35,7 @@
                     <th class="col action">
                         <a href="{{ path('admin_equipment_show', {'slug': equipment.slug}) }}"><img src="{{asset('images/icones/eye.svg')}}" alt="eye"></a>
                         <a href="{{ path('admin_equipment_update', {'slug': equipment.slug}) }}"><img src="{{asset('images/icones/edit.svg')}}" alt="edit"></a>
-                        <a href="{{ path('admin_equipment_delete', {'id': equipment.id, 'token': csrf_token('delete' ~ equipment.id)}) }}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
+                        <a href="{{ path('admin_equipment_delete', {'id': equipment.id, 'token': csrf_token('delete' ~ equipment.id)}) }}" onclick="return confirm('Do you confirm the deletion of {{ equipment.name }}?')"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
                     </th>
                 </tr>
                 

@@ -41,10 +41,10 @@
                     <th class="col">{{ order.status }}</th>
                     <th class="col action">
                         {% if order.status == 'in_demand' %}
-                            <a href="{{ path('admin_order_accept', {'id': order.id}) }}">A</a>
-                            <a href="{{ path('admin_order_refuse', {'id': order.id}) }}">R</a>
+                            <a href="{{ path('admin_order_accept', {'id': order.id}) }}"><img src="{{asset('images/icones/validate.svg')}}" alt="validate"></a>
+                            <a href="{{ path('admin_order_refuse', {'id': order.id}) }}"><img src="{{asset('images/icones/refused.svg')}}" alt="refused"></a>
                         {% endif %}
-                        <a href="{{ path('admin_order_delete', {'id': order.id, 'token': csrf_token('delete' ~ order.id)}) }}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
+                        <a href="{{ path('admin_order_delete', {'id': order.id, 'token': csrf_token('delete' ~ order.id)}) }}" onclick="return confirm('Do you confirm the deletion of order: {{ order.id }}?')"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="bin"></a>
                     </th>
                 </tr>
                 {% endfor %}
