@@ -8,15 +8,17 @@
         {{ form_start(resetForm, { 'attr' : { 'class': 'form-sign' } }) }}
             <h1 class="text-4xl">Reset your password</h1>
 
-            <div class="input-group">
-                {{ form_label(resetForm.plainPassword.first, 'New Password') }}
-                {{ form_widget(resetForm.plainPassword.first)}}
-                {{ form_errors(resetForm.plainPassword.first) }}
-            </div>
-            <div class="input-group">
-                {{ form_label(resetForm.plainPassword.second, 'Repeat Password') }}
-                {{ form_widget(resetForm.plainPassword.second) }}
-                {{ form_errors(resetForm.plainPassword.second) }}
+            <div class="inputs">
+                <div class="input-group">
+                    {{ form_label(resetForm.plainPassword.first, 'New Password') }}
+                    {{ form_widget(resetForm.plainPassword.first)}}
+                    {{ form_errors(resetForm.plainPassword.first) }}
+                </div>
+                <div class="input-group">
+                    {{ form_label(resetForm.plainPassword.second, 'Repeat Password') }}
+                    {{ form_widget(resetForm.plainPassword.second) }}
+                    {{ form_errors(resetForm.plainPassword.second) }}
+                </div>
             </div>
             <button class="main-cta" type="submit">Reset password</button>
         {{ form_end(resetForm) }}

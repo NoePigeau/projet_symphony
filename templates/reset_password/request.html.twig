@@ -11,18 +11,17 @@
         {{ form_start(requestForm, { 'attr' : { 'class': 'form-sign' } }) }}
             <h1 class="text-4xl">Reset your password</h1>
 
-            <div class="input-group">
-                {{ form_label(requestForm.email, 'Email') }}
-                {{ form_widget(requestForm.email)}}
-                {{ form_errors(requestForm.email)}}
-            </div>
-            <div>
+            <div class="inputs">
+                <div class="input-group">
+                    {{ form_label(requestForm.email, 'Email') }}
+                    {{ form_widget(requestForm.email)}}
+                    {{ form_errors(requestForm.email)}}
+                </div>
                 <small>
                     Enter your email address and we will send you a
                     link to reset your password.
                 </small>
             </div>
-
             <button class="main-cta" type="submit">Send password reset email</button>
         {{ form_end(requestForm) }}
     </div>
