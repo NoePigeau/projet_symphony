@@ -3,8 +3,21 @@
 {% block title %}Order Creation{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
-        {{ form_rest(form) }}
-        <input type="submit" value="Create">
-    {{ form_end(form) }}
+    <div class="container-sign">
+        {{ form_start(form, { 'attr' : { 'class': 'form-sign' } }) }}
+            <div class="inputs">
+                <div class="input-group">
+                    {{ form_label(form.equipment, 'Equipment') }}
+                    {{ form_widget(form.equipment)}}
+                    {{ form_errors(form.equipment)}}
+                </div>
+                <div class="input-group">
+                    {{ form_label(form.amount, 'Amount') }}
+                    {{ form_widget(form.amount)}}
+                    {{ form_errors(form.amount)}}
+                </div>
+            </div>
+            <input class="main-cta" type="submit" value="Create Order">
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
