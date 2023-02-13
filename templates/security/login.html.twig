@@ -30,20 +30,9 @@
             <div class="errors">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
-            </div>
-        #}
+        <a class="no-underline hover:underline text-right" href="{{ path('app_forgot_password_request') }}">forget password ?</a>
 
         <button class="rounded mt-4 h-16 bg-violet-600 flex items-center justify-center text-white" type="submit" >Sign in</button>
     </form>
-    <a href="{{ path('app_forgot_password_request') }}">Reset your password</a>
 </div>
 {% endblock %}

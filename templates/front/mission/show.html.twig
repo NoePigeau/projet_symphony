@@ -32,7 +32,9 @@
                 {% endif %}
             </div>
             <div class="container-steps">
+                {% if mission.steps|length > 0 %}
                 <h1 class="text-2xl font-bold">Steps</h1>
+                {% endif %}
                 <div id="steps"></div>
                 <div id="edit-btns"></div>
                 {% if is_granted('ROLE_CLIENT') %}

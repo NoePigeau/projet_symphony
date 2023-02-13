@@ -1,0 +1,16 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    .pagination__item {
+        cursor: pointer;
+        display: block;
+        padding: 4px 10px;
+        border-radius: .25em;
+        background-color: $main-color;
+        color: white;
+        &:hover {
+            background-color: $main-color-light;
+        }
+    }
+}
