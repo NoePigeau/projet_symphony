@@ -44,7 +44,21 @@
         </div>
     </div>
     <div class="w-4/12  flex flex-col gap-6">
-        <div class="h-96 bg-slate-800 rounded"></div>
+        <div class="h-96 bg-slate-800 rounded flex flex-col justify-between">
+            <div id="message-wrapper" class="w-full  max-h-full h-5/6 flex flex-col gap-4 p-4 overflow-x-auto">
+                {% for message in mission.messages %}
+                    {% if message.fromId.id == app.user.id %}
+                    <div class="self-end bg-violet-700 rounded-lg p-4 pt-2 pb-2">{{message.content}}</div>
+                    {% else %}     
+                    <div class="self-start p-4 pt-2 pb-2 bg-violet-500 rounded-lg">{{message.content}}</div>   
+                    {% endif %} 
+                {% endfor %}
+            </div>
+            {{ form_start(formMessage, { 'attr': { 'class': 'custom-form', 'id': 'message-form'} }) }}
+                {{ form_rest(formMessage) }}
+                <input type="submit" class="rounded mt-4 h-16 bg-violet-600 flex items-center justify-center text-white" value="Send">
+            {{ form_end(formMessage) }}
+        </div>
         <div class="h-48 bg-slate-800 rounded flex items-center justify-between pr-8 pl-8 gap-4">
             {% include 'fragment/profile-picture.html.twig' with {'src': 'https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg'} %}
             <div class="flex flex-col items-center">
@@ -76,36 +90,54 @@
         </div>
     </div>
 </div>
-    {% if is_granted('ROLE_AGENT') and mission.status is same as('free') %}
-        <a href="{{ path('front_mission_asign', {'id': mission.id, 'token': csrf_token('asign' ~ mission.id)}) }}">Accept the Mission !</a>
-    {% endif %}
-    {% if is_granted('ROLE_AGENT') and mission.status is same as('in_progress') %}
-        <a href="{{ path('front_order_create', {'slug': mission.slug}) }}">Make an Order</a>
-        <a href="{{ path('front_mission_finish', {'id': mission.id, 'token': csrf_token('finish' ~ mission.id)}) }}">End the mission</a>
-    {% endif %}
-    
-    {% if rating.rate is not defined or rating.rate is empty %}
-        {% if is_granted('ROLE_CLIENT') and mission.status is same as('finished') %}
-            {{ form_start(form, {'action': path('front_rating_submit', {'slug': mission.slug}), 'method': 'POST'}) }}
-                {{ form_rest(form) }}
-                <button type="submit" class="btn btn-primary">Submit</button>
-            {{ form_end(form) }}
-        {% endif %}
-    {% else %}
-        <h3>You rated this agent as a {{ rating.rate }}</h3>
-    {% endif %}
+<script>
+    const missionId = {{ mission.id }}
+    const userId = {{ app.user.id }}
+    const messageWrapper = document.getElementById('message-wrapper')
+    messageWrapper.scrollTop = messageWrapper.scrollHeight
 
-    {% if is_granted('ROLE_AGENT') and mission.orders and mission.status != 'free' %}
-        <h3>Orders for this missions</h3>
-        {% for order in mission.orders %}
-            <div>
-                <h4>{{ order.equipment.name }}</h4>
-                <h4>{{ order.amount }}</h4>
-                <h4>{{ order.status }}</h4>
-            </div>
-        {% endfor %}
-    {% endif %}
-    
-    <a href="{{ path('front_mission_my_missions') }}" class="btn btn-primary">Back to my missions</a>
-    
+    const form = document.getElementById('message-form')
+    form.onsubmit = (event) => {
+        event.preventDefault()
+
+        const fd = new FormData(form)
+        const payload = {}
+        for (const pair of fd.entries()) {
+            payload[pair[0]] = pair[1]
+        } 
+
+        const newM = document.createElement('div')
+        newM.className = 'self-end bg-violet-700 rounded-lg p-4 pt-2 pb-2'
+        newM.innerText = payload['message[content]']
+        messageWrapper.append(newM)
+
+        messageWrapper.scrollTop = messageWrapper.scrollHeight
+
+
+
+        fetch(`/mission/${missionId}/message`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+        })
+        .then(console.log)
+        .catch(err => { console.error(err) })
+        form.getElementsByTagName('input')[0].value = ''
+    }
+    const eventSource = new EventSource("{{ mercure('/messages/'~mission.id|trans)|escape('js') }}");
+    eventSource.onmessage = event => {
+        const payload = JSON.parse(event.data)
+        if (payload.userId !== userId) {
+            const newM = document.createElement('div')
+            newM.className = 'self-start p-4 pt-2 pb-2 bg-violet-500 rounded-lg'
+            newM.innerText = payload.message
+            messageWrapper.append(newM)
+            messageWrapper.scrollTop = messageWrapper.scrollHeight
+        }
+            
+}
+</script>    
 {% endblock %}
