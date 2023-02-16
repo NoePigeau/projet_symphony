@@ -12,6 +12,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -44,7 +47,7 @@ class UserController extends AbstractController
     
     #[Route('/create', name: 'user_create', methods: ['GET', 'POST'])]
     #[Security("is_granted('ROLE_ADMIN')")]
-    public function create(Request $request, UserRepository $userRepository): Response
+    public function create(Request $request, UserRepository $userRepository, MailerInterface $mailer): Response
     {
         $user = new User();
         $pwd = bin2hex(openssl_random_pseudo_bytes(4));
@@ -57,6 +60,16 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $userRepository->save($user, true);
+
+            $url = $this->generateUrl('app_forgot_password_request', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            $email = (new Email())
+                ->from('mission-bot@kgbytes.com')
+                ->to($user->getEmail())
+                ->subject('Personnal informations for your new admin account')
+                ->html('<p>You will found in this email your personnal password for your new admin account: ' . $pwd .' . Don\'t share it with anyone and don\'t forget that you can modify this password by following <a href='.$url.'>this link</a></p>');
+            
+            $mailer->send($email);
 
             return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
         }
