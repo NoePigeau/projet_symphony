@@ -430,4 +430,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getCompleteMissions(): int
+    {
+        return $this->agentMissions->filter(function (Mission $mission) {
+            return $mission->getStatus() === 'finished';
+        })->count();
+    }
 }
