@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Are you Worthy?</title>
+        <link rel="icon" href="{{asset('images/logos/logo-black.svg')}}">
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body class="dark:bg-slate-700 front">
+        <div class="container-sign ">
+            {{ form_start(form, { 'attr' : { 'class': 'form-sign' } }) }}
+                <h1 class="text-4xl">Ya quoi ?</h1>
+                <div class="inputs">
+                    <div class="input-group">
+                        {{ form_label(form.answer) }}
+                        {{ form_widget(form.answer)}}
+                        {{ form_errors(form.answer)}}
+                    </div>
+                </div>
+                <input style="max-width: fit-content;" class="main-cta" type="submit" value="Will you dare to answer?">
+            {{ form_end(form) }}
+        </div>
+    </body>
+</html>
+    

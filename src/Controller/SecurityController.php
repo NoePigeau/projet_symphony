@@ -23,8 +23,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
+        $challengePassed = $request->getSession()->get('challenge_passed', false);
+        if (!$challengePassed) {
+            return $this->redirectToRoute('front_default_cat');
+        }
+
         if ($this->getUser()) return $this->redirectToRoute('profile');
 
         // get the login error if there is one
@@ -38,6 +43,11 @@ class SecurityController extends AbstractController
     #[Route('/register', name: 'register', methods: ['GET', 'POST'])]
     public function create(Request $request, UserRepository $userRepository, MailerInterface $mailer): Response
     {
+        $challengePassed = $request->getSession()->get('challenge_passed', false);
+        if (!$challengePassed) {
+            return $this->redirectToRoute('front_default_cat');
+        }
+
         if ($this->getUser()) return $this->redirectToRoute('profile');
 
         $user = new User();
