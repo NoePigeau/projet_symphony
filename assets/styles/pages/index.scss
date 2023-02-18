@@ -5,8 +5,12 @@
     background-repeat: no-repeat;
     background-size: cover;
     position: block;
-    height: 1000px;
+    height: 100vh;
     display: flex;
+
+    @include breakpoint(tablet) {
+        background-position: center;
+    }
 
     #infos {
         display: flex;
@@ -34,6 +38,10 @@
                 line-height: 77px;
 
                 color: #FFFFFF;
+
+                @include breakpoint(tablet) {
+                    text-align: center;
+                }
             }
 
             p {
@@ -44,7 +52,15 @@
                 line-height: 24px;
 
                 color: #FFFFFF;
+
+                @include breakpoint(tablet) {
+                    text-align: center;
+                }
             }
+        }
+        @include breakpoint(tablet) {
+            margin: 50px auto;
+            align-items: center;
         }
     }
 }
