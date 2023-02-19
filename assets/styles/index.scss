@@ -38,6 +38,10 @@ body {
     background-color: $body-bg;
     @include breakpoint(tablet) {
         padding: 0 24px;
+
+        &:has(#main-page-container) {
+            padding: 90px 0;
+        }
     }
     &.front {
         padding-top: 90px;
