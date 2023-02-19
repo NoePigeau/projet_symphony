@@ -1,0 +1,11 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Thanks for your order !{% endblock %}
+
+{% block body %}
+	<h1>Thank you!</h1>
+	<div>
+		<p>We appreciate your business !</p>
+		<a href="{{ path('front_mission-my-missions') }}" class="btn btn-primary">Back to my missions</a>
+	</div>
+{% endblock %}

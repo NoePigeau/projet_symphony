@@ -1,5 +1,7 @@
 {% extends 'base_front.html.twig' %}
-
+{% block javascripts %}
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
 {% block title %}{{ mission.name }}{% endblock %}
 
 {% block body %}
@@ -10,6 +12,8 @@
     </div>
     <h1>{{ mission.name }}</h1>
     
+    <p>{{ mission.description }}</p>
+    
     {% if is_granted('ROLE_AGENT') and mission.status is same as('free') %}
         <a href="{{ path('front_mission_asign', {'id': mission.id, 'token': csrf_token('asign' ~ mission.id)}) }}">Accept the Mission !</a>
     {% endif %}
@@ -19,9 +23,17 @@
     {% endif %}
     
     {% if is_granted('ROLE_CLIENT') and mission.status is same as('finished') %}
-    {# <a href="{{ path('front_mission_pay', {'id': mission.id, 'token': csrf_token('pay' ~ mission.id)}) }}">Pay the mission</a>#}
-        <a>Pay the mission</a>
+        {% if payment.id is not defined or payment.status is same as('unpaid') or payment.status is same as('cancelled') %}
+            <p>Reward: {{ mission.reward }}</p>
         
+            <a href="{{ path('front_pay', { 'missionId': mission.id}) }}">Pay now</a>
+        {% else %}
+            <p>{{ mission.description }}</p>
+        
+            <p>Reward: {{ mission.reward }}</p>
+        
+            <p>You have paid your due.</p>
+        {% endif %}
     {% endif %}
     
     {% if rating.rate is not defined or rating.rate is empty %}

@@ -1,0 +1,11 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Checkout canceled{% endblock %}
+
+{% block body %}
+	<h1>there was an error</h1>
+	<div>
+		<p>Forgot to add something to your cart? Shop around then come back to pay!</p>
+		<a href="{{ path('front_mission-my-missions') }}" class="btn btn-primary">Back to my missions</a>
+	</div>
+{% endblock %}

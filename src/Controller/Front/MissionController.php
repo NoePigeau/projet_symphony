@@ -9,11 +9,9 @@ use App\Form\MissionType;
 use App\Form\RatingType;
 use App\Repository\MessageRepository;
 use App\Repository\MissionRepository;
+use App\Repository\PaymentRepository;
 use App\Repository\RatingRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Stripe\Checkout\Session;
-use Stripe\Exception\ApiErrorException;
-use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -97,25 +95,29 @@ class MissionController extends AbstractController
     }
 	
 	/**
-	 * @param Mission          $mission
-	 * @param RatingRepository $ratingRepository
+	 * @param Mission           $mission
+	 * @param RatingRepository  $ratingRepository
+	 * @param PaymentRepository $paymentRepository
 	 *
 	 * @return Response
 	 */
 	#[Route('/{slug}', name: 'mission_show', methods: ['GET'])]
 	#[IsGranted(MissionVoter::VIEW, 'mission')]
-	public function show(Mission $mission, RatingRepository $ratingRepository): Response
+	public function show(Mission $mission, RatingRepository $ratingRepository, PaymentRepository $paymentRepository): Response
 	{
 		$rating = $ratingRepository->findOneBy(['mission' => $mission]);
 		$form = $this->createForm(RatingType::class, $rating ?: new Rating());
 
         $messageForm = $this->createForm(\App\Form\MessageType::class);
 		
+		$payment = $paymentRepository->findOneBy(['mission' => $mission]);
+		
 		return $this->render('front/mission/show.html.twig', [
 			'mission' => $mission,
 			'form' => $form->createView(),
 			'rating' => $rating,
             'formMessage' => $messageForm->createView()
+			'payment' => $payment
 		]);
 	}
 
@@ -207,30 +209,4 @@ class MissionController extends AbstractController
 
         return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
     }
-	
-	/**
-	 * @throws ApiErrorException
-	 */
-	public function StripeCheckout(){
-		require_once '../../../vendor/autoload.php';
-		
-		Stripe::setApiKey($_ENV["STRIPE_PUBLIC_KEY"]);
-		header('Content-Type: application/json');
-		
-		$YOUR_DOMAIN = 'http://localhost';
-		
-		$checkout_session = Session::create([
-			'line_items' => [[
-				# Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-				'price' => '{{PRICE_ID}}',
-				'quantity' => 1,
-			]],
-			'mode' => 'payment',
-			'success_url' => $YOUR_DOMAIN . '/success.html',
-			'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
-		]);
-		
-		header("HTTP/1.1 303 See Other");
-		header("Location: " . $checkout_session->url);
-	}
 }
