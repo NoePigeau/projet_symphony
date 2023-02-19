@@ -30,12 +30,14 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('front_default_cat');
         }
 
+        $user = $this->getUser();
         if ($this->getUser()) return $this->redirectToRoute('profile');
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
@@ -56,7 +58,7 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setValidationToken(bin2hex(random_bytes(10)));
-
+            $user->setRoles(["ROLE_CLIENT"]);
 
             $url = $this->generateUrl('profile_token_validation', ['token' => $user->getValidationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
 
