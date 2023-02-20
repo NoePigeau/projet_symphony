@@ -3,9 +3,22 @@
 {% block title %}Thanks for your order !{% endblock %}
 
 {% block body %}
-	<h1>Thank you!</h1>
-	<div>
-		<p>We appreciate your business !</p>
-		<a href="{{ path('front_mission-my-missions') }}" class="btn btn-primary">Back to my missions</a>
+	<div class="h-96 relative">
+		<div class="object-cover h-96 w-full absolute" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(30, 41, 59));"></div>
+		<div class="linear-background relative min-h-96 w-full bg-slate-800 rounded pt-48 p-8 flex flex-col justify-start content-start items-start z-10">
+			<div class="flex gap-4 items-center w-full">
+				<div class="flex gap-4 items-start w-full">
+					<h1 class="text-4xl font-bold border-b-2 border-violet-600 mb-4">Thank you !</h1>
+				</div>
+			</div>
+			<div class="flex gap-4 mt-4 justify-between w-full">
+				<span class="text-lg text-neutral-300 w-9/12 flex-2">We appreciate your business !</span>
+				<div class="w-3/12 flex flex-col items-stretch flex-1">
+					<div class="flex bg-violet-600 items-center justify-center rounded">
+						<a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_mission_my_missions') }}">Back to my missions</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 {% endblock %}
