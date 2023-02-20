@@ -14,6 +14,7 @@
     
     <p>{{ mission.description }}</p>
     
+    
     {% if is_granted('ROLE_AGENT') and mission.status is same as('free') %}
         <a href="{{ path('front_mission_asign', {'id': mission.id, 'token': csrf_token('asign' ~ mission.id)}) }}">Accept the Mission !</a>
     {% endif %}
