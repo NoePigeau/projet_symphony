@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="eng">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1">
@@ -9,54 +9,43 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
-
+        
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body class="dark:bg-slate-700 front">
         <header class="navbar-front">
-                <figure>
-                    <a href="{{ path('front_default_index') }}">
-                        <img src="{{ asset('images/logos/logo-text.svg') }}" alt="logo black">
-                    </a>
-                </figure>
-                <nav class="links">
-                    {% if is_granted('ROLE_USER') %}
-<<<<<<< HEAD
+            <figure>
+                <a href="{{ path('front_default_index') }}">
+                    <img src="{{ asset('images/logos/logo-text.svg') }}" alt="logo black">
+                </a>
+            </figure>
+            <nav class="links">
+                {% if is_granted('ROLE_USER') %}
                     <ul><a href="{{ path('front_mission_my_missions') }}"> See My Missions </a></ul>
                     {% if is_granted('ROLE_CLIENT') %}
                         <ul><a href="{{ path('front_mission_create') }}"> Create Mission </a></ul>
                     {% elseif is_granted('ROLE_AGENT') %}
                         <ul><a href="{{ path('front_mission_index') }}"> Missions List </a></ul>
-=======
-                    <ul><a href="{{ path('front_mission_index') }}">See missions</a></ul>
-                    {% if is_granted('ROLE_CLIENT') %}
-                        <ul><a href="{{ path('front_mission-my-missions') }}">My missions</a></ul>
-                        <ul><a href="{{ path('front_mission_create') }}">Create missions</a></ul>
->>>>>>> aa58634 (Stripe payment begun)
                     {% endif %}
-                    <ul><a href="{{ path('profile') }}">History</a></ul>
-                    <ul><a href="{{ path('profile') }}">Profile</a></ul>
-                    {% endif %}
-<<<<<<< HEAD
-                    {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_user_index') }}">Backoffice</a></ul> {% endif %}
-=======
-                    {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_default_index') }}">Admin Panel</a></ul> {% endif %}
->>>>>>> aa58634 (Stripe payment begun)
-                </nav>
-                <div class="sign">
-                    {% if is_granted('ROLE_USER') %} 
+                    <ul><a href="{{ path('profile') }}"> History </a></ul>
+                    <ul><a href="{{ path('profile') }}"> Profil </a></ul>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_user_index') }}">Backoffice</a></ul> {% endif %}
+            </nav>
+            <div class="sign">
+                {% if is_granted('ROLE_USER') %}
                     <a href="{{ path('app_logout') }}"><img src="{{ asset('images/icones/logout.svg') }}" alt="logo black">Logout</a>
-                    {% else  %}
-                    <a href="{{ path('register') }}"><img src="{{ asset('images/icones/signup.svg') }}" alt="signup">Sign up</a>
-                    <a href="{{ path('app_login') }}"><img src="{{ asset('images/icones/signin.svg') }}" alt="signin">Sign in</a>
-                    {% endif %}
-                   
-                </div>
-                <div class="burger-menu" id="burger-menu">
-                    <img src="{{ asset('images/icones/burger-menu.svg') }}" alt="burger menu">
-                </div>
+                {% else  %}
+                    <a href="{{ path('register') }}"><img src="{{ asset('images/icones/signup.svg') }}" alt="signup"> Sign up</a>
+                    <a href="{{ path('app_login') }}"><img src="{{ asset('images/icones/signin.svg') }}" alt="signin"> Sign in</a>
+                {% endif %}
+            
+            </div>
+            <div class="burger-menu" id="burger-menu">
+                <img src="{{ asset('images/icones/burger-menu.svg') }}" alt="burger menu">
+            </div>
         </header>
         {% block body %}{% endblock %}
     </body>
