@@ -116,7 +116,7 @@ class MissionController extends AbstractController
 			'mission' => $mission,
 			'form' => $form->createView(),
 			'rating' => $rating,
-            'formMessage' => $messageForm->createView()
+            'formMessage' => $messageForm->createView(),
 			'payment' => $payment
 		]);
 	}
