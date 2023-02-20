@@ -78,8 +78,11 @@
         <div class="h-20 bg-slate-800 rounded flex gap-4 items-center p-4 w-full relative">
             <div class="flex gap-4 items-center w-10/12 relative">
                 {% for order in mission.orders %}
-                    <div class="w-12 h-12 rounded-3xl bg-violet-600 overflow-hidden"> 
-                        <img class="w-full h-full rounded-3xl" src="{{ vich_uploader_asset(order.getEquipment(), 'imageFile') }}"/>             
+                    <div class="w-12 h-12 rounded-3xl bg-violet-600 overflow-hidden bg-red-100"> 
+                        <div class="relative">
+                            <img class="w-full h-full rounded-3xl" src="{{ vich_uploader_asset(order.getEquipment(), 'imageFile') }}"/>
+                            <div class="absolute top-0 left-0 w-full h-full {{ order.status == "in_demand" ? "bg-gray-700" : order.status == "refused" ? "bg-red-700" : ""}} rounded-3xl mix-blend-overlay"></div>
+                          </div>
                     </div>
 
                 {% endfor %}
