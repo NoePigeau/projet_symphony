@@ -12160,6 +12160,34 @@
     },
     "require": {
         "symfony/webpack-encore-bundle": "^1.16",
-        "symfony/runtime": "^6.2"
+        "symfony/runtime": "^6.2",
+        "symfony/flex": "^2.2",
+        "symfony/dotenv": "^6.2"
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.48",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "symfony/stopwatch": "^6.2",
+        "symfony/web-profiler-bundle": "^6.2"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
+    },
+    "extra": {
+        "src-dir": "src/App",
+        "symfony": {
+            "allow-contrib" : false,
+            "require" : "^6.2",
+            "docker": true
+        },
+        "runtime": {
+            "class": "Symfony\\Component\\Runtime\\GenericRuntime"
+        }
     }
 }
