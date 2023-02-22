@@ -1,0 +1,10 @@
+.my-missions {
+    display: flex;
+    max-width: 1050px;
+    gap: 56px;
+    padding: 56px 0;
+    margin: 0 auto;
+    @include breakpoint(tablet) {
+        flex-direction: column;
+    }
+}
