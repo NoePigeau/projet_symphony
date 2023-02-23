@@ -11,6 +11,7 @@ class MissionVoter extends Voter
 {
     public const EDIT = 'POST_EDIT';
     public const VIEW = 'POST_VIEW';
+    public const DELETE = 'POST_DELETE';
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -27,11 +28,13 @@ class MissionVoter extends Voter
 
         switch ($attribute) {
             case self::EDIT:
-                // logic to determine if the user can EDIT
-                // return true or false
+                return $this->edit($subject, $user);
                 break;
             case self::VIEW:
                 return $this->view($subject, $user);
+                break;
+            case self::DELETE:
+                return $this->edit($subject, $user);
                 break;
         }
 
@@ -50,5 +53,15 @@ class MissionVoter extends Voter
 
 
         return $mission->getStatus() === 'free' || $mission->getAgent() === $user;
+    }
+
+    private function edit(Mission $mission, UserInterface $user)
+    {
+        if(in_array('ROLE_ADMIN', $user->getRoles())) {
+            return true;
+        }
+
+        return in_array('ROLE_CLIENT', $user->getRoles()) && $mission->getClient() === $user;
+
     }
 }

@@ -92,6 +92,29 @@ class MissionController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @param Mission $mission
+     * @return Response
+    */
+    #[Route('/{slug}/update', name: 'mission_update', methods: ['GET', 'POST'])]
+    #[IsGranted(MissionVoter::EDIT, 'mission')]
+    public function update(Mission $mission, Request $request, MissionRepository $missionRepository): Response
+    {
+        $form = $this->createForm(MissionType::class, $mission);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $missionRepository->save($mission, true);
+
+            return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
+        }
+
+        return $this->render('front/mission/update.html.twig', [
+            'form' => $form->createView(),
+            'mission' => $mission
+        ]);
+    }
 	
 	/**
 	 * @param Mission          $mission
@@ -115,6 +138,25 @@ class MissionController extends AbstractController
             'formMessage' => $messageForm->createView()
 		]);
 	}
+
+    /**
+     * @param Mission $mission
+     * @param $token
+     * @param MissionRepository $missionRepository
+     * @return Response
+    */
+    #[Route('/{id}/delete/{token}', name: 'mission_delete', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[IsGranted(MissionVoter::EDIT, 'mission')]
+    public function delete(Mission $mission, string $token, MissionRepository $missionRepository): Response
+    {
+        if (!$this->isCsrfTokenValid('delete' . $mission->getId(), $token)) {
+            throw $this->createAccessDeniedException('Error token!');
+        }
+
+        $missionRepository->remove($mission, true);
+
+        return $this->redirectToRoute('front_mission_my_missions');
+    }
 
             /**
      * @param Mission $mission
