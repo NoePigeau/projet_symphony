@@ -165,13 +165,15 @@ class MissionController extends AbstractController
         $mission->setStatus('in_progress');
         $missionRepository->save($mission, true);
 
-        $email = (new Email())
-            ->from('mission-bot@kgbytes.com')
-            ->to($mission->getClient()->getEmail())
-            ->subject('Your mission has been accepted')
-            ->html('<p>' . $mission->getAgent()->getNickname() . ' accepeted your mission: ' . $mission->getName() .'. You will be noticed when our agent will finish the mission.</p>');
-        
-        $mailer->send($email);
+        if ($mission->getClient()->getEmailNotify()) {
+            $email = (new Email())
+                ->from('mission-bot@kgbytes.com')
+                ->to($mission->getClient()->getEmail())
+                ->subject('Your mission has been accepted')
+                ->html('<p>' . $mission->getAgent()->getNickname() . ' accepeted your mission: ' . $mission->getName() .'. You will be noticed when our agent will finish the mission.</p>');
+            
+            $mailer->send($email);
+        }
 
         return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
     }
@@ -194,13 +196,15 @@ class MissionController extends AbstractController
         $mission->setStatus('finished');
         $missionRepository->save($mission, true);
 
-        $email = (new Email())
-            ->from('mission-bot@kgbytes.com')
-            ->to($mission->getClient()->getEmail())
-            ->subject('Our agent completed your mission !')
-            ->html('<p>' . $mission->getAgent()->getNickname() . ' completed your mission: ' . $mission->getName() .'. You can now send him his reward. Thank you for trusting our services.</p>');
-        
-        $mailer->send($email);
+        if ($mission->getClient()->getEmailNotify()) {
+            $email = (new Email())
+                ->from('mission-bot@kgbytes.com')
+                ->to($mission->getClient()->getEmail())
+                ->subject('Our agent completed your mission !')
+                ->html('<p>' . $mission->getAgent()->getNickname() . ' completed your mission: ' . $mission->getName() .'. You can now send him his reward. Thank you for trusting our services.</p>');
+            
+            $mailer->send($email);
+        }
 
         return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
     }
