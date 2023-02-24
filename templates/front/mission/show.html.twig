@@ -3,11 +3,18 @@
 {% block title %}{{ mission.name }}{% endblock %}
 
 {% block body %}
-<div class="md:container mt-20 mb-4">
+<div class="md:container mt-20 mb-4 flex gap-2">
     <div class="bg-slate-800 w-10 h-10 rounded flex justify-center items-center">
         <a class="text-center font-bold text-xl" href="{{ path('front_mission_my_missions') }}"><</a>
     </div>
-
+    {% if is_granted('ROLE_CLIENT') %}
+        <div class="bg-slate-800 w-16 h-10 rounded flex justify-center items-center">
+            <a class="text-center font-bold text-xl" href="{{ path('front_mission_update', {'slug': mission.slug}) }}">Edit</a>
+        </div>
+        <div class="bg-slate-800 w-24 h-10 rounded flex justify-center items-center">
+            <a class="text-center font-bold text-xl" href="{{ path('front_mission_delete', {'id': mission.id, 'token': csrf_token('delete' ~ mission.id)}) }}">Delete</a>
+        </div>
+    {% endif %}
 </div>
 <div class="md:container flex  gap-6">
 
