@@ -14,8 +14,6 @@
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
-        "mailgun/mailgun-php": "*",
-        "nyholm/psr7": "^1.5",
         "pagerfanta/doctrine-orm-adapter": "^3.7",
         "pagerfanta/twig": "^3.7",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -36,7 +34,6 @@
         "symfony/http-client": "6.1.*",
         "symfony/intl": "6.1.*",
         "symfony/mailer": "6.1.*",
-        "symfony/mailgun-mailer": "6.1.*",
         "symfony/mercure": "^0.6.2",
         "symfony/mercure-bundle": "^0.3.5",
         "symfony/mime": "6.1.*",
@@ -66,8 +63,7 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true,
-            "php-http/discovery": true
+            "symfony/runtime": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -112,8 +108,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "6.1.*",
-            "docker": true
+            "require": "6.1.*"
         }
     },
     "require-dev": {
