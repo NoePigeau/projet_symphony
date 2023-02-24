@@ -61,14 +61,15 @@ class OrderController extends AbstractController
         $equipmentRepository->save($equipment, true);
         $orderRepository->save($order, true);
 
-        $email = (new Email())
-            ->from('mission-bot@kgbytes.com')
-            ->to($order->getAgent()->getEmail())
-            ->subject('Your order has been accepted')
-            // ->text('The order for: ' . $order->getEquipment()->getName() . 'has been accepted and will be delivered to you')
-            ->html('<p>The order for: ' . $order->getEquipment()->getName() . ' has been accepted and will be delivered to you</p>');
+        if ($order->getAgent()->getEmailNotify()) {
+            $email = (new Email())
+                ->from('mission-bot@kgbytes.com')
+                ->to($order->getAgent()->getEmail())
+                ->subject('Your order has been accepted')
+                ->html('<p>The order for: ' . $order->getEquipment()->getName() . ' has been accepted and will be delivered to you</p>');
 
-        $mailer->send($email);
+            $mailer->send($email);
+        }
 
         return $this->redirectToRoute('admin_order_index');
     }
@@ -85,14 +86,15 @@ class OrderController extends AbstractController
 
         $orderRepository->save($order, true);
 
-        $email = (new Email())
-            ->from('mission-bot@kgbytes.com')
-            ->to($order->getAgent()->getEmail())
-            ->subject('Your order has been accepted')
-            // ->text('The order for: ' . $order->getEquipment()->getName() . 'has been accepted and will be delivered to you')
-            ->html('<p>The order for: ' . $order->getEquipment()->getName() . ' has been refused. Sorry :(</p>');
+        if ($order->getAgent()->getEmailNotify()) {
+            $email = (new Email())
+                ->from('mission-bot@kgbytes.com')
+                ->to($order->getAgent()->getEmail())
+                ->subject('Your order has been accepted')
+                ->html('<p>The order for: ' . $order->getEquipment()->getName() . ' has been refused. Sorry :(</p>');
 
-        $mailer->send($email);
+            $mailer->send($email);
+        }
 
         return $this->redirectToRoute('admin_order_index');
     }
