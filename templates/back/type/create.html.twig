@@ -9,13 +9,7 @@
     <div class="container-sign back">
         {{ form_start(form, { 'attr' : { 'class': 'form-sign' } }) }}
             <h1 class="text-3xl">Add type</h1>
-            <div class="inputs">
-                    <div class="input-group">
-                        {{ form_label(form.name) }}
-                        {{ form_widget(form.name)}}
-                        {{ form_errors(form.name) }}
-                    </div>
-            </div>
+                {{ include('back/type/_form.html.twig') }}
             <input class="main-cta" type="submit" value="Add">
         {{ form_end(form) }}
     </div>
