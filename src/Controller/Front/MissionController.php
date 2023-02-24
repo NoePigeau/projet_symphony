@@ -5,7 +5,6 @@ namespace App\Controller\Front;
 use App\Entity\Message;
 use App\Entity\Mission;
 use App\Entity\Rating;
-use App\Entity\User;
 use App\Form\MissionType;
 use App\Form\RatingType;
 use App\Repository\MessageRepository;
@@ -111,8 +110,6 @@ class MissionController extends AbstractController
 		$form = $this->createForm(RatingType::class, $rating ?: new Rating());
 		
 		$messageForm = $this->createForm(\App\Form\MessageType::class);
-		
-		$payment = $paymentRepository->findOneBy(['mission' => $mission]);
 		
 		$payment = $paymentRepository->findOneBy(['mission' => $mission]);
 		

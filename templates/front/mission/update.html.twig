@@ -1,14 +1,14 @@
 {% extends 'base_front.html.twig' %}
 
-{% block title %}Create a mission{% endblock %}
+{% block title %}Edit a mission{% endblock %}
 
 {% block body %}
     <div class="container-sign">
         {{ form_start(form, { 'attr' : { 'class': 'form-sign' } }) }}
         
-            <h1 class="text-4xl">Add Mission</h1>
+            <h1 class="text-4xl">Edit Mission</h1>
             {{ include('front/mission/_form.html.twig') }}
-            <input class="main-cta" type="submit" value="Add mission">
+            <input class="main-cta" type="submit" value="Edit mission">
         {{ form_end(form) }}
     </div>
 {% endblock %}
