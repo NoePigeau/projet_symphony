@@ -26,6 +26,14 @@ class StripeController extends AbstractController
 		// Retrieve the mission from the database using the missionId
 		$mission = $entityManager->getRepository(Mission::class)->find($missionId);
 		
+		// Check if the mission already exists in payment table
+		$payment = $entityManager->getRepository(Payment::class)->findOneBy(['mission' => $mission]);
+		if ($payment){
+			// If the mission already exists in payment table, delete it
+			$entityManager->remove($payment);
+			$entityManager->flush();
+		}
+		
 		// Create a new payment object
 		$payment = new Payment();
 		$payment->setMission($mission);
