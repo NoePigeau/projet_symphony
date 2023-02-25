@@ -29,7 +29,8 @@ class UserFixtures extends Fixture
                 ->setPlainPassword($pwd)
                 ->addType($faker->randomElement($types))
                 ->addType($faker->randomElement($types))
-                ->setRoles(['ROLE_AGENT']);
+                ->setRoles(['ROLE_AGENT'])
+                ->setStatus(true);
             $manager->persist($user);
         }
 
@@ -42,7 +43,8 @@ class UserFixtures extends Fixture
                 ->setLastname($faker->lastName())
                 ->setValidationToken('_baw_')
                 ->setPlainPassword($pwd)
-                ->setRoles(['ROLE_CLIENT']);
+                ->setRoles(['ROLE_CLIENT'])
+                ->setStatus(true);
             $manager->persist($user);
         }
 
@@ -54,7 +56,7 @@ class UserFixtures extends Fixture
                 ->setValidationToken('_baw_')
                 ->setPlainPassword($pwd)
                 ->setRoles(['ROLE_ADMIN'])
-            ;
+                ->setStatus(true);
         $manager->persist($user);
 
         $user = (new User())
@@ -65,7 +67,7 @@ class UserFixtures extends Fixture
                 ->setValidationToken('_baw_')
                 ->setPlainPassword($pwd)
                 ->setRoles(['ROLE_CLIENT'])
-            ;
+                ->setStatus(true);
         $manager->persist($user);
 
         // $user = (new User())

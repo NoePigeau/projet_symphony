@@ -5,8 +5,24 @@
 {% block title %}{{ mission.name }}{% endblock %}
 
 {% block body %}
+    <div class="md:container mt-20 mb-4 flex gap-2">
+        <div class="bg-slate-800 w-10 h-10 rounded flex justify-center items-center">
+            <a class="text-center font-bold text-xl" href="{{ path('front_mission_my_missions') }}"><</a>
+        </div>
+        {% if is_granted('ROLE_CLIENT') %}
+            <div class="bg-slate-800 w-16 h-10 rounded flex justify-center items-center">
+                <a class="text-center font-bold text-xl" href="{{ path('front_mission_update', {'slug': mission.slug}) }}">Edit</a>
+            </div>
+            <div class="bg-slate-800 w-24 h-10 rounded flex justify-center items-center">
+                <a class="text-center font-bold text-xl" href="{{ path('front_mission_delete', {'id': mission.id, 'token': csrf_token('delete' ~ mission.id)}) }}">Delete</a>
+            </div>
+        {% endif %}
+        <div class="bg-slate-800 w-32 h-10 rounded flex justify-center items-center">
+            <p class="text-center font-bold text-xl {{ mission.status == "free" or mission.status == "finished" ? "text-green-400" : mission.status == "refused" ? "text-red-400" : ""}}">{{ mission.status == "in_demand" ? "in demand" : mission.status == "in_progress" ? "in progress" : mission.status }}</p>
+        </div>
+    </div>
     <div class="md:container flex  gap-6">
-        
+
         <div class="h-96 w-8/12 rounded relative">
             <div class="object-cover h-96 w-full absolute" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(30, 41, 59)),url('{{ vich_uploader_asset(mission, 'imageFile') }}');"></div>
             <div class="linear-background relative min-h-96 w-full bg-slate-800 rounded pt-48 p-8 flex flex-col justify-start content-start items-start z-10">
@@ -23,6 +39,13 @@
                         <div class="w-3/12 flex flex-col items-stretch flex-1">
                             <div class="flex bg-violet-600 items-center justify-center rounded">
                                 <a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_mission_asign', {'id': mission.id, 'token': csrf_token('asign' ~ mission.id)}) }}">Accept!</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if is_granted('ROLE_AGENT') and mission.status is same as('in_progress') %}
+                        <div class="w-3/12 flex flex-col items-stretch flex-1">
+                            <div class="flex bg-violet-600 items-center justify-center rounded">
+                                <a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_mission_finish', {'id': mission.id, 'token': csrf_token('finish' ~ mission.id)}) }}">Finish!</a>
                             </div>
                         </div>
                     {% endif %}
@@ -84,39 +107,55 @@
                 <input type="submit" class="rounded mt-4 h-16 bg-violet-600 flex items-center justify-center text-white" value="Send">
                 {{ form_end(formMessage) }}
             </div>
-            <div class="h-48 bg-slate-800 rounded flex items-center justify-between pr-8 pl-8 gap-4">
-                {% include 'fragment/profile-picture.html.twig' with {'src': 'https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg'} %}
-                
-                {% if mission.status != 'free' %}
-                    <div class="flex flex-col items-center">
-                        <h1 class="text-xl">{{ mission.agent.nickname }}</h1>
-                        <h3 class="text-neutral-400 text-sm">{{ mission.agent.getCompleteMissions }} missions completes</h3>
-                        <h1 class="text-lg">Skills</h1>
-                        {% for type in mission.agent.type %}
-                            <span class="bg-red-600 text-base p-1 pr-4 pl-4  text-center rounded mt-2 mb-2 font-bold">{{ type.name }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-            <div class="h-20 bg-slate-800 rounded flex gap-4 items-center p-4 w-full relative">
-                <div class="flex gap-4 items-center w-10/12 relative">
-                    {% for order in mission.orders %}
-                        <div class="w-12 h-12 rounded-3xl bg-violet-600 overflow-hidden">
-                            <img class="w-full h-full rounded-3xl" alt="img" src="{{ vich_uploader_asset(order.getEquipment(), 'imageFile') }}"/>
+            {% if mission.agent %}
+                <div class="h-48 bg-slate-800 rounded flex items-center justify-between pr-8 pl-8 gap-4">
+                    {% include 'fragment/profile-picture.html.twig' with {'src': 'https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg'} %}
+
+                    {% if mission.status != 'free' %}
+                        <div class="flex flex-col items-center">
+                            <h1 class="text-xl">{{ mission.agent.nickname }}</h1>
+                            <h3 class="text-neutral-400 text-sm">{{ mission.agent.getCompleteMissions }} missions completes</h3>
+                            <h1 class="text-lg">Skills</h1>
+                            {% for type in mission.agent.type %}
+                                <span class="bg-red-600 text-base p-1 pr-4 pl-4  text-center rounded mt-2 mb-2 font-bold">{{ type.name }}</span>
+                            {% endfor %}
                         </div>
-                    
-                    {% endfor %}
-                    
-                    <div class="absolute linear-background-horizontal z-10 w-full h-full"></div>
+                    {% endif %}
                 </div>
-                <div class="w-12 h-12 rounded-3xl bg-violet-600 flex items-center justify-center">
-                    <a href="{{ path('front_order_create', {'slug': mission.slug}) }}" class="text-4xl font-bold">+</a>
+            {% endif %}
+            {% if is_granted('ROLE_AGENT') and mission.status == "in_progress" %}
+                <div class="h-20 bg-slate-800 rounded flex gap-4 items-center p-4 w-full relative">
+                    <div class="flex gap-4 items-center w-10/12 relative">
+                        {% for order in mission.orders %}
+                            <div class="w-12 h-12 rounded-3xl bg-violet-600 overflow-hidden bg-red-100"> 
+                                <div class="relative">
+                                    <img class="w-full h-full rounded-3xl" src="{{ vich_uploader_asset(order.getEquipment(), 'imageFile') }}"/>
+                                    <div class="absolute top-0 left-0 w-full h-full {{ order.status == "in_demand" ? "bg-gray-700" : order.status == "refused" ? "bg-red-700" : ""}} rounded-3xl mix-blend-overlay"></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="absolute linear-background-horizontal z-10 w-full h-full"></div>
+                    </div>
+                    <div class="w-12 h-12 rounded-3xl bg-violet-600 flex items-center justify-center">
+                        <a href="{{ path('front_order_create', {'slug': mission.slug}) }}" class="text-4xl font-bold">+</a>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
     <script>
         const missionId = {{ mission.id }}
+
+    
+          
+            
+    
+
+          
+    
+    
+  
         const userId = {{ app.user.id }}
         const messageWrapper = document.getElementById('message-wrapper')
         messageWrapper.scrollTop = messageWrapper.scrollHeight

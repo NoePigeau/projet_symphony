@@ -1,11 +1,16 @@
 {% extends 'base_back.html.twig' %}
 
-{% block title %}Update Type{% endblock %}
+{% block title %}Edit type{% endblock %}
 
 {% block body %}
-    <h1>Update Type</h1>
-
-    {{ include('back/type/_form.html.twig') }}
-
-    <a href="{{ path('admin_type_index') }}">back to list</a>
+    <div>
+        <a href="{{ path('admin_type_index') }}"> back to type list </a>
+    </div>
+    <div class="container-sign back">
+        {{ form_start(form, { 'attr' : { 'class': 'form-sign' } }) }}
+            <h1 class="text-3xl">Edit type</h1>
+                {{ include('back/type/_form.html.twig') }}
+            <input class="main-cta" type="submit" value="Update">
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
