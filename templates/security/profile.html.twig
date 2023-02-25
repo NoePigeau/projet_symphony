@@ -3,8 +3,8 @@
 {% block title %}Profile update!{% endblock %}
 
 {% block body %}
-<div class="md:container flex mt-10 gap-4 items-start">
-    <div class="rounded dark:bg-slate-800 w-3/12 flex flex-col items-center justify-center p-8">
+<div class="md:container flex md:flex-row flex-col mt-10 gap-8 items-start">
+    <div class="rounded dark:bg-slate-800 md:w-3/12 w-full flex flex-col items-center justify-center p-8">
         {% include 'fragment/profile-picture.html.twig' with {'src': app.user.image ? vich_uploader_asset(app.user, 'imageFile') : 'https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg'} %}
         <div class="flex flex-col items-center">
             <h1 class="text-xl">{{ app.user.nickname }}</h1>
@@ -15,16 +15,16 @@
             {% endfor %}
         </div>
     </div>
-    <div class="profile w-9/12">
+    <div class="profile">
         {% if hasPending is null and not is_granted('ROLE_AGENT') %}
-        <div class="flex-col dark:bg-slate-800 text-white relative">
+        <div class="rounded flex-col dark:bg-slate-800 text-white relative">
             <h1 class="text-2xl mb-4 text-white" >Become an Agent</h1>
             <p class="text-white">Simply by submiting an official document of your abilites you could become the futur Agent and execute order from this platform</p>
             <a href="{{ path('profile_become_agent') }}" class="rounded mt-4 h-16 bg-violet-600 flex items-center justify-center">Apply</a>
         </div>
         {% endif %}
         {% if is_granted('ROLE_AGENT') %}
-        <div class="flex-col dark:bg-slate-800 text-white relative">
+        <div class="rounded flex-col dark:bg-slate-800 text-white relative">
             <h1 class="text-2xl mb-4 text-white" >Select your skills</h1>
             <div class="flex justify-start1">
                 <div class="mb-3 w-full">
@@ -37,7 +37,7 @@
               </div>
         </div>
         {% endif %}
-        <div class="flex-col dark:bg-slate-800 text-white relative">
+        <div class="rounded flex-col dark:bg-slate-800 text-white relative">
             <h1 class="text-2xl mb-10">Update Profile</h1>
             {{ form_start(form, { 'attr': { 'class': 'custom-form'} }) }}
                 {{ form_rest(form) }}

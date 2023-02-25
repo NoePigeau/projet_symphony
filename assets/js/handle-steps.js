@@ -89,6 +89,9 @@ const displaySteps = async () => {
 
     const steps = await getSteps()
     stepsContainer.innerHTML = ""
+    if(steps.length == 0) {
+        stepsContainer.innerHTML = "there is no steps on this missions"
+    }
     steps.forEach((step) => {
         const el = document.createElement('div')
         el.classList.add('step')

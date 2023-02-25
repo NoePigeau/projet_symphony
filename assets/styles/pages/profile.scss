@@ -1,11 +1,11 @@
 .profile {
-    width: 80%;
+    width: 100%;
+    max-width: 950px;
     display: flex;
     flex-direction: column;
     margin: auto;
     gap: 2em;
     > div {
-        border-radius: 12px;
         -webkit-box-shadow: 3px 2px 27px -4px rgba(0,0,0,0.52); 
         box-shadow: 3px 2px 27px -4px rgba(0,0,0,0.52);
         padding: 2em;

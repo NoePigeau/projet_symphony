@@ -1,7 +1,5 @@
 {% extends 'base_front.html.twig' %}
-{% block javascripts %}
-    <script src="https://js.stripe.com/v3/"></script>
-{% endblock %}
+
 {% block title %}{{ mission.name }}{% endblock %}
 
 {% block body %}
@@ -51,9 +49,7 @@
                     {% endif %}
                 </div>
                 <div class="container-steps">
-                    {% if mission.steps|length > 0 %}
-                        <h1 class="text-2xl font-bold">Steps</h1>
-                    {% endif %}
+                    <h1 class="text-2xl font-bold mt-10">Steps</h1>
                     <div id="steps"></div>
                     <div id="edit-btns"></div>
                     {% if is_granted('ROLE_CLIENT') %}

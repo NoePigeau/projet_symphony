@@ -34,13 +34,20 @@
 .custom-form {
     display: flex;
     flex-direction: column;
-    gap: .8em;
+    gap: 16px;
     > div {
         display: flex;
         position: relative;
+        @include breakpoint(tablet) {
+            flex-wrap: wrap;
+            gap: 6px;
+        }
         > label {
-            width: 150px;
+            min-width: 150px;
             font-size: 20px;
+            @include breakpoint(tablet) {
+                font-size: 10px;
+            }
         }
         > ul {
            position: absolute; 
@@ -50,11 +57,20 @@
 
            }
         }
+        .vich-image {
+            max-width: 100%;
+            img {
+                max-height: 300px;
+            }
+        }
         > input, > select {
+            flex: 1;
             border-bottom: 2px solid rgb(124 58 237);
             background-color: transparent;
-            width: 100%;
             font-size: 18px;
+            @include breakpoint(tablet) {
+                font-size: 14px;
+            }
         }
         > textarea {
             border-bottom: 2px solid rgb(124 58 237);
