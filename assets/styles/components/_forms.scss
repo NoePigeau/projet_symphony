@@ -56,5 +56,11 @@
             width: 100%;
             font-size: 18px;
         }
+        > textarea {
+            border-bottom: 2px solid rgb(124 58 237);
+            background-color: transparent;
+            width: 100%;
+            color: white;
+        }
     }
 }

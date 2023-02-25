@@ -36,7 +36,7 @@ class StripeController extends AbstractController
 			$entityManager->remove($payment);
 			$entityManager->flush();
 		}
-		
+        
 		// Create a new payment object
 		$payment = new Payment();
 		$payment->setMission($mission);

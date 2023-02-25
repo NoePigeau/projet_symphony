@@ -6,6 +6,10 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <meta name="viewport" content="initial-scale=1, maximum-scale=1">
         <link rel="icon" href="{{asset('images/logos/logo-black.svg')}}">
+    
+        <!-- Font Awesome Icon Library -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}

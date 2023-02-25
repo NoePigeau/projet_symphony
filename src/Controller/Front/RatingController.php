@@ -33,7 +33,7 @@
 				$rating->setAgent($mission->getAgent());
 				$ratingRepository->save($rating, true);
 				
-				return $this->redirectToRoute('front_mission_my_missions');
+				return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
 			}
 			
 			return $this->render('front/mission/show.html.twig', [
