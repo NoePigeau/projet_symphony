@@ -69,6 +69,7 @@
             </div>
         </div>
         <div class="w-4/12  flex flex-col gap-6">
+            {% if (mission.client is not null and mission.client.id == app.user.id) or (mission.agent is not null and mission.agent.id == app.user.id) %}
             <div class="h-96 bg-slate-800 rounded flex flex-col justify-between">
                 <div id="message-wrapper" class="w-full  max-h-full h-5/6 flex flex-col gap-4 p-4 overflow-x-auto">
                     {% for message in mission.messages %}
@@ -82,8 +83,12 @@
                 {{ form_start(formMessage, { 'attr': { 'class': 'custom-form', 'id': 'message-form'} }) }}
                 {{ form_rest(formMessage) }}
                 <input type="submit" class="rounded mt-4 h-16 bg-violet-600 flex items-center justify-center text-white" value="Send">
-                {{ form_end(formMessage) }}
             </div>
+
+            {{ form_end(formMessage) }}
+            {% endif %}
+
+            {% if mission.agent is not null %}
             <div class="h-48 bg-slate-800 rounded flex items-center justify-between pr-8 pl-8 gap-4">
                 {% include 'fragment/profile-picture.html.twig' with {'src': 'https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg'} %}
                 
@@ -98,6 +103,8 @@
                     </div>
                 {% endif %}
             </div>
+            {% endif %}
+            {% if mission.agent is not null and mission.agent.id == app.user.id  %}
             <div class="h-20 bg-slate-800 rounded flex gap-4 items-center p-4 w-full relative">
                 <div class="flex gap-4 items-center w-10/12 relative">
                     {% for order in mission.orders %}
@@ -113,6 +120,8 @@
                     <a href="{{ path('front_order_create', {'slug': mission.slug}) }}" class="text-4xl font-bold">+</a>
                 </div>
             </div>
+            {% endif %}
+
         </div>
     </div>
     <script>
