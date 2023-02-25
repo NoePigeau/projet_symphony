@@ -109,7 +109,7 @@
             </div>
             {% if mission.agent %}
                 <div class="h-48 bg-slate-800 rounded flex items-center justify-between pr-8 pl-8 gap-4">
-                    {% include 'fragment/profile-picture.html.twig' with {'src': 'https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg'} %}
+                    {% include 'fragment/profile-picture.html.twig' with {'src': mission.agent.image ? vich_uploader_asset(mission.agent, 'imageFile') : 'https://www.artmajeur.com/medias/standard/t/o/tony-rubino/artwork/15273703_007.jpg'} %}
 
                     {% if mission.status != 'free' %}
                         <div class="flex flex-col items-center">
