@@ -80,7 +80,10 @@ const displaySteps = async () => {
     if (!stepsContainer) {
         return
     }
-    document.getElementById('handle-steps').style.display = "flex"
+    const handleStepBtn = document.getElementById('handle-steps')
+    if (editBtn) {
+        editBtn.style.display = "flex"
+    }
     document.getElementById('edit-btns').innerHTML = ""
     document.getElementById('edit-btns').style.display = "none"
 
