@@ -21,29 +21,29 @@
             <p class="text-center font-bold text-xl {{ mission.status == "free" or mission.status == "finished" ? "text-green-400" : mission.status == "refused" ? "text-red-400" : ""}}">{{ mission.status == "in_demand" ? "in demand" : mission.status == "in_progress" ? "in progress" : mission.status }}</p>
         </div>
     </div>
-    <div class="md:container flex  gap-6">
+    <div class="md:container flex md:flex-row flex-col  gap-6">
 
-        <div class="h-96 w-8/12 rounded relative">
+        <div class=" md:w-8/12 w-full rounded relative">
             <div class="object-cover h-96 w-full absolute" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(30, 41, 59)),url('{{ vich_uploader_asset(mission, 'imageFile') }}');"></div>
             <div class="linear-background relative min-h-96 w-full bg-slate-800 rounded pt-48 p-8 flex flex-col justify-start content-start items-start z-10">
-                <div class="flex gap-4 items-center w-full">
-                    <div class="flex gap-4 items-start w-full">
-                        <h1 class="text-4xl font-bold border-b-2 border-violet-600 mb-4">{{ mission.name }}</h1>
-                        <span class="bg-red-600 text-xl p-1 pr-4 pl-4 text-center rounded mt-2 mb-2 font-bold">{{ mission.type.name }}</span>
+                <div class="flex md:flex-row flex-col gap-4 items-center w-full">
+                    <div class="flex gap-4 md:items-start items-center w-full">
+                        <h1 class="md:text-4xl text-xl font-bold border-b-2 border-violet-600 md:mb-4 mb-0">{{ mission.name }}</h1>
+                        <span class="bg-red-600 md:text-xl text-base p-1 pr-4 pl-4 text-center rounded mt-2 mb-2 font-bold">{{ mission.type.name }}</span>
                     </div>
-                    <span class="p-1 text-center text-3xl font-bold">{{ mission.reward }}€</span>
+                    <span class="p-1 text-center md:text-3xl text-xl font-bold self-start">{{ mission.reward }}€</span>
                 </div>
-                <div class="flex gap-4 mt-4 justify-between w-full">
+                <div class="flex md:flex-row flex-col gap-4 mt-4 justify-between w-full">
                     <span class="text-lg text-neutral-300 w-9/12 flex-2">{{ mission.description }}</span>
                     {% if is_granted('ROLE_AGENT') and mission.status is same as('free') %}
-                        <div class="w-3/12 flex flex-col items-stretch flex-1">
+                        <div class="md:w-3/12 w-full flex flex-col items-stretch flex-1">
                             <div class="flex bg-violet-600 items-center justify-center rounded">
                                 <a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_mission_asign', {'id': mission.id, 'token': csrf_token('asign' ~ mission.id)}) }}">Accept!</a>
                             </div>
                         </div>
                     {% endif %}
                     {% if is_granted('ROLE_AGENT') and mission.status is same as('in_progress') %}
-                        <div class="w-3/12 flex flex-col items-stretch flex-1">
+                        <div class="md:w-3/12 w-full  flex flex-col items-stretch flex-1">
                             <div class="flex bg-violet-600 items-center justify-center rounded">
                                 <a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_mission_finish', {'id': mission.id, 'token': csrf_token('finish' ~ mission.id)}) }}">Finish!</a>
                             </div>
@@ -91,7 +91,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-4/12  flex flex-col gap-6">
+        <div class="md:w-4/12 w-full  flex flex-col gap-6">
             <div class="h-96 bg-slate-800 rounded flex flex-col justify-between">
                 <div id="message-wrapper" class="w-full  max-h-full h-5/6 flex flex-col gap-4 p-4 overflow-x-auto">
                     {% for message in mission.messages %}
@@ -146,16 +146,6 @@
     </div>
     <script>
         const missionId = {{ mission.id }}
-
-    
-          
-            
-    
-
-          
-    
-    
-  
         const userId = {{ app.user.id }}
         const messageWrapper = document.getElementById('message-wrapper')
         messageWrapper.scrollTop = messageWrapper.scrollHeight
