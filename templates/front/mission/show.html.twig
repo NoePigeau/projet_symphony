@@ -23,7 +23,7 @@
     </div>
     <div class="md:container flex md:flex-row flex-col  gap-6">
 
-        <div class=" md:w-8/12 w-full rounded relative">
+        <div class="md:w-8/12 w-full rounded relative">
             <div class="object-cover h-96 w-full absolute" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(30, 41, 59)),url('{{ vich_uploader_asset(mission, 'imageFile') }}');"></div>
             <div class="linear-background relative min-h-96 w-full bg-slate-800 rounded pt-48 p-8 flex flex-col justify-start content-start items-start z-10">
                 <div class="flex md:flex-row flex-col gap-4 items-center w-full">
@@ -64,7 +64,7 @@
                 </div>
                 
                 {# Payment#}
-                <div class="flex gap-4 mt-4 justify-between w-full">
+                <div class="flex md:flex-row flex-col gap-4 mt-4 justify-between w-full">
                     {% if is_granted('ROLE_CLIENT') and mission.status is same as('finished') %}
                         {% if payment.id is not defined or payment.status is same as('unpaid') or payment.status is same as('cancelled') %}
                             <a href="{{ path('front_pay', { 'missionId': mission.id}) }}" class="main-cta">Pay now</a>
@@ -75,13 +75,18 @@
                 </div>
                 
                 {# Rating#}
-                <div class="flex gap-4 mt-4 justify-between w-full">
+                <div class="flex md:flex-row flex-col gap-4 mt-4 justify-between w-full">
                     {% if rating.rate is not defined or rating.rate is empty %}
                         {% if is_granted('ROLE_CLIENT') and mission.status is same as('finished') %}
-                            <div class="w-3/12 flex flex-col items-stretch flex-1">
+                            <div class="md:w-3/12 w-full flex flex-col items-stretch flex-1">
+                                <div class="stars">
+                                    {% for i in 1..5 %}
+                                        <span id="star{{ i }}" class="fa fa-star" onclick="insertRatingStars({{ i }})"></span>
+                                    {% endfor %}
+                                </div>
                                 {{ form_start(form, {'action': path('front_rating_submit', {'slug': mission.slug}), 'method': 'POST', 'attr': { 'class': 'custom-form' } }) }}
-                                {{ form_rest(form) }}
-                                <button type="submit" class="main-cta">Submit</button>
+                                    {{ form_rest(form) }}
+                                    <button type="submit" class="main-cta">Submit</button>
                                 {{ form_end(form) }}
                             </div>
                         {% endif %}
@@ -89,6 +94,7 @@
                         <h1 class="text-2xl font-bold">You rated this agent as a {{ rating.rate }}</h1>
                     {% endif %}
                 </div>
+                
             </div>
         </div>
         <div class="md:w-4/12 w-full  flex flex-col gap-6">
@@ -192,6 +198,42 @@
                 messageWrapper.scrollTop = messageWrapper.scrollHeight
             }
             
+        }
+
+        //Rating with stars
+        //select the parent div of the input with the id rating_rate and put display none
+        let rating = document.getElementById("rating_rate").parentElement;
+        rating.style.display = "none";
+
+        for (let i = 1; i <= 5; i++) {
+            const star = document.querySelector(`#star${i}`);
+            if (star !== null) {
+                star.addEventListener('click', () => {
+                    addStar(i);
+                });
+            }
+        }
+        
+        function addStar(nbrOfStars) {
+            for (let i = 1; i <= 5; i++) {
+                const star = document.querySelector(`#star${i}`);
+                if (i <= nbrOfStars) {
+                    star.classList.add("checked");
+                } else {
+                    star.classList.remove("checked");
+                }
+            }
+        }
+
+        function removeStars() {
+            for (let i = 1; i <= 5; i++) {
+                const star = document.querySelector(`#star${i}`);
+                star.classList.remove("checked");
+            }
+        }
+
+        function insertRatingStars(nbrOfStars){
+            document.getElementById("rating_rate").value = nbrOfStars;
         }
     </script>
 {% endblock %}

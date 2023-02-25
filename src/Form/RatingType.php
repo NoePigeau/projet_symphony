@@ -15,23 +15,22 @@
 		{
 			$builder
 					->add('rate', NumberType::class, [
-							'label' => 'Note',
-							'attr' => [
-									'min' => 0,
-									'max' => 5
-							]
+						'attr' => [
+							'min' => 0,
+							'max' => 5
+						],
 					])
 					->add('opinion', TextareaType::class, [
-							'label' => 'Opinion'
+						'label' => 'Opinion'
 					])
 //					->add('agent', EntityType::class, [
-//							'class' => User::class,
+//						'class' => User::class,
 ////							'hidden' => true,
-//							'label' => 'Agent',
-//							'choice_label' => 'nickname',
-//							'query_builder' => function (UserRepository $us) {
-//								return $us->findByRole('ROLE_AGENT');
-//							}
+//						'label' => 'Agent',
+//						'choice_label' => 'nickname',
+//						'query_builder' => function (UserRepository $us) {
+//							return $us->findByRole('ROLE_AGENT');
+//						}
 //					])
 			;
 		}
@@ -39,7 +38,7 @@
 		public function configureOptions(OptionsResolver $resolver)
 		{
 			$resolver->setDefaults([
-					'data_class' => Rating::class
-			                       ]);
+				'data_class' => Rating::class
+            ]);
 		}
 	}
