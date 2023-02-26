@@ -5,14 +5,19 @@ namespace App\Controller\Front;
 use App\Entity\Message;
 use App\Entity\Mission;
 use App\Entity\Rating;
+use App\Form\MessageType;
 use App\Form\MissionType;
 use App\Form\RatingType;
 use App\Repository\MessageRepository;
 use App\Repository\MissionRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\RatingRepository;
+use App\Repository\TypeRepository;
+use App\Repository\UserRepository;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -67,11 +72,14 @@ class MissionController extends AbstractController
 			'user' => $user
 		]);
 	}
-
+	
 	/**
-     * @param Mission $mission
-     * @return Response
-    */
+	 * @param Mission           $mission
+	 * @param Request           $request
+	 * @param MissionRepository $missionRepository
+	 *
+	 * @return Response
+	 */
     #[Route('/{slug}/update', name: 'mission_update', methods: ['GET', 'POST'])]
     #[IsGranted(MissionVoter::EDIT, 'mission')]
     public function update(Mission $mission, Request $request, MissionRepository $missionRepository): Response
@@ -132,7 +140,7 @@ class MissionController extends AbstractController
 		$rating = $ratingRepository->findOneBy(['mission' => $mission]);
 		$form = $this->createForm(RatingType::class, $rating ?: new Rating());
 		
-		$messageForm = $this->createForm(\App\Form\MessageType::class);
+		$messageForm = $this->createForm(MessageType::class);
 		
 		$payment = $paymentRepository->findOneBy(['mission' => $mission]);
 		
@@ -144,13 +152,14 @@ class MissionController extends AbstractController
 			'payment' => $payment
 		]);
 	}
-
+	
 	/**
-     * @param Mission $mission
-     * @param $token
-     * @param MissionRepository $missionRepository
-     * @return Response
-    */
+	 * @param Mission           $mission
+	 * @param string            $token
+	 * @param MissionRepository $missionRepository
+	 *
+	 * @return Response
+	 */
     #[Route('/{id}/delete/{token}', name: 'mission_delete', requirements: ['id' => '\d+'], methods: ['GET'])]
     #[IsGranted(MissionVoter::EDIT, 'mission')]
     public function delete(Mission $mission, string $token, MissionRepository $missionRepository): Response
@@ -229,6 +238,74 @@ class MissionController extends AbstractController
 		
 		return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
 	}
+	
+	/*
+	the banned agent is redirect to a new page where he can see that he is banned
+	*/
+	
+	/**
+	 * @param Mission           $mission
+	 * @param string            $token
+	 * @param UserRepository    $userRepository
+	 * @param MissionRepository $missionRepository
+	 * @param TypeRepository    $typeRepository
+	 *
+	 * @return RedirectResponse
+	 */
+	#[Route('/{id}/give-up/{token}', name: 'give_up', requirements: ['id' => '\d+'], methods: ['GET'])]
+	#[Security("is_granted('ROLE_AGENT')")]
+	public function giveUp(Mission $mission, string $token, UserRepository $userRepository, MissionRepository $missionRepository, TypeRepository $typeRepository): RedirectResponse {
+		if (!$this->isCsrfTokenValid('give_up' . $mission->getId(), $token)) {
+			throw $this->createAccessDeniedException('Error token!');
+		}
+		
+		$adminUser = $userRepository->findOneBy(['email' => 'admin@user.fr']);
+		$type = $typeRepository->findOneBy(['name' => 'Murder']);
+		
+		$murderMission = new Mission();
+		$murderMission->setType($type);
+		$murderMission->setClient($adminUser);
+		$murderMission->setName("Eliminate traitor");
+		$murderMission->setDescription(
+			"Eliminate the traitor named : " .
+			$mission->getAgent()->getFirstname() . ' "' .
+			$mission->getAgent()->getNickname() . '" ' .
+			$mission->getAgent()->getLastname()
+		);
+		$murderMission->setStatus($mission::STATUS_FREE);
+		$murderMission->setReward($mission->getReward());
+		$murderMission->setCreatedAt(new DateTime());
+		$murderMission->setUpdatedAT(new DateTime());
+		
+		$missionRepository->save($murderMission, true);
+		
+		$agent = $this->getUser();
+		if ($agent === $mission->getAgent()){
+			$agent->setRoles(['ROLE_BANNED']);
+			$agent->setDescription('Banned agent');
+			$agent->setStatus(false);
+			$agent->setUpdatedAT(new DateTime());
+			$userRepository->save($agent, true);
+		}
+		
+		//find all mission where $this->getUser() is the agent and set the status to free and set the agent to null
+		$missions = $missionRepository->findBy(['agent' => $this->getUser()]);
+		foreach ($missions as $mission) {
+			$mission->setAgent(null);
+			$mission->setStatus('free');
+			$missionRepository->save($mission, true);
+		}
+		return $this->redirectToRoute('front_mission_my_missions');
+	}
+	
+//	/**
+//	 * @Route("/banned", name="give_up_page")
+//	 */
+//	#[Route('/banned', name: 'give_up_page', methods: ['GET'])]
+//	public function giveUpPage(): Response
+//	{
+//		return $this->render('front/default/banned.html.twig');
+//	}
 	
 	/**
 	 * @param Mission           $mission
