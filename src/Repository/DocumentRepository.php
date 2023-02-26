@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Document;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Document>
@@ -37,6 +38,18 @@ class DocumentRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function search($request): QueryBuilder
+    {
+        $limit = $request->request->get('limit');
+
+        $qr = $this->createQueryBuilder('m')
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults($limit)
+        ;
+
+        return $qr;
     }
 
 //    /**

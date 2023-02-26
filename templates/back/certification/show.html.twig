@@ -1,0 +1,18 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}certification {{ certificate.id }}{% endblock %}
+
+{% block body %}
+    <div class="page-list">
+        <a href="{{ path('admin_certification_index') }}" class="back" ><img src="{{ asset('images/icones/arrow-back.svg') }}" alt="back">  back to certifications list</a>
+        <div class="card-profile">  
+                <h1 class="text-4xl"> Information </h1>
+                <div> <strong>Id</strong> : {{ certificate.id }} </div>
+                <div> <strong>User</strong> : {{ certificate.submitedBy.nickname }} </div>
+                {% if dump(vich_uploader_asset(certificate, 'document')) is not null %}
+                <div class="container-img"><img src="{{ vich_uploader_asset(certificate, 'document') }}" alt="{{ certificate.id }}"></div>
+                {% endif %}
+        
+        </div>
+    </div>
+{% endblock %}

@@ -23,7 +23,7 @@
                 <div> <strong>client</strong> : {{ mission.client.email }}, {{mission.client.firstname}} {{mission.client.lastname}}</div>
                 
                 
-                {% if dump(vich_uploader_asset(mission, 'imageFile')) is null %}
+                {% if dump(vich_uploader_asset(mission, 'imageFile')) is not null %}
                 <div class="container-img"><img src="{{ vich_uploader_asset(mission, 'imageFile') }}" alt="{{ mission.name }}"></div>
                 {% endif %}
                 {% if mission.steps|length > 0 %}   
