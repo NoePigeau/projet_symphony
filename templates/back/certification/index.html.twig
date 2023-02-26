@@ -1,0 +1,48 @@
+{% extends 'base_back.html.twig' %}
+
+{% block title %}Certifications list{% endblock %}
+
+{% block body %}
+    <div class="page-list">
+        <h1 class="text-4xl"> Certifications List </h1>
+        <form method="POST" class="container-search">
+            <input class="input" type="text" value="{{ app.request.request.get('query') }}" name="query" placeholder="Search ...">
+            <select name="limit">
+                <option value="10" {{ limit == 10 ? 'selected': '' }}>10</option>
+                <option value="20" {{ limit == 20 ? 'selected': '' }}>20</option>
+                <option value="30" {{ limit == 30 ? 'selected': '' }}>30</option>
+            </select>
+            <button type="submit" class="main-cta">Search</button>
+        </form>
+
+        {% if pager|length == 0 %} 
+            <div>no Certifications found.</div>
+        {% else %}
+            <table class="container-list">
+                <thead>
+                    <tr class="row">
+                        <th class="col">Id</th>
+                        <th class="col">SubmitedBy</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for certification in pager %}
+                    <tr class="row">
+                        <th class="col">{{ certification.id }}</th>
+                        <th class="col">{{ certification.submitedBy.nickname }}</th>
+                        <th class="col action">
+                            <a href="{{ path('admin_certification_show', {'id': certification.id}) }}"><img src="{{asset('images/icones/eye.svg')}}" alt="eye"></a>
+                            <a href="{{ path('admin_certification_accept', {'id': certification.id, 'token': csrf_token('delete' ~ certification.id)})}}"><img src="{{asset('images/icones/validate.svg')}}" alt="accept"></a>
+                            <a href="{{ path('admin_certification_delete', {'id': certification.id, 'token': csrf_token('delete' ~ certification.id)})}}"><img src="{{asset('images/icones/delete-bin.svg')}}" alt="delete"></a>
+                        </th>
+                    </tr>
+                    {% endfor %}
+                    <tr class="row pagination">
+                        <th class="col">{{ pagerfanta(pager, { 'prev_message' : 'back' }) }}</th>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
