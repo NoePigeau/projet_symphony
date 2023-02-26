@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -66,11 +67,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
+    #[Ignore]
     #[Vich\UploadableField(mapping: 'users', fileNameProperty: 'image')]
     #[Assert\Image(
         maxSize: '2M',
         mimeTypes: ['image/png', 'image/jpeg'],
-        mimeTypesMessage: 'file extensions: jpeg, png',
+        mimeTypesMessage: 'file extensions available: jpeg, png',
     )]
     private ?File $imageFile = null;
 
@@ -101,6 +103,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): ?int
+    {
+        return $this->id = $id;
     }
 
     public function getEmail(): ?string

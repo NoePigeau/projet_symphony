@@ -160,9 +160,7 @@ class SecurityController extends AbstractController {
 	#[Security("is_granted('ROLE_USER')")]
 	public function profile( Request $request, EntityManagerInterface $entityManager, DocumentRepository $dr ): Response {
 		$form = $this->createForm(UserType::class, $this->getUser(), ['isUpdate' => true]);
-		
-//		$user = new User();
-		
+	
 		$formSkill = $this->createForm(SkillType::class, $this->getUser());
 		
 		$hasPendingRequest = $dr->findOneBy(array('submitedBy' => $this->getUser()->getId()));
@@ -170,7 +168,8 @@ class SecurityController extends AbstractController {
 		$form->handleRequest($request);
 		if($form->isSubmitted() && $form->isValid()){
 			$entityManager->flush();
-			
+			$this->getUser()->setImageFile(null);
+
 			return $this->redirectToRoute('profile');
 		}
 		
