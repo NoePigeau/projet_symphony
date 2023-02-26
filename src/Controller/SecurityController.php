@@ -4,10 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Document;
 use App\Entity\User;
+use App\Form\BecomeType;
 use App\Form\SkillType;
 use App\Form\UserType;
 use App\Repository\MissionRepository;
 use App\Repository\PaymentRepository;
+use App\Repository\RatingRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Exception;
+use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Repository\DocumentRepository;
 use App\Repository\UserRepository;
@@ -22,8 +28,6 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-// use Mailgun\Mailgun;
-
 /**
  * Class SecurityController
  *
@@ -37,7 +41,6 @@ class SecurityController extends AbstractController {
 			return $this->redirectToRoute('front_default_cat');
 		}
 		
-		$user = $this->getUser();
 		if($this->getUser()){
 			return $this->redirectToRoute('profile');
 		}
@@ -58,6 +61,7 @@ class SecurityController extends AbstractController {
 	 *
 	 * @return Response
 	 * @throws TransportExceptionInterface
+	 * @throws Exception
 	 */
 	#[Route('/register', name : 'register', methods : ['GET', 'POST'])]
 	public function create( Request $request, UserRepository $userRepository, MailerInterface $mailer ): Response {
@@ -71,7 +75,7 @@ class SecurityController extends AbstractController {
 		}
 		
 		$user = new User();
-		$form = $this->createForm(\App\Form\UserType::class, $user);
+		$form = $this->createForm(UserType::class, $user);
 		
 		$form->handleRequest($request);
 		if($form->isSubmitted() && $form->isValid()){
@@ -133,7 +137,7 @@ class SecurityController extends AbstractController {
 	#[Security("is_granted('ROLE_USER')")]
 	public function becomeAgent( Request $request, EntityManagerInterface $entityManager, DocumentRepository $dr ): Response {
 		$document = new Document();
-		$form = $this->createForm(\App\Form\BecomeType::class, $document);
+		$form = $this->createForm(BecomeType::class, $document);
 		
 		$form->handleRequest($request);
 		
@@ -153,14 +157,15 @@ class SecurityController extends AbstractController {
 	 * @param Request                $request
 	 * @param EntityManagerInterface $entityManager
 	 * @param DocumentRepository     $dr
+	 * @param RatingRepository       $ratingRepository
 	 *
 	 * @return Response
 	 */
 	#[Route('/profile', name : 'profile', methods : ['GET', 'POST'])]
 	#[Security("is_granted('ROLE_USER')")]
-	public function profile( Request $request, EntityManagerInterface $entityManager, DocumentRepository $dr ): Response {
+	public function profile( Request $request, EntityManagerInterface $entityManager, DocumentRepository $dr , RatingRepository $ratingRepository): Response {
 		$form = $this->createForm(UserType::class, $this->getUser(), ['isUpdate' => true]);
-	
+		
 		$formSkill = $this->createForm(SkillType::class, $this->getUser());
 		
 		$hasPendingRequest = $dr->findOneBy(array('submitedBy' => $this->getUser()->getId()));
@@ -179,8 +184,25 @@ class SecurityController extends AbstractController {
 			return $this->redirectToRoute('profile');
 		}
 		
+		try{
+			$averageRating = $ratingRepository
+				->createQueryBuilder('r')
+				->select('AVG(r.rate) as average')
+				->where('r.agent = :agent')
+				->setParameter('agent', $this->getUser())
+				->getQuery()
+				->getSingleScalarResult()
+			;
+		}catch(NoResultException|NonUniqueResultException){
+			$averageRating = 0;
+		}
 		
-		return $this->render('security/profile.html.twig', ['form' => $form->createView(), 'hasPending' => $hasPendingRequest, 'formSkill' => $formSkill->createView()]);
+		return $this->render('security/profile.html.twig', [
+			'form' => $form->createView(),
+			'hasPending' => $hasPendingRequest,
+			'formSkill' => $formSkill->createView(),
+			'averageRating' => $averageRating
+		]);
 	}
 	
 	/**
@@ -215,6 +237,6 @@ class SecurityController extends AbstractController {
 	#[Route(path : '/logout', name : 'app_logout')]
 	#[Security("is_granted('ROLE_USER')")]
 	public function logout(): void {
-		throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+		throw new LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
 	}
 }
