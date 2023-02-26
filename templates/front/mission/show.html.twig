@@ -41,7 +41,10 @@
                         </div>
                     {% endif %}
                     {% if is_granted('ROLE_AGENT') and mission.status is same as('in_progress') %}
-                        <div class="md:w-3/12 w-full  flex flex-col items-stretch flex-1">
+                        <div class="md:w-3/12 w-full  flex flex-col items-stretch flex-1 gap-2">
+                            <div class="flex bg-violet-600 items-center justify-center rounded">
+                                <a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_give_up', {'id': mission.id, 'token': csrf_token('give_up' ~ mission.id)}) }}">Give up</a>
+                            </div>
                             <div class="flex bg-violet-600 items-center justify-center rounded">
                                 <a class="rounded p-4 text-xl font-bold text-center" href="{{ path('front_mission_finish', {'id': mission.id, 'token': csrf_token('finish' ~ mission.id)}) }}">Finish!</a>
                             </div>
@@ -131,7 +134,7 @@
                         {% for order in mission.orders %}
                             <div class="w-12 h-12 rounded-3xl bg-violet-600 overflow-hidden bg-red-100"> 
                                 <div class="relative">
-                                    <img class="w-full h-full rounded-3xl" src="{{ vich_uploader_asset(order.getEquipment(), 'imageFile') }}"/>
+                                    <img class="w-full h-full rounded-3xl" src="{{ vich_uploader_asset(order.getEquipment(), 'imageFile') }}" alt="imageEquipment"/>
                                     <div class="absolute top-0 left-0 w-full h-full {{ order.status == "in_demand" ? "bg-gray-700" : order.status == "refused" ? "bg-red-700" : ""}} rounded-3xl mix-blend-overlay"></div>
                                 </div>
                             </div>
