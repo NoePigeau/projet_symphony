@@ -15,6 +15,8 @@ use App\Repository\RatingRepository;
 use App\Repository\TypeRepository;
 use App\Repository\UserRepository;
 use DateTime;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -140,6 +142,19 @@ class MissionController extends AbstractController
 		$rating = $ratingRepository->findOneBy(['mission' => $mission]);
 		$form = $this->createForm(RatingType::class, $rating ?: new Rating());
 		
+		try{
+			$averageRating = $ratingRepository
+				->createQueryBuilder('r')
+				->select('AVG(r.rate) as average')
+				->where('r.agent = :agent')
+				->setParameter('agent', $mission->getAgent())
+				->getQuery()
+				->getSingleScalarResult()
+			;
+		}catch(NoResultException|NonUniqueResultException){
+			$averageRating = 0;
+		}
+		
 		$messageForm = $this->createForm(MessageType::class);
 		
 		$payment = $paymentRepository->findOneBy(['mission' => $mission]);
@@ -148,6 +163,7 @@ class MissionController extends AbstractController
 			'mission' => $mission,
 			'form' => $form->createView(),
 			'rating' => $rating,
+			'averageRating' => $averageRating,
 			'formMessage' => $messageForm->createView(),
 			'payment' => $payment
 		]);
@@ -239,10 +255,6 @@ class MissionController extends AbstractController
 		return $this->redirectToRoute('front_mission_show', ['slug' => $mission->getSlug()]);
 	}
 	
-	/*
-	the banned agent is redirect to a new page where he can see that he is banned
-	*/
-	
 	/**
 	 * @param Mission           $mission
 	 * @param string            $token
@@ -297,15 +309,6 @@ class MissionController extends AbstractController
 		}
 		return $this->redirectToRoute('front_mission_my_missions');
 	}
-	
-//	/**
-//	 * @Route("/banned", name="give_up_page")
-//	 */
-//	#[Route('/banned', name: 'give_up_page', methods: ['GET'])]
-//	public function giveUpPage(): Response
-//	{
-//		return $this->render('front/default/banned.html.twig');
-//	}
 	
 	/**
 	 * @param Mission           $mission

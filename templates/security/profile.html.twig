@@ -10,6 +10,7 @@
             <h1 class="text-xl">{{ app.user.nickname }}</h1>
             {% if is_granted('ROLE_AGENT') %}
             <h3 class="text-neutral-400 text-sm">{{ app.user.getCompleteMissions }} missions completes</h3>
+            <h3 class="text-neutral-400 text-sm">Average rating : {{ averageRating|round(1, 'floor') }}</h3>
             {% endif %}
             <h1 class="text-lg">Skills</h1>
             {% for type in app.user.type %}
@@ -21,7 +22,7 @@
         {% if hasPending is null and not is_granted('ROLE_AGENT') %}
         <div class="rounded flex-col dark:bg-slate-800 text-white relative">
             <h1 class="text-2xl mb-4 text-white" >Become an Agent</h1>
-            <p class="text-white">Simply by submiting an official document of your abilites you could become the futur Agent and execute order from this platform</p>
+            <p class="text-white">Simply by submitting an official document of your abilities you could become the futur Agent and execute order from this platform</p>
             <a href="{{ path('profile_become_agent') }}" class="rounded mt-4 h-16 bg-violet-600 flex items-center justify-center">Apply</a>
         </div>
         {% endif %}
