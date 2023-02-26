@@ -17,6 +17,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 
 #[Route('/order')]
+#[Security("is_granted('ROLE_ADMIN')")]
 class OrderController extends AbstractController
 {
     /**
@@ -24,7 +25,6 @@ class OrderController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'order_index', methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function index(OrderRepository $orderRepository, Request $request): Response
     {
         $orders = $orderRepository->search($request);  
@@ -46,7 +46,6 @@ class OrderController extends AbstractController
      * @return Response
      */
     #[Route('/{id}/accept', name: 'order_accept', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function accept(Order $order, OrderRepository $orderRepository, EquipmentRepository $equipmentRepository, MailerInterface $mailer): Response
     {
         $equipment = $order->getEquipment();
@@ -79,7 +78,6 @@ class OrderController extends AbstractController
      * @return Response
      */
     #[Route('/{id}/refuse', name: 'order_refuse', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function refuse(Order $order, OrderRepository $orderRepository, MailerInterface $mailer): Response
     {
         $order->setStatus('refused');
@@ -106,7 +104,6 @@ class OrderController extends AbstractController
      * @return Response
      */
     #[Route('/{id}/delete/{token}', name: 'order_delete', requirements: ['id' => '\d+'], methods: ['GET'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function delete(Order $order, string $token, OrderRepository $orderRepository): Response
     {
         if (!$this->isCsrfTokenValid('delete' . $order->getId(), $token)) {

@@ -20,6 +20,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 
 #[Route('/mission')]
+#[Security("is_granted('ROLE_ADMIN')")]
 class MissionController extends AbstractController
 {
     /**
