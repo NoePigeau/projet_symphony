@@ -36,7 +36,7 @@
                         <ul><a href="{{ path('front_mission_index') }}"> Missions List </a></ul>
                     {% endif %}
                     <ul><a href="{{ path('history') }}"> History </a></ul>
-                    <ul><a href="{{ path('profile') }}"> Profil </a></ul>
+                    <ul><a href="{{ path('profile') }}"> Profile </a></ul>
                 {% endif %}
                 {% if is_granted('ROLE_ADMIN') %} <ul><a href="{{ path('admin_user_index') }}">Backoffice</a></ul> {% endif %}
             </nav>
