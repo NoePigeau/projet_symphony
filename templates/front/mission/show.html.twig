@@ -7,12 +7,12 @@
         <div class="bg-slate-800 w-10 h-10 rounded flex justify-center items-center">
             <a class="text-center font-bold text-xl" href="{{ path('front_mission_my_missions') }}"><</a>
         </div>
-        {% if is_granted('ROLE_CLIENT') %}
+        {% if is_granted('ROLE_CLIENT') and (mission.status is same as('free') or mission.status is same as('in_demand')) %}
             <div class="bg-slate-800 w-16 h-10 rounded flex justify-center items-center">
                 <a class="text-center font-bold text-xl" href="{{ path('front_mission_update', {'slug': mission.slug}) }}">Edit</a>
             </div>
             <div class="bg-slate-800 w-24 h-10 rounded flex justify-center items-center">
-                <a class="text-center font-bold text-xl" href="{{ path('front_mission_delete', {'id': mission.id, 'token': csrf_token('delete' ~ mission.id)}) }}">Delete</a>
+                <a class="text-center font-bold text-xl" href="{{ path('front_mission_delete', {'id': mission.id, 'token': csrf_token('delete' ~ mission.id)}) }}" onclick="return confirm('Do you confirm the deletion of {{ mission.name }}?')">Delete</a>
             </div>
         {% endif %}
         <div class="bg-slate-800 w-32 h-10 rounded flex justify-center items-center">
