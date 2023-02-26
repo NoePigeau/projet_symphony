@@ -15,6 +15,7 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 
 #[Route('/certification')]
+#[Security("is_granted('ROLE_ADMIN')")]
 class CertificationController extends AbstractController
 {
     /**
@@ -22,7 +23,6 @@ class CertificationController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'certification_index', methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function index(DocumentRepository $DocumentRepository, Request $request): Response
     {
         $certifications = $DocumentRepository->search($request);  
@@ -41,7 +41,6 @@ class CertificationController extends AbstractController
     }
     
     #[Route('/{id}', name: 'certification_show', methods: ['GET'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function show(Document $certificate): Response
     {
         return $this->render('back/certification/show.html.twig', [
@@ -50,7 +49,6 @@ class CertificationController extends AbstractController
     }
 
     #[Route('/{id}/accept/{token}', name: 'certification_accept', requirements: ['id' => '\d+'], methods: ['GET'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function accept(Document $certification, string $token, DocumentRepository $documentRepository): Response
     {
         if (!$this->isCsrfTokenValid('delete' . $certification->getId(), $token)) {
@@ -65,7 +63,6 @@ class CertificationController extends AbstractController
     }
 
     #[Route('/{id}/delete/{token}', name: 'certification_delete', requirements: ['id' => '\d+'], methods: ['GET'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function delete(Document $certification, string $token, DocumentRepository $documentRepository): Response
     {
         if (!$this->isCsrfTokenValid('delete' . $certification->getId(), $token)) {

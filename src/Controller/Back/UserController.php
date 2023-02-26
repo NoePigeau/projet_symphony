@@ -20,6 +20,7 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 
 #[Route('/user')]
+#[Security("is_granted('ROLE_ADMIN')")]
 class UserController extends AbstractController
 {
     /**
@@ -27,7 +28,6 @@ class UserController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'user_index', methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function index(UserRepository $userRepository, Request $request): Response
     {
         $users = $userRepository->search($request);  
@@ -46,7 +46,6 @@ class UserController extends AbstractController
     }
     
     #[Route('/create', name: 'user_create', methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function create(Request $request, UserRepository $userRepository, MailerInterface $mailer): Response
     {
         $user = new User();
@@ -80,7 +79,6 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'user_show', methods: ['GET'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function show(User $user): Response
     {
         return $this->render('back/user/show.html.twig', [
@@ -89,7 +87,6 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/update', name: 'user_update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function update(user $user, Request $request, userRepository $userRepository): Response
     {
         $form = $this->createForm(UserUpdateType::class, $user);
@@ -108,7 +105,6 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/delete/{token}', name: 'user_delete', requirements: ['id' => '\d+'], methods: ['GET'])]
-    #[Security("is_granted('ROLE_ADMIN')")]
     public function delete(User $user, string $token, UserRepository $userRepository): Response
     {
         if (!$this->isCsrfTokenValid('delete' . $user->getId(), $token)) {
